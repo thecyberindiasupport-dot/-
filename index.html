@@ -1,249 +1,253 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TheCyberIndia — OSINT Arsenal</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#060a06;--bg2:#0a0f0a;--bg3:#0d150d;--card:#0f180f;--card2:#141e14;
-  --g:#00e676;--g2:#69f0ae;--cyan:#00e5ff;--pink:#f50057;--yellow:#ffd740;
-  --purple:#d500f9;--orange:#ff6d00;--blue:#2979ff;--teal:#1de9b6;--red:#ff1744;
-  --border:#1a2a1a;--border2:#243a24;--text:#c8e6c9;--muted:#4a7a4a;--dim:#0d1a0d;
-}
-body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-
-/* ── ANIMATED HEADER ── */
-.hdr{background:linear-gradient(180deg,#020602 0%,var(--bg2) 100%);border-bottom:1px solid #1a3a1a;padding:0;position:sticky;top:0;z-index:300;box-shadow:0 2px 20px rgba(0,230,118,.07)}
-.hdr-inner{padding:12px 16px 10px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-
-/* ROTATING LOGO */
-.logo-wrap{display:flex;align-items:center;gap:12px}
-.logo-ring{position:relative;width:52px;height:52px;flex-shrink:0}
-.logo-ring svg{position:absolute;top:0;left:0;animation:spin 8s linear infinite}
-.logo-inner{position:absolute;inset:8px;background:radial-gradient(circle,#0f2a0f,#060a06);border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid #1a3a1a}
-.logo-icon{font-size:16px;animation:pulse 2s ease-in-out infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(.9)}}
-.logo-text{}
-.logo-title{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,var(--g) 0%,var(--cyan) 50%,var(--teal) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
-.logo-sub{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);margin-top:2px;letter-spacing:1px}
-.logo-badge{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--g);background:#0a1f0a;border:1px solid #1a3a1a;border-radius:3px;padding:1px 5px;margin-top:3px;display:inline-block;letter-spacing:1px}
+:root{--bg:#050805;--bg2:#080d08;--bg3:#0b130b;--card:#0e160e;--card2:#111911;--g:#00e676;--g2:#69f0ae;--cyan:#00e5ff;--pink:#f50057;--yellow:#ffd740;--purple:#d500f9;--orange:#ff6d00;--blue:#2979ff;--teal:#1de9b6;--red:#ff1744;--border:#152515;--border2:#1e3a1e;--text:#c8e6c9;--muted:#3d6b3d;--dim:#0a120a}
+body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);min-height:600px}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:#1e3a1e;border-radius:3px}
 
 /* TICKER */
-.ticker{background:#030703;border-bottom:1px solid #1a2a1a;padding:5px 0;overflow:hidden}
-.ticker-inner{display:flex;white-space:nowrap;animation:ticker 30s linear infinite}
-.ticker-item{font-family:'Share Tech Mono',monospace;font-size:10px;padding:0 20px;color:var(--muted)}
-.ticker-item span{color:var(--g)}
-@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-wrap{background:#020402;border-bottom:1px solid #0f1f0f;padding:4px 0;overflow:hidden}
+.ticker{display:flex;white-space:nowrap;animation:tick 35s linear infinite}
+.ti{font-family:'Share Tech Mono',monospace;font-size:10px;padding:0 22px;color:var(--muted)}
+.ti b{color:var(--g)}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-/* SEARCH + STATS */
-.search-area{padding:10px 16px 8px}
+/* HEADER */
+.hdr{background:linear-gradient(180deg,#020502,var(--bg2));border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:400}
+.hdr-main{padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+/* LOGO */
+.logo-area{display:flex;align-items:center;gap:12px}
+.ring-wrap{position:relative;width:54px;height:54px;flex-shrink:0}
+.r-outer{position:absolute;inset:0;animation:spinR 10s linear infinite}
+.r-inner{position:absolute;inset:7px;animation:spinL 5s linear infinite}
+.r-center{position:absolute;inset:13px;background:radial-gradient(circle,#0f280f,#050805);border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid #1e3a1e;box-shadow:inset 0 0 10px rgba(0,230,118,.1)}
+.r-icon{font-size:16px;animation:iconPulse 2.5s ease-in-out infinite}
+@keyframes spinR{to{transform:rotate(360deg)}}
+@keyframes spinL{to{transform:rotate(-360deg)}}
+@keyframes iconPulse{0%,100%{filter:drop-shadow(0 0 2px #00e676)}50%{filter:drop-shadow(0 0 8px #00e5ff)}}
+.logo-info{}
+.logo-title{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,#00e676,#00e5ff,#1de9b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-sub{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);margin-top:2px}
+.logo-pills{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}
+.pill{font-family:'Share Tech Mono',monospace;font-size:8px;padding:2px 6px;border-radius:8px;font-weight:700}
+.pg{background:#071207;color:var(--g);border:1px solid #143014}
+.pc{background:#001018;color:var(--cyan);border:1px solid #002838}
+
+/* SYNC STATUS */
+.sync-status{display:flex;align-items:center;gap:6px;font-family:'Share Tech Mono',monospace;font-size:9px;background:var(--dim);border:1px solid var(--border2);border-radius:5px;padding:4px 8px;cursor:pointer;transition:all .15s}
+.sync-status:hover{border-color:var(--g)}
+.sync-dot{width:7px;height:7px;border-radius:50%;animation:syncPulse 1.5s ease-in-out infinite;flex-shrink:0}
+.sync-dot.ok{background:var(--g)}
+.sync-dot.loading{background:var(--yellow)}
+.sync-dot.err{background:var(--pink)}
+@keyframes syncPulse{0%,100%{opacity:1}50%{opacity:.3}}
+.sync-text{color:var(--muted)}
+
+/* ADD BTN */
+.add-btn{background:linear-gradient(135deg,var(--g),var(--cyan));color:#000;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;padding:10px 14px;border:none;border-radius:7px;cursor:pointer;letter-spacing:1px;display:flex;align-items:center;gap:6px;transition:all .15s;white-space:nowrap}
+.add-btn:hover{transform:scale(1.04);box-shadow:0 0 18px rgba(0,229,118,.3)}
+
+/* SEARCH */
+.search-area{padding:8px 14px 9px}
 .sw{position:relative}
-.si{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:16px}
-.search{width:100%;background:var(--bg3);border:1px solid #1e3a1e;border-radius:8px;padding:8px 12px 8px 34px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;outline:none;transition:border-color .2s,box-shadow .2s}
-.search:focus{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(0,229,255,.08)}
-.search::placeholder{color:#2a4a2a}
-.stats{display:flex;gap:14px;margin-top:8px;flex-wrap:wrap}
+.si-svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.search{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:8px 10px 8px 32px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;outline:none;transition:all .2s}
+.search:focus{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(0,229,255,.06)}
+.search::placeholder{color:#1a3a1a}
+.statsrow{display:flex;gap:12px;margin-top:7px;flex-wrap:wrap}
 .stat{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);display:flex;align-items:center;gap:4px}
 .sdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 
-/* ADD TOOL BTN */
-.add-btn{background:linear-gradient(135deg,var(--g),var(--cyan));color:#000;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;padding:10px 16px;border:none;border-radius:7px;cursor:pointer;letter-spacing:1px;display:flex;align-items:center;gap:6px;transition:all .15s;white-space:nowrap;flex-shrink:0}
-.add-btn:hover{transform:scale(1.05);box-shadow:0 0 20px rgba(0,229,118,.3)}
-.add-btn::before{content:'⊕';font-size:14px;font-weight:900}
-
-/* ── TABS ── */
-.tabs{display:flex;overflow-x:auto;background:var(--bg2);border-bottom:1px solid var(--border2);padding:0 14px;scrollbar-width:none}
+/* TABS */
+.tabs{display:flex;overflow-x:auto;background:var(--bg2);border-bottom:1px solid var(--border2);padding:0 12px;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
-.tab{padding:9px 12px;font-size:10px;font-weight:600;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;font-family:'Share Tech Mono',monospace;transition:color .12s,border-color .12s;letter-spacing:.5px}
+.tab{padding:8px 11px;font-size:10px;font-weight:700;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;font-family:'Share Tech Mono',monospace;transition:all .15s;letter-spacing:.4px}
 .tab.active{color:var(--cyan);border-bottom-color:var(--cyan)}
 .tab:hover:not(.active){color:var(--text)}
-.cbadge{background:#0f1f0f;border:1px solid var(--border2);font-size:8px;padding:1px 5px;border-radius:6px;margin-left:3px}
+.cbadge{background:var(--dim);border:1px solid var(--border);font-size:8px;padding:1px 4px;border-radius:6px;margin-left:2px}
 
-/* ── FILTER ROW ── */
-.content{padding:10px 14px}
-.frow{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
-.fb{font-size:10px;padding:4px 10px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;font-family:'Share Tech Mono',monospace;transition:all .15s}
-.fb:hover{color:var(--text);border-color:#3a5a3a}
+/* FILTERS */
+.content{padding:9px 12px}
+.frow{display:flex;gap:4px;margin-bottom:9px;flex-wrap:wrap;align-items:center}
+.frow-lbl{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);margin-right:2px}
+.fb{font-size:10px;padding:3px 9px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;font-family:'Share Tech Mono',monospace;transition:all .15s}
+.fb:hover{color:var(--text)}
 .fb.active{border-color:transparent}
-.slbl{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:#2e4a2e;padding:3px 0 8px}
+.slbl{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:#1a3a1a;padding:2px 0 7px}
 
-/* ── GRID ── */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:8px}
-.chdr{grid-column:1/-1;display:flex;align-items:center;gap:8px;margin-top:10px;margin-bottom:3px}
-.clbl{font-family:'Share Tech Mono',monospace;font-size:9px;font-weight:700;padding:3px 9px;border-radius:3px;letter-spacing:1.5px}
-.cline{flex:1;height:1px}
-.ccnt{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted)}
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(278px,1fr));gap:7px}
+.cat-hdr{grid-column:1/-1;display:flex;align-items:center;gap:7px;margin-top:10px;margin-bottom:2px}
+.cat-lbl{font-family:'Share Tech Mono',monospace;font-size:9px;font-weight:700;padding:2px 9px;border-radius:3px;letter-spacing:1px;white-space:nowrap}
+.cat-line{flex:1;height:1px;opacity:.4}
+.cat-cnt{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted)}
 
 /* CARDS */
-.card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:11px 13px;transition:all .15s;position:relative;overflow:hidden;cursor:default}
-.card:hover{background:var(--card2);transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,.4)}
-.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
-/* Color variants */
-.cg::before{background:var(--g)}.cc::before{background:var(--cyan)}.cp::before{background:var(--purple)}
-.cy::before{background:var(--yellow)}.cpk::before{background:var(--pink)}.co::before{background:var(--orange)}
-.cb2::before{background:var(--blue)}.ct::before{background:var(--teal)}.crd::before{background:var(--red)}
-.card.cg:hover{box-shadow:0 4px 20px rgba(0,230,118,.12)}
-.card.cc:hover{box-shadow:0 4px 20px rgba(0,229,255,.12)}
-.card.cp:hover{box-shadow:0 4px 20px rgba(213,0,249,.12)}
-.card.cy:hover{box-shadow:0 4px 20px rgba(255,215,64,.12)}
-.card.cpk:hover{box-shadow:0 4px 20px rgba(245,0,87,.12)}
-.card.co:hover{box-shadow:0 4px 20px rgba(255,109,0,.12)}
-.card.cb2:hover{box-shadow:0 4px 20px rgba(41,121,255,.12)}
-.card.ct:hover{box-shadow:0 4px 20px rgba(29,233,182,.12)}
-.cname{font-size:13px;font-weight:700;letter-spacing:.3px;line-height:1.2}
-.cdesc{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5;font-family:'Share Tech Mono',monospace}
-.cfooter{display:flex;align-items:center;justify-content:space-between;margin-top:10px;gap:5px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 12px;transition:all .15s;position:relative;overflow:hidden}
+.card:hover{background:var(--card2);transform:translateY(-1px)}
+.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:2px 0 0 2px}
+.cg::before{background:#00e676}.cc::before{background:#00e5ff}.cp::before{background:#d500f9}
+.cy::before{background:#ffd740}.cpk::before{background:#f50057}.co::before{background:#ff6d00}
+.cb2::before{background:#2979ff}.ct::before{background:#1de9b6}.crd::before{background:#ff1744}
+.cg:hover{box-shadow:0 3px 14px rgba(0,230,118,.09)}.cc:hover{box-shadow:0 3px 14px rgba(0,229,255,.09)}
+.cp:hover{box-shadow:0 3px 14px rgba(213,0,249,.09)}.cy:hover{box-shadow:0 3px 14px rgba(255,215,64,.09)}
+.cpk:hover{box-shadow:0 3px 14px rgba(245,0,87,.09)}.co:hover{box-shadow:0 3px 14px rgba(255,109,0,.09)}
+.cb2:hover{box-shadow:0 3px 14px rgba(41,121,255,.09)}.ct:hover{box-shadow:0 3px 14px rgba(29,233,182,.09)}
+.cname{font-size:13px;font-weight:700;letter-spacing:.3px}
+.cdesc{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.45;font-family:'Share Tech Mono',monospace}
+.cnotes{font-family:'Share Tech Mono',monospace;font-size:9px;color:#1e4a1e;margin-top:3px}
+.cfooter{display:flex;align-items:center;justify-content:space-between;margin-top:9px;gap:4px}
 .badges{display:flex;gap:3px;flex-wrap:wrap}
-.badge{font-size:9px;padding:2px 6px;border-radius:3px;font-family:'Share Tech Mono',monospace;font-weight:700;letter-spacing:.3px}
-.bnew{background:#0a2e0a;color:#69f0ae;border:1px solid #1e4e1e}
-.bgit{background:#141f14;color:#4a7a4a;border:1px solid #1a2a1a}
-.bweb{background:#001828;color:var(--cyan);border:1px solid #003050}
-.bext{background:#180028;color:#d580ff;border:1px solid #300055}
-.bbot{background:#18001e;color:#f48fb1;border:1px solid #300040}
-.badd{background:#001e1e;color:var(--teal);border:1px solid #004040}
-.lbtn{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);text-decoration:none;padding:3px 8px;border:1px solid var(--border2);border-radius:4px;display:flex;align-items:center;gap:3px;transition:all .12s;flex-shrink:0}
+.badge{font-size:9px;padding:2px 6px;border-radius:3px;font-family:'Share Tech Mono',monospace;font-weight:700}
+.bnew{background:#071807;color:#69f0ae;border:1px solid #1e4a1e}
+.bgit{background:#101810;color:#3d6b3d;border:1px solid #1a2a1a}
+.bweb{background:#001520;color:#00e5ff;border:1px solid #002840}
+.bext{background:#150023;color:#d580ff;border:1px solid #2e0050}
+.bbot{background:#170020;color:#f48fb1;border:1px solid #2e0040}
+.bshared{background:#001a2a;color:#00e5ff;border:1px solid #003850}
+.lbtn{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);text-decoration:none;padding:3px 7px;border:1px solid var(--border2);border-radius:4px;display:flex;align-items:center;gap:3px;transition:all .12s;flex-shrink:0}
 .lbtn:hover{color:var(--cyan);border-color:var(--cyan)}
-.empty{text-align:center;padding:60px 20px;font-family:'Share Tech Mono',monospace;color:var(--muted);font-size:12px}
-
-/* ── MODAL OVERLAY ── */
-.ovl{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:900;display:flex;align-items:center;justify-content:center;padding:10px;backdrop-filter:blur(4px)}
-.ovl.hidden{display:none}
+.empty{text-align:center;padding:50px 20px;font-family:'Share Tech Mono',monospace;color:var(--muted);font-size:12px}
+.loading-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:12px}
+.loading-ring{width:40px;height:40px;border:2px solid #1e3a1e;border-top-color:var(--g);border-radius:50%;animation:spinR .8s linear infinite}
+.loading-text{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted)}
 
 /* MODAL */
-.modal{background:var(--bg2);border:1px solid #2a4a2a;border-radius:14px;width:100%;max-width:540px;max-height:94vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,229,118,.1),0 0 120px rgba(0,229,255,.04)}
-.mhdr{padding:0}
-/* Modal header with gradient */
-.mhdr-inner{background:linear-gradient(135deg,#081208,#060e10);border-bottom:1px solid #1e3a1e;padding:16px 18px;display:flex;align-items:center;gap:12px}
-.mhdr-logo{width:36px;height:36px;flex-shrink:0}
-.mhdr-logo svg{animation:spin 6s linear infinite}
-.mhdr-text{flex:1}
-.mtitle{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;background:linear-gradient(90deg,var(--g),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:1px}
+.ovl{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:800;display:flex;align-items:center;justify-content:center;padding:10px;backdrop-filter:blur(5px)}
+.ovl.hidden{display:none}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:13px;width:100%;max-width:540px;max-height:94vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,229,118,.09)}
+.mhdr{background:linear-gradient(135deg,#040c04,#060e10);border-bottom:1px solid var(--border2);padding:14px 17px;display:flex;align-items:center;gap:11px}
+.mhdr-ring{position:relative;width:40px;height:40px;flex-shrink:0}
+.mhdr-ring-svg{position:absolute;inset:0;animation:spinR 6s linear infinite}
+.mhdr-center{position:absolute;inset:8px;background:#030803;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px}
+.mhdr-info{flex:1}
+.mtitle{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;color:var(--g);letter-spacing:1px}
 .msub{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);margin-top:2px}
-.xbtn{background:transparent;border:1px solid #1e2e1e;color:var(--muted);width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0;line-height:1}
-.xbtn:hover{color:var(--pink);border-color:var(--pink);background:#1a0008}
-
-/* FORM PROGRESS */
-.msteps{display:flex;gap:0;background:#040804;border-bottom:1px solid var(--border)}
-.mstep{flex:1;padding:8px 4px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:9px;color:#2a4a2a;letter-spacing:.5px;transition:color .2s;border-bottom:2px solid transparent;cursor:pointer}
-.mstep.active{color:var(--cyan);border-bottom-color:var(--cyan)}
-.mstep.done{color:var(--g);border-bottom-color:var(--g)}
-
-.mbody{padding:16px 18px;overflow-y:auto;flex:1}
-.fpage{display:none}
+.xbtn{background:transparent;border:1px solid var(--border);color:var(--muted);width:26px;height:26px;border-radius:5px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0}
+.xbtn:hover{color:var(--pink);border-color:var(--pink)}
+.steps{display:flex;background:#030603;border-bottom:1px solid var(--border)}
+.step{flex:1;padding:8px 4px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:9px;color:#1a3a1a;border-bottom:2px solid transparent;transition:all .2s;letter-spacing:.3px;position:relative}
+.step.active{color:var(--cyan);border-bottom-color:var(--cyan)}
+.step.done{color:var(--g);border-bottom-color:var(--g)}
+.step.done::after{content:'✓';position:absolute;right:5px;top:50%;transform:translateY(-50%);font-size:10px}
+.mbody{padding:14px 16px;overflow-y:auto;flex:1}
+.fpage{display:none;animation:fadeIn .2s ease}
 .fpage.show{display:block}
-.fg{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+@keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .ff{grid-column:1/-1}
 .fld{display:flex;flex-direction:column;gap:4px}
 .fld label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--muted)}
-.fld label em{color:var(--pink);font-style:normal}
-.fi{background:var(--bg3);border:1px solid #1e3a1e;border-radius:7px;padding:9px 11px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;outline:none;width:100%;transition:all .15s}
-.fi:focus{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(0,229,255,.07)}
-.fi::placeholder{color:#1e3e1e}
-select.fi{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%234a7a4a'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+.freq{color:var(--pink);font-style:normal}
+.fi{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:8px 10px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;outline:none;width:100%;transition:all .15s}
+.fi:focus{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(0,229,255,.06)}
+.fi::placeholder{color:#1a3a1a}
+select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%233d6b3d'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;appearance:none}
 select.fi option{background:var(--bg3);color:var(--text)}
-textarea.fi{resize:vertical;min-height:70px}
-.errm{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--pink);margin-top:3px;display:none}
-.dcnt{font-family:'Share Tech Mono',monospace;font-size:9px;color:#2a4a2a;margin-top:2px;text-align:right}
-
-/* TYPE SELECTOR */
+textarea.fi{resize:vertical;min-height:68px}
+.errm{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--pink);margin-top:2px;display:none;padding:3px 8px;background:#100008;border-radius:3px}
+.dcnt{font-family:'Share Tech Mono',monospace;font-size:9px;color:#1a3a1a;text-align:right;margin-top:2px}
 .tgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
-.to{padding:9px 4px;border:1px solid #1a2a1a;border-radius:7px;text-align:center;cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);transition:all .15s;user-select:none;line-height:1.5}
-.to:hover{border-color:#2a4a2a;color:var(--text)}
-.to.sg{background:#061a06;color:var(--g);border-color:var(--g);box-shadow:0 0 8px rgba(0,230,118,.15)}
-.to.sc{background:#001020;color:var(--cyan);border-color:var(--cyan);box-shadow:0 0 8px rgba(0,229,255,.15)}
-.to.se{background:#100020;color:#d580ff;border-color:#d580ff;box-shadow:0 0 8px rgba(213,0,249,.15)}
-.to.sb{background:#140010;color:#f48fb1;border-color:#f48fb1;box-shadow:0 0 8px rgba(244,143,177,.15)}
-.to-icon{font-size:18px;display:block;margin-bottom:3px}
-
-/* COLOR SELECTOR */
-.colgrid{display:grid;grid-template-columns:repeat(9,1fr);gap:5px;margin-top:2px}
+.to{padding:9px 3px;border:1px solid var(--border2);border-radius:7px;text-align:center;cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);transition:all .15s;line-height:1.5;user-select:none}
+.to:hover{color:var(--text);border-color:#2e5a2e}
+.to .ti{font-size:20px;display:block;margin-bottom:3px}
+.to.sg{background:#061a06;color:var(--g);border-color:var(--g)}.to.sc{background:#001020;color:var(--cyan);border-color:var(--cyan)}.to.se{background:#0e0020;color:#d580ff;border-color:#d580ff}.to.sb{background:#12001a;color:#f48fb1;border-color:#f48fb1}
+.sec-t{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.sec-t::after{content:'';flex:1;height:1px;background:var(--border)}
+.colgrid{display:grid;grid-template-columns:repeat(9,1fr);gap:4px}
 .co2{height:26px;border-radius:5px;border:2px solid transparent;cursor:pointer;transition:all .15s;position:relative}
-.co2:hover{transform:scale(1.1)}
-.co2.sel{border-color:#fff;transform:scale(1.15);box-shadow:0 0 8px rgba(255,255,255,.2)}
-.co2.sel::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:rgba(0,0,0,.7)}
-
-/* PREVIEW */
-.pvlbl{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:#1e3a1e;padding:12px 0 7px;display:flex;align-items:center;gap:6px}
-.pvlbl::before,.pvlbl::after{content:'';flex:1;height:1px;background:var(--border)}
-
-/* MODAL FOOTER */
-.mftr{padding:12px 18px;border-top:1px solid var(--border);background:#040804;display:flex;gap:8px}
-.sbtn{flex:1;background:linear-gradient(135deg,var(--g),var(--cyan));color:#000;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;padding:11px;border:none;border-radius:7px;cursor:pointer;letter-spacing:1px;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s}
-.sbtn:hover{transform:scale(1.02);box-shadow:0 0 16px rgba(0,229,118,.3)}
-.nbtn{flex:1;background:linear-gradient(135deg,var(--cyan),var(--purple));color:#fff;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;padding:11px;border:none;border-radius:7px;cursor:pointer;letter-spacing:1px;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s}
+.co2:hover{transform:scale(1.08)}
+.co2.sel{border-color:#fff;transform:scale(1.14)}
+.co2.sel::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:rgba(0,0,0,.6)}
+.color-guide{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:7px}
+.cg-i{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted);display:flex;align-items:center;gap:4px}
+.cg-d{width:7px;height:7px;border-radius:2px;flex-shrink:0}
+.pv-t{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:#1a3a1a;margin:10px 0 7px;display:flex;align-items:center;gap:7px}
+.pv-t::before,.pv-t::after{content:'';flex:1;height:1px;background:var(--border)}
+.pv-meta{margin-top:9px;padding:9px 11px;background:var(--dim);border-radius:6px;border:1px solid var(--border)}
+.pv-meta-r{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);line-height:1.9}
+.success-page{text-align:center;padding:26px 20px}
+.success-icon{font-size:52px;display:block;animation:popIn .4s cubic-bezier(.2,1.4,.3,1)}
+@keyframes popIn{0%{transform:scale(0) rotate(-10deg)}70%{transform:scale(1.1)}100%{transform:scale(1)}}
+.success-title{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:var(--g);margin-top:10px;letter-spacing:1px}
+.success-sub{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--cyan);margin-top:5px}
+.success-note{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);margin-top:8px}
+.mftr{padding:11px 16px;border-top:1px solid var(--border);background:var(--dim);display:flex;gap:6px}
+.sbtn{flex:2;background:linear-gradient(135deg,var(--g),var(--cyan));color:#000;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;padding:10px;border:none;border-radius:6px;cursor:pointer;letter-spacing:1px;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .15s}
+.sbtn:hover{transform:scale(1.02);box-shadow:0 0 16px rgba(0,229,118,.25)}
+.nbtn{flex:2;background:linear-gradient(135deg,var(--cyan),var(--teal));color:#000;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;padding:10px;border:none;border-radius:6px;cursor:pointer;letter-spacing:1px;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .15s}
 .nbtn:hover{transform:scale(1.02)}
-.pbtn{background:transparent;border:1px solid var(--border2);color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:10px;padding:11px 14px;border-radius:7px;cursor:pointer;transition:all .12s}
-.pbtn:hover{color:var(--text);border-color:#3a5a3a}
-.cbtn{background:transparent;border:1px solid #1a1a1a;color:#2e4e2e;font-family:'Share Tech Mono',monospace;font-size:10px;padding:11px 14px;border-radius:7px;cursor:pointer;transition:all .12s}
-.cbtn:hover{color:var(--muted);border-color:#2a2a2a}
+.pbtn,.cbtn{flex:1;background:transparent;border:1px solid var(--border2);color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:10px;padding:10px 8px;border-radius:6px;cursor:pointer;transition:all .12s;text-align:center}
+.pbtn:hover,.cbtn:hover{color:var(--text)}
 
-/* SUCCESS STATE */
-.success-view{text-align:center;padding:30px 20px}
-.success-icon{font-size:48px;display:block;animation:popIn .4s ease-out}
-.success-title{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--g);margin-top:12px;letter-spacing:1px}
-.success-sub{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);margin-top:6px}
-@keyframes popIn{0%{transform:scale(0);opacity:0}80%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+/* SHARED BANNER */
+.shared-banner{background:#001a0a;border:1px solid #0a3a1a;border-radius:7px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--g)}
+.shared-banner-icon{font-size:16px;flex-shrink:0}
 
 /* TOAST */
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:#0a1e0a;border:1px solid var(--g);border-radius:9px;padding:10px 18px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--g);z-index:9999;transition:transform .35s cubic-bezier(.2,.8,.3,1.2);display:flex;align-items:center;gap:8px;box-shadow:0 0 24px rgba(0,229,118,.2);white-space:nowrap}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(70px);background:#060d06;border:1px solid var(--g);border-radius:9px;padding:9px 16px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--g);z-index:9999;transition:transform .4s cubic-bezier(.2,.8,.3,1.2);display:flex;align-items:center;gap:7px;box-shadow:0 0 24px rgba(0,229,118,.18);white-space:nowrap}
 .toast.show{transform:translateX(-50%) translateY(0)}
 
-/* DISCLAIMER */
-.disc{text-align:center;padding:18px 16px;border-top:1px solid var(--border);font-family:'Share Tech Mono',monospace;font-size:9px;color:#1e3e1e;line-height:1.7;margin-top:10px}
+.disc{text-align:center;padding:16px;border-top:1px solid var(--border);font-family:'Share Tech Mono',monospace;font-size:9px;color:#1a3a1a;line-height:1.8;margin-top:8px}
 </style>
 </head>
 <body>
 
 <!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-inner" id="ticker">
-    <span class="ticker-item">⬤ <span>THECYBERINDIA</span> — OSINT ARSENAL v3.0</span>
-    <span class="ticker-item">// <span>ETHICAL HACKING</span> · FORENSICS · CYBER INTEL</span>
-    <span class="ticker-item">⬤ <span>73 TOOLS</span> INDEXED · UPDATED 2024</span>
-    <span class="ticker-item">// AUTHORIZED USE ONLY · STAY ETHICAL · STAY LEGAL</span>
-    <span class="ticker-item">⬤ <span>ADD YOUR TOOLS</span> TO THE ARSENAL</span>
-    <span class="ticker-item">// <span>THECYBERINDIA</span> — OSINT ARSENAL v3.0</span>
-    <span class="ticker-item">⬤ <span>ETHICAL HACKING</span> · FORENSICS · CYBER INTEL</span>
-    <span class="ticker-item">// <span>73 TOOLS</span> INDEXED · UPDATED 2024</span>
-    <span class="ticker-item">⬤ AUTHORIZED USE ONLY · STAY ETHICAL · STAY LEGAL</span>
-    <span class="ticker-item">// <span>ADD YOUR TOOLS</span> TO THE ARSENAL</span>
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ti">⬤ <b>THECYBERINDIA</b> — SHARED OSINT ARSENAL</span>
+    <span class="ti">// TOOLS ADDED BY ANY TEAM MEMBER ARE <b>VISIBLE TO ALL</b></span>
+    <span class="ti">⬤ <b>REAL-TIME SHARED</b> DATABASE · TEAM COLLABORATION</span>
+    <span class="ti">// ETHICAL HACKING · FORENSICS · OPEN SOURCE INTEL</span>
+    <span class="ti">⬤ <b>THECYBERINDIA</b> — SHARED OSINT ARSENAL</span>
+    <span class="ti">// TOOLS ADDED BY ANY TEAM MEMBER ARE <b>VISIBLE TO ALL</b></span>
+    <span class="ti">⬤ <b>REAL-TIME SHARED</b> DATABASE · TEAM COLLABORATION</span>
+    <span class="ti">// ETHICAL HACKING · FORENSICS · OPEN SOURCE INTEL</span>
   </div>
 </div>
 
 <!-- HEADER -->
 <div class="hdr">
-  <div class="hdr-inner">
-    <div class="logo-wrap">
-      <div class="logo-ring">
-        <svg viewBox="0 0 52 52" width="52" height="52" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="26" cy="26" r="24" fill="none" stroke="#1a3a1a" stroke-width="1"/>
-          <circle cx="26" cy="26" r="24" fill="none" stroke="#00e676" stroke-width="1.5" stroke-dasharray="6 4" stroke-dashoffset="0"/>
-          <circle cx="26" cy="2" r="2" fill="#00e676"/>
-          <circle cx="26" cy="50" r="1.5" fill="#00e5ff"/>
-          <circle cx="2" cy="26" r="1.5" fill="#1de9b6"/>
+  <div class="hdr-main">
+    <div class="logo-area">
+      <div class="ring-wrap">
+        <svg class="r-outer" viewBox="0 0 54 54" width="54" height="54" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="27" cy="27" r="25" fill="none" stroke="#0f2a0f" stroke-width="1"/>
+          <circle cx="27" cy="27" r="25" fill="none" stroke="#00e676" stroke-width="1.5" stroke-dasharray="5 4" opacity=".7"/>
+          <circle cx="27" cy="2" r="2.5" fill="#00e676"/><circle cx="52" cy="27" r="1.5" fill="#00e5ff"/><circle cx="27" cy="52" r="2" fill="#1de9b6"/><circle cx="2" cy="27" r="1.5" fill="#69f0ae"/>
         </svg>
-        <div class="logo-inner">
-          <span class="logo-icon">🔍</span>
-        </div>
+        <svg class="r-inner" viewBox="0 0 40 40" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="17" fill="none" stroke="#001a00" stroke-width="1"/>
+          <circle cx="20" cy="20" r="17" fill="none" stroke="#00e5ff" stroke-width="1" stroke-dasharray="3 5" opacity=".4"/>
+        </svg>
+        <div class="r-center"><span class="r-icon">🔍</span></div>
       </div>
-      <div class="logo-text">
+      <div class="logo-info">
         <div class="logo-title">THECYBERINDIA</div>
-        <div class="logo-sub">OSINT &amp; FORENSICS ARSENAL</div>
-        <div class="logo-badge">▶ CLASSIFIED TOOLKIT</div>
+        <div class="logo-sub">⚡ SHARED OSINT &amp; FORENSICS ARSENAL</div>
+        <div class="logo-pills"><span class="pill pg">OSINT</span><span class="pill pc">TEAM SHARED</span></div>
       </div>
     </div>
-    <button class="add-btn" id="openModal">ADD NEW TOOL</button>
+    <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+      <button class="add-btn" id="openModal">+ ADD TOOL</button>
+      <div class="sync-status" id="syncStatus" onclick="loadSharedTools()">
+        <div class="sync-dot loading" id="syncDot"></div>
+        <span class="sync-text" id="syncText">connecting...</span>
+      </div>
+    </div>
   </div>
   <div class="search-area">
     <div class="sw">
-      <svg class="si" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <svg class="si-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <input class="search" id="srch" type="text" placeholder="search tools, descriptions, categories..." autocomplete="off">
     </div>
-    <div class="stats" id="stats"></div>
+    <div class="statsrow" id="stats"></div>
   </div>
 </div>
 
@@ -252,373 +256,344 @@ textarea.fi{resize:vertical;min-height:70px}
 
 <!-- CONTENT -->
 <div class="content">
-  <div class="frow" id="frow"></div>
+  <div class="shared-banner" id="sharedBanner" style="display:none">
+    <span class="shared-banner-icon">🌐</span>
+    <span>Shared tools visible to <b>all team members</b> — auto-refreshes every 30 seconds</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+    <span class="frow-lbl" style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted)">FILTER:</span>
+    <div id="frow" style="display:flex;gap:4px;flex-wrap:wrap"></div>
+  </div>
   <div class="slbl" id="slbl"></div>
-  <div class="grid" id="grid"></div>
-  <div class="empty" id="emp" style="display:none">
-    <div style="font-size:28px;margin-bottom:10px">🔍</div>
-    no tools found for this query.
+  <div id="loadingScreen" class="loading-screen">
+    <div class="loading-ring"></div>
+    <div class="loading-text">loading shared arsenal...</div>
   </div>
-  <div class="disc">
-    ⚠ All tools listed for educational purposes, ethical hacking &amp; authorized cybercrime investigation only.<br>
-    Unauthorized use against systems or individuals without explicit permission is illegal and unethical.<br>
-    TheCyberIndia does not take responsibility for misuse of any tools listed here.
-  </div>
+  <div class="grid" id="grid" style="display:none"></div>
+  <div class="empty" id="emp" style="display:none">🔍<br><br>No tools found.</div>
+  <div class="disc">⚠ All tools for educational purposes, ethical hacking & authorized cybercrime investigation only.<br>TheCyberIndia does not take responsibility for misuse.</div>
 </div>
 
-<!-- ── ADD TOOL MODAL ── -->
+<!-- ADD TOOL MODAL -->
 <div class="ovl hidden" id="ovl">
   <div class="modal">
-    <!-- Modal Header -->
     <div class="mhdr">
-      <div class="mhdr-inner">
-        <div class="mhdr-logo">
-          <svg viewBox="0 0 36 36" width="36" height="36" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="18" cy="18" r="16" fill="none" stroke="#1a3a1a" stroke-width="1"/>
-            <circle cx="18" cy="18" r="16" fill="none" stroke="#00e676" stroke-width="1.5" stroke-dasharray="5 3"/>
-            <circle cx="18" cy="2" r="2" fill="#00e676"/>
-          </svg>
-        </div>
-        <div class="mhdr-text">
-          <div class="mtitle">ADD NEW TOOL</div>
-          <div class="msub">// classified addition to arsenal · thecyberindia</div>
-        </div>
-        <button class="xbtn" id="closeModal" title="Close">✕</button>
+      <div class="mhdr-ring">
+        <svg class="mhdr-ring-svg" viewBox="0 0 40 40" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="18" fill="none" stroke="#0f2a0f" stroke-width="1"/>
+          <circle cx="20" cy="20" r="18" fill="none" stroke="#00e676" stroke-width="1.5" stroke-dasharray="5 3"/>
+          <circle cx="20" cy="2" r="2" fill="#00e676"/><circle cx="38" cy="20" r="1.5" fill="#00e5ff"/>
+        </svg>
+        <div class="mhdr-center">🛡️</div>
       </div>
-      <!-- STEPS -->
-      <div class="msteps">
-        <div class="mstep active" id="step1">① BASIC INFO</div>
-        <div class="mstep" id="step2">② LINK &amp; TYPE</div>
-        <div class="mstep" id="step3">③ STYLE</div>
-        <div class="mstep" id="step4">④ PREVIEW</div>
+      <div class="mhdr-info">
+        <div class="mtitle">ADD TOOL TO SHARED ARSENAL</div>
+        <div class="msub">// visible to all team members instantly · thecyberindia</div>
       </div>
+      <button class="xbtn" id="closeModal">✕</button>
     </div>
+    <div class="steps">
+      <div class="step active" id="st1">① INFO</div>
+      <div class="step" id="st2">② LINK</div>
+      <div class="step" id="st3">③ STYLE</div>
+      <div class="step" id="st4">④ CONFIRM</div>
+    </div>
+    <div class="mbody">
 
-    <!-- FORM PAGES -->
-    <div class="mbody" id="mbody">
-
-      <!-- PAGE 1: BASIC INFO -->
-      <div class="fpage show" id="page1">
+      <!-- PAGE 1 -->
+      <div class="fpage show" id="pg1">
         <div class="fg">
           <div class="fld ff">
-            <label>TOOL NAME <em>*</em></label>
-            <input class="fi" id="fn" type="text" placeholder="e.g. Maltego, Shodan, Recon-ng..." maxlength="60">
-            <div class="errm" id="en">⚠ Tool name is required</div>
+            <label>TOOL NAME <em class="freq">*</em></label>
+            <input class="fi" id="fn" type="text" placeholder="e.g. Maltego, Shodan..." maxlength="60">
+            <div class="errm" id="en">⚠ Tool name required</div>
           </div>
           <div class="fld ff">
-            <label>DESCRIPTION <em>*</em></label>
-            <textarea class="fi" id="fd" placeholder="What does this tool do? How is it useful for OSINT or forensics investigations?" maxlength="180" rows="3"></textarea>
-            <div class="errm" id="ed">⚠ Description is required</div>
-            <div class="dcnt"><span id="dc">0</span>/180</div>
+            <label>DESCRIPTION <em class="freq">*</em></label>
+            <textarea class="fi" id="fd" placeholder="What does this tool do? How is it useful for OSINT or forensics?" maxlength="200" rows="3"></textarea>
+            <div class="errm" id="ed">⚠ Description required</div>
+            <div class="dcnt"><span id="dc">0</span>/200</div>
           </div>
           <div class="fld">
-            <label>CATEGORY <em>*</em></label>
+            <label>CATEGORY <em class="freq">*</em></label>
             <select class="fi" id="fc">
-              <option value="">-- select category --</option>
-              <option>OS Platforms</option>
-              <option>Domain &amp; Network</option>
-              <option>Person &amp; Social</option>
-              <option>Email Intelligence</option>
-              <option>Mobile Forensics</option>
-              <option>Image &amp; Media</option>
-              <option>Dark Web</option>
-              <option>Digital Forensics</option>
-              <option>OSINT Frameworks</option>
-              <option>Telegram Intel</option>
-              <option>Search Engines</option>
-              <option>ProtonMail</option>
-              <option>Cloud OSINT</option>
-              <option>Learning Resources</option>
+              <option value="">-- select --</option>
+              <option>OS Platforms</option><option>Domain &amp; Network</option><option>Person &amp; Social</option>
+              <option>Email Intelligence</option><option>Mobile Forensics</option><option>Image &amp; Media</option>
+              <option>Dark Web</option><option>Digital Forensics</option><option>OSINT Frameworks</option>
+              <option>Telegram Intel</option><option>Search Engines</option><option>ProtonMail</option>
+              <option>Cloud OSINT</option><option>Learning Resources</option>
               <option value="__custom">+ New Category...</option>
             </select>
-            <div class="errm" id="ec">⚠ Category is required</div>
+            <div class="errm" id="ec">⚠ Category required</div>
           </div>
           <div class="fld" id="ccf" style="display:none">
-            <label>CUSTOM CATEGORY NAME <em>*</em></label>
-            <input class="fi" id="fcc" type="text" placeholder="e.g. Geo Intelligence..." maxlength="40">
+            <label>CUSTOM CATEGORY <em class="freq">*</em></label>
+            <input class="fi" id="fcc" placeholder="e.g. Geo Intelligence..." maxlength="40">
+          </div>
+          <div class="fld">
+            <label>ADDED BY (Your Name)</label>
+            <input class="fi" id="fby" type="text" placeholder="e.g. Shahzad, TeamMember1..." maxlength="30">
           </div>
           <div class="fld">
             <label>YEAR</label>
-            <select class="fi" id="fy">
-              <option value="2025">2025</option>
-              <option value="2024" selected>2024</option>
-              <option value="2023">2023</option>
-              <option value="2022">2022</option>
-              <option value="2021">2021</option>
-              <option value="2020">2020</option>
-            </select>
+            <select class="fi" id="fy"><option value="2025">2025</option><option value="2024" selected>2024</option><option value="2023">2023</option><option value="2022">2022</option><option value="2021">2021</option><option value="2020">2020</option></select>
           </div>
         </div>
       </div>
 
-      <!-- PAGE 2: LINK & TYPE -->
-      <div class="fpage" id="page2">
+      <!-- PAGE 2 -->
+      <div class="fpage" id="pg2">
         <div class="fg">
           <div class="fld ff">
-            <label>TOOL URL / LINK <em>*</em></label>
-            <input class="fi" id="fl" type="url" placeholder="https://github.com/user/repo  OR  https://tool.io">
-            <div class="errm" id="el">⚠ Valid URL required (must start with https://)</div>
+            <label>TOOL URL <em class="freq">*</em></label>
+            <input class="fi" id="fl" type="url" placeholder="https://github.com/...  OR  https://tool.io">
+            <div class="errm" id="el">⚠ Valid URL required (https://...)</div>
           </div>
           <div class="fld ff">
-            <label>TOOL TYPE <em>*</em></label>
+            <label>TOOL TYPE <em class="freq">*</em></label>
             <div class="tgrid">
-              <div class="to" data-t="github"><span class="to-icon">🐙</span>GITHUB<br><span style="color:#2a4a2a;font-size:8px">open source</span></div>
-              <div class="to" data-t="web"><span class="to-icon">🌐</span>WEBSITE<br><span style="color:#2a4a2a;font-size:8px">web app / tool</span></div>
-              <div class="to" data-t="ext"><span class="to-icon">🧩</span>EXTENSION<br><span style="color:#2a4a2a;font-size:8px">browser plugin</span></div>
-              <div class="to" data-t="bot"><span class="to-icon">🤖</span>BOT / APP<br><span style="color:#2a4a2a;font-size:8px">telegram / mobile</span></div>
+              <div class="to" data-t="github"><span class="ti">🐙</span>GITHUB<br><span style="font-size:8px;color:#1a3a1a">open source</span></div>
+              <div class="to" data-t="web"><span class="ti">🌐</span>WEBSITE<br><span style="font-size:8px;color:#1a3a1a">web app</span></div>
+              <div class="to" data-t="ext"><span class="ti">🧩</span>EXTENSION<br><span style="font-size:8px;color:#1a3a1a">browser</span></div>
+              <div class="to" data-t="bot"><span class="ti">🤖</span>BOT/APP<br><span style="font-size:8px;color:#1a3a1a">telegram</span></div>
             </div>
-            <div class="errm" id="et">⚠ Please select a tool type</div>
+            <div class="errm" id="et">⚠ Select a tool type</div>
           </div>
           <div class="fld ff">
             <label>NOTES (optional)</label>
-            <input class="fi" id="fnotes" type="text" placeholder="e.g. requires Python 3.9+, needs API key..." maxlength="100">
+            <input class="fi" id="fnotes" placeholder="e.g. requires Python 3.9+, needs API key..." maxlength="100">
           </div>
         </div>
       </div>
 
-      <!-- PAGE 3: STYLE -->
-      <div class="fpage" id="page3">
+      <!-- PAGE 3 -->
+      <div class="fpage" id="pg3">
         <div class="fg">
           <div class="fld ff">
-            <label>CARD ACCENT COLOR</label>
+            <div class="sec-t">CARD ACCENT COLOR</div>
             <div class="colgrid" id="colg">
-              <div class="co2 sel" data-c="cg" style="background:#00e676" title="Green (default)"></div>
+              <div class="co2 sel" data-c="cg" style="background:#00e676" title="Green"></div>
               <div class="co2" data-c="cc" style="background:#00e5ff" title="Cyan"></div>
               <div class="co2" data-c="cp" style="background:#d500f9" title="Purple"></div>
               <div class="co2" data-c="cy" style="background:#ffd740" title="Yellow"></div>
-              <div class="co2" data-c="cpk" style="background:#f50057" title="Pink/Red"></div>
+              <div class="co2" data-c="cpk" style="background:#f50057" title="Pink"></div>
               <div class="co2" data-c="co" style="background:#ff6d00" title="Orange"></div>
               <div class="co2" data-c="cb2" style="background:#2979ff" title="Blue"></div>
               <div class="co2" data-c="ct" style="background:#1de9b6" title="Teal"></div>
               <div class="co2" data-c="crd" style="background:#ff1744" title="Red"></div>
             </div>
-          </div>
-          <div class="fld ff" style="margin-top:4px">
-            <label>COLOR MEANING GUIDE</label>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:4px">
-              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;background:#00e676;border-radius:2px;flex-shrink:0"></span>Green → OS / Frameworks</div>
-              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;background:#00e5ff;border-radius:2px;flex-shrink:0"></span>Cyan → Domain / Network</div>
-              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;background:#d500f9;border-radius:2px;flex-shrink:0"></span>Purple → Social / Person</div>
-              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;background:#ffd740;border-radius:2px;flex-shrink:0"></span>Yellow → Email / Search</div>
-              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;background:#ff6d00;border-radius:2px;flex-shrink:0"></span>Orange → Mobile</div>
-              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;background:#2979ff;border-radius:2px;flex-shrink:0"></span>Blue → Dark Web / Cloud</div>
-              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;background:#1de9b6;border-radius:2px;flex-shrink:0"></span>Teal → Digital Forensics</div>
-              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);display:flex;align-items:center;gap:5px"><span style="width:8px;height:8px;background:#f50057;border-radius:2px;flex-shrink:0"></span>Pink → Image / Media</div>
+            <div class="color-guide">
+              <div class="cg-i"><div class="cg-d" style="background:#00e676"></div>Green → OS/Frameworks</div>
+              <div class="cg-i"><div class="cg-d" style="background:#00e5ff"></div>Cyan → Domain/Network</div>
+              <div class="cg-i"><div class="cg-d" style="background:#d500f9"></div>Purple → Social/Person</div>
+              <div class="cg-i"><div class="cg-d" style="background:#ffd740"></div>Yellow → Email/Search</div>
+              <div class="cg-i"><div class="cg-d" style="background:#f50057"></div>Pink → Image/Media</div>
+              <div class="cg-i"><div class="cg-d" style="background:#ff6d00"></div>Orange → Mobile</div>
+              <div class="cg-i"><div class="cg-d" style="background:#2979ff"></div>Blue → Dark Web/Cloud</div>
+              <div class="cg-i"><div class="cg-d" style="background:#1de9b6"></div>Teal → Digital Forensics</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- PAGE 4: PREVIEW + SUBMIT -->
-      <div class="fpage" id="page4">
-        <div class="pvlbl">LIVE PREVIEW</div>
+      <!-- PAGE 4 PREVIEW -->
+      <div class="fpage" id="pg4">
+        <div class="pv-t">LIVE PREVIEW</div>
         <div class="card cg" id="pvc">
           <div class="cname" id="pvn" style="color:#69f0ae">Tool Name</div>
-          <div class="cdesc" id="pvd">Tool description will appear here...</div>
-          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#2a4a2a;margin-top:4px" id="pvnotes"></div>
+          <div class="cdesc" id="pvd">Description here...</div>
+          <div class="cnotes" id="pvnotes"></div>
           <div class="cfooter">
-            <div class="badges">
-              <span class="badge bnew" id="pvy">NEW 2024</span>
-              <span class="badge bgit" id="pvt">🐙 github</span>
-            </div>
+            <div class="badges"><span class="badge bnew" id="pvy">NEW 2024</span><span class="badge bgit" id="pvt">🐙 github</span><span class="badge bshared">🌐 shared</span></div>
             <div class="lbtn">🔗 open</div>
           </div>
         </div>
-        <div style="margin-top:14px;padding:10px 12px;background:var(--dim);border-radius:6px;border:1px solid var(--border)">
-          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);line-height:1.8">
-            <div>📁 CATEGORY: <span id="pv-cat" style="color:var(--text)">—</span></div>
-            <div>🔗 URL: <span id="pv-url" style="color:var(--cyan);word-break:break-all">—</span></div>
-          </div>
+        <div class="pv-meta">
+          <div class="pv-meta-r">📁 Category: <span id="pv-cat" style="color:var(--text)">—</span></div>
+          <div class="pv-meta-r">👤 Added by: <span id="pv-by" style="color:var(--cyan)">—</span></div>
+          <div class="pv-meta-r">🔗 URL: <span id="pv-url" style="color:var(--cyan);word-break:break-all">—</span></div>
         </div>
       </div>
 
-      <!-- SUCCESS PAGE -->
-      <div class="fpage" id="pageSuccess">
-        <div class="success-view">
+      <!-- SUCCESS -->
+      <div class="fpage" id="pgS">
+        <div class="success-page">
           <span class="success-icon">✅</span>
-          <div class="success-title">TOOL ADDED TO ARSENAL!</div>
-          <div class="success-sub" id="success-name">Tool has been successfully classified.</div>
-          <div style="margin-top:16px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted)">visible in your arsenal under the selected category</div>
+          <div class="success-title">TOOL SHARED WITH TEAM!</div>
+          <div class="success-sub" id="sname">Tool added successfully</div>
+          <div class="success-note">// All team members can now see this tool<br>// Visible to everyone using this arsenal</div>
         </div>
       </div>
 
-    </div><!-- end mbody -->
-
-    <!-- MODAL FOOTER -->
+    </div>
     <div class="mftr" id="mftr">
       <button class="cbtn" id="cancelBtn">CANCEL</button>
       <button class="pbtn" id="prevBtn" style="display:none">◀ BACK</button>
       <button class="nbtn" id="nextBtn">NEXT ▶</button>
-      <button class="sbtn" id="submitBtn" style="display:none">✚ ADD TO ARSENAL</button>
+      <button class="sbtn" id="submitBtn" style="display:none">🌐 SHARE WITH TEAM</button>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast">
-  ✅ <span id="tmsg">Tool added to arsenal!</span>
-</div>
+<div class="toast" id="toast">✅ <span id="tmsg">Tool shared!</span></div>
 
 <script>
-// ═══════════════════════════════════════════════════════
-// TOOL DATABASE
-// ═══════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════
+   BASE TOOLS (Built-in, always visible)
+═══════════════════════════════════════════ */
 const BASE=[
-  // OS Platforms
   {cat:"OS Platforms",name:"OS-Surveillance",desc:"Ultimate streamlined OSINT research platform",link:"https://www.os-surveillance.io/",type:"web",year:2023,col:"cg"},
-  {cat:"OS Platforms",name:"OSINTk.o",desc:"Customized Kali Linux ISO with pre-installed OSINT packages & scripts",link:"https://github.com/LinaYorda/OSINTko",type:"github",year:2022,col:"cg"},
-  {cat:"OS Platforms",name:"CyberPunkOS",desc:"VM with OSINT tools focused on dismantling Fake News",link:"https://github.com/cyberpunkOS/CyberPunkOS",type:"github",year:2022,col:"cg"},
+  {cat:"OS Platforms",name:"OSINTk.o",desc:"Customized Kali Linux ISO with pre-installed OSINT packages",link:"https://github.com/LinaYorda/OSINTko",type:"github",year:2022,col:"cg"},
   {cat:"OS Platforms",name:"Tlosint Live",desc:"Trace Labs OSINT Linux Distribution based on Kali",link:"https://github.com/tracelabs/tlosint-live",type:"github",year:2022,col:"cg"},
   {cat:"OS Platforms",name:"OSINT JUMP",desc:"Offensive recon VM based on Kali NetInstall",link:"https://github.com/delikely/OSINT-JUMP",type:"github",year:2021,col:"cg"},
-  // Domain & Network
   {cat:"Domain & Network",name:"SpiderFoot",desc:"Automates OSINT for threat intelligence & attack surface mapping",link:"https://github.com/smicallef/spiderfoot",type:"github",year:2020,col:"cc"},
   {cat:"Domain & Network",name:"BBOT",desc:"OSINT automation for hackers — recursive recon engine",link:"https://github.com/blacklanternsecurity/bbot",type:"github",year:2023,col:"cc"},
   {cat:"Domain & Network",name:"GooFuzz",desc:"OSINT fuzzing via Google Dorking — no traces on target server",link:"https://github.com/m3n0sd0n4ld/GooFuzz",type:"github",year:2022,col:"cc"},
   {cat:"Domain & Network",name:"Netlas.io",desc:"Visualize relationships of investigation entry points like Maltego",link:"https://app.netlas.io/",type:"web",year:2023,col:"cc"},
   {cat:"Domain & Network",name:"OpenSquat",desc:"Detection of phishing domains and typosquatting attacks",link:"https://github.com/atenreiro/opensquat",type:"github",year:2022,col:"cc"},
-  {cat:"Domain & Network",name:"Sub3Suite",desc:"Free cross-platform subdomains & network intelligence gathering",link:"https://github.com/3nock/sub3suite",type:"github",year:2022,col:"cc"},
-  {cat:"Domain & Network",name:"Commit-Stream",desc:"Find GitHub repos by extracting real-time commit logs",link:"https://github.com/x1sec/commit-stream",type:"github",year:2021,col:"cc"},
   {cat:"Domain & Network",name:"Chiasmodon",desc:"CLI OSINT toolkit for domain information gathering",link:"https://github.com/chiasmd0n/chiasmodon",type:"github",year:2023,col:"cc"},
-  // Person & Social
   {cat:"Person & Social",name:"Social Analyzer",desc:"Find a person's profile across +1000 social media sites",link:"https://github.com/qeeqbox/social-analyzer",type:"github",year:2021,col:"cp"},
   {cat:"Person & Social",name:"Blackbird",desc:"Search for accounts by username across social networks",link:"https://github.com/p1ngul1n0/blackbird",type:"github",year:2023,col:"cp"},
-  {cat:"Person & Social",name:"Alfred",desc:"Find social media accounts based on username inputs",link:"https://github.com/Alfredredbird/alfred",type:"github",year:2023,col:"cp"},
   {cat:"Person & Social",name:"GHunt",desc:"Offensive Google framework for OSINT investigations",link:"https://github.com/mxrch/GHunt",type:"github",year:2022,col:"cp"},
   {cat:"Person & Social",name:"CrossLinked",desc:"LinkedIn enumeration — extract valid employee names via scraping",link:"https://github.com/m8sec/CrossLinked",type:"github",year:2022,col:"cp"},
-  {cat:"Person & Social",name:"Mr.Holmes",desc:"Complete OSINT tool for target investigation",link:"https://github.com/Lucksi/Mr.Holmes",type:"github",year:2023,col:"cp"},
   {cat:"Person & Social",name:"WhoCord",desc:"Discord OSINT — investigate users and servers",link:"https://github.com/Siv-nick/WhoCord",type:"github",year:2024,isNew:true,col:"cp"},
-  {cat:"Person & Social",name:"Profil3r",desc:"Find a person's accounts, emails & breached credentials",link:"https://github.com/Greyjedix/Profil3r",type:"github",year:2022,col:"cp"},
-  {cat:"Person & Social",name:"DaProfiler",desc:"Web scraping + Google dorking for comprehensive target profiling",link:"https://github.com/daprofiler/DaProfiler",type:"github",year:2022,col:"cp"},
-  {cat:"Person & Social",name:"Ghost Recon",desc:"Person search, criminal search, social media scanning framework",link:"https://github.com/DR34M-M4K3R/GhostRecon",type:"github",year:2023,col:"cp"},
-  {cat:"Person & Social",name:"Twayback",desc:"Automate downloading archived deleted tweets",link:"https://github.com/Mennaruuk/twayback",type:"github",year:2022,col:"cp"},
   {cat:"Person & Social",name:"IG Follower Export",desc:"Export Instagram followers list to CSV — Chrome extension",link:"https://chromewebstore.google.com/detail/ig-follower-export-tool-i/kicgclkbiilobmccmmidfghnijgfamdb",type:"ext",year:2024,isNew:true,col:"cp"},
-  {cat:"Person & Social",name:"Insfo IG Export",desc:"Export Instagram following/followers list — Chrome extension",link:"https://chromewebstore.google.com/detail/insfo-ig-follower-export/bckleejkdhlponanidmjfjdigpahlado",type:"ext",year:2024,isNew:true,col:"cp"},
-  // Email
-  {cat:"Email Intelligence",name:"Holehe",desc:"Check if email is used on Twitter, Instagram & 100+ sites without alerting target",link:"https://github.com/megadose/holehe",type:"github",year:2021,col:"cy"},
+  {cat:"Email Intelligence",name:"Holehe",desc:"Check if email is used on Twitter, Instagram & 100+ sites",link:"https://github.com/megadose/holehe",type:"github",year:2021,col:"cy"},
   {cat:"Email Intelligence",name:"iKy",desc:"Advance email investigations with visual intelligence graphs",link:"https://github.com/kennbroorg/iKy",type:"github",year:2022,col:"cy"},
-  {cat:"Email Intelligence",name:"Infoga",desc:"Collection of information from e-mail addresses",link:"https://github.com/m4ll0k/Infoga",type:"github",year:2020,col:"cy"},
-  {cat:"Email Intelligence",name:"Check-If-Email-Exists",desc:"Verify email addresses without sending any email (via Telnet)",link:"https://github.com/amaurymartiny/check-if-email-exists",type:"github",year:2022,col:"cy"},
-  {cat:"Email Intelligence",name:"Oblivion",desc:"Real-time monitoring for new data leaks & credential exposure",link:"https://github.com/loseys/Oblivion",type:"github",year:2023,col:"cy"},
   {cat:"Email Intelligence",name:"BehindTheEmail",desc:"Investigate who is behind an email address",link:"https://behindtheemail.com/",type:"web",year:2024,isNew:true,col:"cy"},
   {cat:"Email Intelligence",name:"MailAccess",desc:"Email OSINT — account access investigation tool",link:"https://github.com/KatrielMoses/MailAccess",type:"github",year:2024,isNew:true,col:"cy"},
-  // Mobile
   {cat:"Mobile Forensics",name:"MVT",desc:"Mobile Verification Toolkit — find signs of device compromise",link:"https://github.com/mvt-project/mvt",type:"github",year:2023,col:"co"},
-  {cat:"Mobile Forensics",name:"Andriller",desc:"Forensic acquisition from Android devices — read-only, non-destructive",link:"https://github.com/den4uk/andriller",type:"github",year:2021,col:"co"},
-  {cat:"Mobile Forensics",name:"AndroidQF",desc:"Android Quick Forensics — identify traces of compromise on device",link:"https://github.com/botherder/androidqf",type:"github",year:2022,col:"co"},
+  {cat:"Mobile Forensics",name:"Andriller",desc:"Forensic acquisition from Android devices — read-only",link:"https://github.com/den4uk/andriller",type:"github",year:2021,col:"co"},
   {cat:"Mobile Forensics",name:"Whapa",desc:"Graphical forensic tools to analyze WhatsApp on Android & iOS",link:"https://github.com/B16f00t/whapa",type:"github",year:2022,col:"co"},
-  {cat:"Mobile Forensics",name:"MEAT",desc:"Forensic acquisitions on iOS devices",link:"https://github.com/jfarley248/MEAT",type:"github",year:2021,col:"co"},
   {cat:"Mobile Forensics",name:"Avilla Forensics",desc:"Police investigation forensics for WhatsApp, Signal & more",link:"https://github.com/AvillaDaniel/AvillaForensics",type:"github",year:2023,col:"co"},
-  {cat:"Mobile Forensics",name:"OSINT Forensics Mobile",desc:"Collection of tools for cell phone related investigations",link:"https://github.com/CScorza/OSINT-FORENSICS-MOBILE",type:"github",year:2022,col:"co"},
-  // Image & Media
   {cat:"Image & Media",name:"ExifLooter",desc:"Find geolocation on all image URLs and directories (OpenStreetMap)",link:"https://github.com/aydinnyunus/exifLooter",type:"github",year:2022,col:"cpk"},
   {cat:"Image & Media",name:"Imago Forensics",desc:"Extract digital evidence from images recursively",link:"https://github.com/redaelli/imago-forensics",type:"github",year:2021,col:"cpk"},
   {cat:"Image & Media",name:"AutoExif",desc:"Easily remove or view sensitive EXIF data from photos",link:"https://github.com/SirCryptic/autoexif",type:"github",year:2023,col:"cpk"},
-  {cat:"Image & Media",name:"RdpCacheStitcher",desc:"Reconstruct images from RDP cache bitmaps — by BSI Germany",link:"https://github.com/BSI-Bund/RdpCacheStitcher",type:"github",year:2021,col:"cpk"},
-  // Dark Web
   {cat:"Dark Web",name:"Prying Deep",desc:"OSINT tool to collect intelligence on the dark web",link:"https://github.com/iudicium/pryingdeep",type:"github",year:2023,col:"cb2"},
   {cat:"Dark Web",name:"OnionSearch",desc:"Scrape URLs across different .onion search engines",link:"https://github.com/megadose/OnionSearch",type:"github",year:2022,col:"cb2"},
-  {cat:"Dark Web",name:"Ransomware Posts",desc:"Track ransomware groups' public posts and victim data leaks",link:"https://github.com/privtools/ransomposts",type:"github",year:2023,col:"cb2"},
-  // Digital Forensics
-  {cat:"Digital Forensics",name:"Hayabusa",desc:"Sigma-based threat hunting + Windows event log timeline generator (Rust)",link:"https://github.com/Yamato-Security/hayabusa",type:"github",year:2023,col:"ct"},
+  {cat:"Dark Web",name:"Ransomware Posts",desc:"Track ransomware groups' public posts and victim leaks",link:"https://github.com/privtools/ransomposts",type:"github",year:2023,col:"cb2"},
+  {cat:"Digital Forensics",name:"Hayabusa",desc:"Sigma-based threat hunting + Windows event log timeline generator",link:"https://github.com/Yamato-Security/hayabusa",type:"github",year:2023,col:"ct"},
   {cat:"Digital Forensics",name:"Turbinia",desc:"Automation of digital forensic tools at scale — by Google",link:"https://github.com/google/turbinia",type:"github",year:2023,col:"ct"},
   {cat:"Digital Forensics",name:"IRIS Web",desc:"Collaborative Incident Response platform for DFIR teams",link:"https://github.com/dfir-iris/iris-web",type:"github",year:2023,col:"ct"},
-  {cat:"Digital Forensics",name:"Linux Explorer",desc:"Easy-to-use live forensics toolbox for Linux endpoints",link:"https://github.com/intezer/linux-explorer",type:"github",year:2022,col:"ct"},
-  {cat:"Digital Forensics",name:"Live Forensicator",desc:"PowerShell script for Incident Response & Live Forensics",link:"https://github.com/Johnng007/Live-Forensicator",type:"github",year:2023,col:"ct"},
-  {cat:"Digital Forensics",name:"Forensix",desc:"Google Chrome forensic tool — analyze & visualize browsing artifacts",link:"https://github.com/ChmaraX/forensix",type:"github",year:2022,col:"ct"},
-  {cat:"Digital Forensics",name:"IPED",desc:"Open source digital evidence processing for law enforcement",link:"https://github.com/sepinf-inc/IPED",type:"github",year:2023,col:"ct"},
   {cat:"Digital Forensics",name:"Tracee",desc:"Runtime Security and Forensics using eBPF",link:"https://github.com/aquasecurity/tracee",type:"github",year:2023,col:"ct"},
-  // OSINT Frameworks
-  {cat:"OSINT Frameworks",name:"GhostInt Tools",desc:"Comprehensive OSINT investigative toolkit — browser-based web app",link:"https://cyberz7.github.io/Ghostint-Tools/",type:"web",year:2024,isNew:true,col:"cg"},
+  {cat:"OSINT Frameworks",name:"GhostInt Tools",desc:"Comprehensive OSINT investigative toolkit — browser-based",link:"https://cyberz7.github.io/Ghostint-Tools/",type:"web",year:2024,isNew:true,col:"cg"},
   {cat:"OSINT Frameworks",name:"D4rk Intel",desc:"Dark web & surface web OSINT investigation toolkit",link:"https://github.com/techenthusiast167/D4rk_Intel-OSINT-Investigative-Toolkit",type:"github",year:2024,isNew:true,col:"cg"},
-  {cat:"OSINT Frameworks",name:"OSINT Portal",desc:"Comprehensive web-based OSINT tools portal collection",link:"https://osint.juanmathewsrebellosantos.com/",type:"web",year:2024,isNew:true,col:"cg"},
-  {cat:"OSINT Frameworks",name:"rOSINT",desc:"Russian OSINT — tools and methods for Russian-language investigations",link:"https://www.rosint.dev/",type:"web",year:2024,isNew:true,col:"cg"},
+  {cat:"OSINT Frameworks",name:"OSINT Portal",desc:"Comprehensive web-based OSINT tools portal",link:"https://osint.juanmathewsrebellosantos.com/",type:"web",year:2024,isNew:true,col:"cg"},
+  {cat:"OSINT Frameworks",name:"rOSINT",desc:"Russian OSINT — tools for Russian-language investigations",link:"https://www.rosint.dev/",type:"web",year:2024,isNew:true,col:"cg"},
   {cat:"OSINT Frameworks",name:"OSINT CrackOverflow",desc:"Online OSINT tools collection and interactive framework",link:"https://osint.crackoverflow.com/",type:"web",year:2024,isNew:true,col:"cc"},
-  {cat:"OSINT Frameworks",name:"Karma v2",desc:"Passive OSINT Automated Reconnaissance Framework",link:"https://github.com/Dheerajmadhukar/karma_v2",type:"github",year:2022,col:"cg"},
-  {cat:"OSINT Frameworks",name:"Mihari",desc:"Tool for OSINT-based threat hunting automation",link:"https://github.com/ninoseki/mihari",type:"github",year:2023,col:"cg"},
-  {cat:"OSINT Frameworks",name:"Ominis OSINT",desc:"Google-based information gathering via advanced queries",link:"https://github.com/AnonCatalyst/Ominis-Osint",type:"github",year:2024,isNew:true,col:"cc"},
-  // Telegram Intel
   {cat:"Telegram Intel",name:"Telepathy",desc:"OSINT toolkit for investigating Telegram chats and channels",link:"https://github.com/jordanwildon/Telepathy",type:"github",year:2023,col:"cc"},
-  {cat:"Telegram Intel",name:"Telegram Trilateration",desc:'Abuse "People Near Me" to track user location via trilateration',link:"https://github.com/jkctech/Telegram-Trilateration",type:"github",year:2022,col:"cc"},
   {cat:"Telegram Intel",name:"Telegram Nearby Map",desc:"Discover and map location of nearby Telegram users",link:"https://github.com/tejado/telegram-nearby-map",type:"github",year:2021,col:"cc"},
   {cat:"Telegram Intel",name:"TrueCall Robot",desc:"Telegram bot for caller ID & phone number OSINT lookups",link:"https://t.me/TrueCall_Robot",type:"bot",year:2024,isNew:true,col:"cb2"},
-  // Search Engines
-  {cat:"Search Engines",name:"GoodOldSearch",desc:"Classic search engine results without modern algorithm manipulation",link:"https://goodoldsearch.com/",type:"web",year:2024,isNew:true,col:"cy"},
-  {cat:"Search Engines",name:"MetaOSINT",desc:"Quickly identify relevant OSINT tools and resources — 4000+ entries",link:"https://metaosint.github.io/table/",type:"web",year:2023,col:"cy"},
-  // ProtonMail
-  {cat:"ProtonMail",name:"Prot1ntelligence",desc:"Investigate ProtonMail accounts, PGP keys & ProtonVPN IPs",link:"https://github.com/C3n7ral051nt4g3ncy/Prot1ntelligence",type:"github",year:2023,col:"cpk"},
-  {cat:"ProtonMail",name:"ProtOSINT",desc:"Python script for investigating ProtonMail & ProtonVPN accounts",link:"https://github.com/pixelbubble/ProtOSINT",type:"github",year:2022,col:"cpk"},
-  // Cloud OSINT
-  {cat:"Cloud OSINT",name:"Cloud OSINT",desc:"Resources, tools and techniques for Cloud Intelligence gathering",link:"https://github.com/7WaySecurity/cloud_osint",type:"github",year:2023,col:"cb2"},
-  {cat:"Cloud OSINT",name:"BeVigil CLI",desc:"CLI + Python library for BeVigil OSINT API",link:"https://github.com/Bevigil/BeVigil-OSINT-CLI",type:"github",year:2023,col:"cb2"},
-  // Learning Resources
-  {cat:"Learning Resources",name:"OSINT of Pakistan",desc:"Comprehensive guide to OSINT tools and methods for Pakistan investigations",link:"https://unishka.substack.com/p/osint-of-pakistan",type:"web",year:2024,isNew:true,col:"cp"},
+  {cat:"Search Engines",name:"GoodOldSearch",desc:"Classic search results without modern algorithm manipulation",link:"https://goodoldsearch.com/",type:"web",year:2024,isNew:true,col:"cy"},
+  {cat:"Search Engines",name:"MetaOSINT",desc:"Identify OSINT tools and resources — 4000+ entries indexed",link:"https://metaosint.github.io/table/",type:"web",year:2023,col:"cy"},
+  {cat:"Learning Resources",name:"OSINT of Pakistan",desc:"Guide to OSINT tools and methods for Pakistan investigations",link:"https://unishka.substack.com/p/osint-of-pakistan",type:"web",year:2024,isNew:true,col:"cp"},
   {cat:"Learning Resources",name:"OSINTstitute",desc:"Learning hub for OSINT training and professional courses",link:"http://osintstitute.com/",type:"web",year:2024,isNew:true,col:"cp"},
   {cat:"Learning Resources",name:"OhShINT",desc:"OSINT blog + huge collection of tools and resources",link:"https://github.com/OhShINT/ohshint.gitbook.io",type:"github",year:2022,col:"cp"},
-  {cat:"Learning Resources",name:"Offensive OSINT Blog",desc:"Advanced offensive OSINT techniques and write-ups",link:"https://www.offensiveosint.io/",type:"web",year:2023,col:"cp"},
-  {cat:"Learning Resources",name:"cURL for OSINT",desc:"cURL tool usage guide for OSINT investigations",link:"https://github.com/C3n7ral051nt4g3ncy/cURL_for_OSINT",type:"github",year:2023,col:"cp"},
   {cat:"Learning Resources",name:"Linux for OSINT — 21 Day",desc:"Short Linux OSINT automation course — 21 day challenge",link:"https://github.com/cipher387/linux-for-OSINT-21-day",type:"github",year:2022,col:"cp"},
-  {cat:"Learning Resources",name:"OSINT Stuff Tools",desc:"Collection of 500+ online OSINT tools curated by cipher387",link:"https://github.com/cipher387/osint_stuff_tool_collection",type:"github",year:2023,col:"cp"},
-  {cat:"Learning Resources",name:"Firefox OSINT Config",desc:"Configure Firefox for OSINT and Security Investigations",link:"https://github.com/simeononsecurity/FireFox-Security-Researcher",type:"github",year:2023,col:"cp"},
 ];
 
-// ═══════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════
+/* ═══════ CONFIG ═══════ */
 const CC={cg:"#00e676",cc:"#00e5ff",cp:"#d500f9",cy:"#ffd740",cpk:"#f50057",co:"#ff6d00",cb2:"#2979ff",ct:"#1de9b6",crd:"#ff1744"};
 const CAT_COL={"OS Platforms":"cg","Domain & Network":"cc","Person & Social":"cp","Email Intelligence":"cy","Mobile Forensics":"co","Image & Media":"cpk","Dark Web":"cb2","Digital Forensics":"ct","OSINT Frameworks":"cg","Telegram Intel":"cc","Search Engines":"cy","ProtonMail":"cpk","Cloud OSINT":"cb2","Learning Resources":"cp"};
-const TYPE_ICON={github:"🐙",web:"🌐",ext:"🧩",bot:"🤖"};
-const TYPE_LBL={github:"github",web:"web",ext:"extension",bot:"bot/app"};
-const TYPE_BADGE={github:"bgit",web:"bweb",ext:"bext",bot:"bbot"};
+const TBADGE={github:"bgit",web:"bweb",ext:"bext",bot:"bbot"};
+const TICON={github:"🐙",web:"🌐",ext:"🧩",bot:"🤖"};
+const TLBL={github:"github",web:"website",ext:"extension",bot:"bot/app"};
+const STORAGE_KEY="tci_shared_tools_v1";
 
-let custom=[];
-let acat="ALL",afilt="all",q="";
-let selType="",selCol="cg";
-let curPage=1;
+/* ═══════ STATE ═══════ */
+let sharedTools=[];
+let acat="ALL",afilt="all",srch="",selType="",selCol="cg",curPg=1;
+let autoRefreshTimer=null;
 
-try{const s=localStorage.getItem("tci_arsenal_v4");if(s)custom=JSON.parse(s);}catch(e){}
-const saveC=()=>{try{localStorage.setItem("tci_arsenal_v4",JSON.stringify(custom));}catch(e){}};
-const allT=()=>[...BASE,...custom];
+/* ═══════ SHARED STORAGE LOAD/SAVE ═══════ */
+async function loadSharedTools(){
+  setSyncStatus("loading","syncing...");
+  try{
+    const result=await window.storage.get(STORAGE_KEY,true);
+    if(result&&result.value){
+      sharedTools=JSON.parse(result.value);
+    } else {
+      sharedTools=[];
+    }
+    setSyncStatus("ok","synced · "+sharedTools.length+" shared");
+    document.getElementById("sharedBanner").style.display="flex";
+  } catch(e){
+    sharedTools=[];
+    setSyncStatus("ok","connected");
+  }
+  document.getElementById("loadingScreen").style.display="none";
+  document.getElementById("grid").style.display="grid";
+  buildTabs(); buildFilters(); render();
+}
 
-// ═══════════════════════════════════════════════════════
-// RENDER CARDS
-// ═══════════════════════════════════════════════════════
-function cardH(t){
-  const cl=t.col||CAT_COL[t.cat]||"cg";
-  const nc=CC[cl]||"#00e676";
-  const yb=t.isNew?`<span class="badge bnew">★ NEW ${t.year}</span>`:`<span class="badge bgit">${t.year}</span>`;
-  const cb=t._custom?`<span class="badge badd">✦ added</span>`:"";
-  const tb=`<span class="badge ${TYPE_BADGE[t.type]||'bgit'}">${TYPE_ICON[t.type]||'🔧'} ${TYPE_LBL[t.type]||t.type}</span>`;
-  const notes=t.notes?`<div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#2a4a2a;margin-top:3px">// ${t.notes}</div>`:"";
-  return`<div class="card ${cl}"><div class="cname" style="color:${nc}">${t.name}</div><div class="cdesc">${t.desc}</div>${notes}<div class="cfooter"><div class="badges">${yb}${cb}${tb}</div><a class="lbtn" href="${t.link}" target="_blank" rel="noopener">🔗 open</a></div></div>`;
+async function saveSharedTools(){
+  try{
+    await window.storage.set(STORAGE_KEY,JSON.stringify(sharedTools),true);
+    setSyncStatus("ok","saved · "+sharedTools.length+" shared");
+    return true;
+  } catch(e){
+    setSyncStatus("err","save failed");
+    return false;
+  }
+}
+
+function setSyncStatus(state,text){
+  const dot=document.getElementById("syncDot");
+  const txt=document.getElementById("syncText");
+  dot.className="sync-dot "+state;
+  txt.textContent=text;
+}
+
+/* AUTO REFRESH every 30s */
+function startAutoRefresh(){
+  if(autoRefreshTimer)clearInterval(autoRefreshTimer);
+  autoRefreshTimer=setInterval(async()=>{
+    await loadSharedTools();
+  },30000);
+}
+
+/* ═══════ RENDER ═══════ */
+const allT=()=>[...BASE,...sharedTools];
+
+function cardHTML(t){
+  const cl=t.col||CAT_COL[t.cat]||"cg",nc=CC[cl]||"#00e676";
+  const yb=t.isNew?`<span class="badge bnew">★ ${t.year}</span>`:`<span class="badge bgit">${t.year}</span>`;
+  const shb=t._shared?`<span class="badge bshared">🌐 ${t._addedBy||"shared"}</span>`:"";
+  const tb=`<span class="badge ${TBADGE[t.type]||"bgit"}">${TICON[t.type]||"🔧"} ${TLBL[t.type]||t.type}</span>`;
+  const nt=t.notes?`<div class="cnotes">// ${t.notes}</div>`:"";
+  return`<div class="card ${cl}"><div class="cname" style="color:${nc}">${t.name}</div><div class="cdesc">${t.desc}</div>${nt}<div class="cfooter"><div class="badges">${yb}${shb}${tb}</div><a class="lbtn" href="${t.link}" target="_blank" rel="noopener">🔗 open</a></div></div>`;
 }
 
 function render(){
   const tools=allT();
   const fil=tools.filter(t=>{
     const mc=acat==="ALL"||t.cat===acat;
-    const mf=afilt==="all"||(afilt==="new"&&t.isNew)||(afilt==="custom"&&t._custom)||(afilt==="web"&&t.type==="web")||(afilt==="github"&&t.type==="github")||(afilt==="ext"&&(t.type==="ext"||t.type==="bot"));
-    const qo=q.toLowerCase();
-    const mq=!qo||t.name.toLowerCase().includes(qo)||t.desc.toLowerCase().includes(qo)||t.cat.toLowerCase().includes(qo);
+    const mf=afilt==="all"||(afilt==="new"&&t.isNew)||(afilt==="shared"&&t._shared)||(afilt==="web"&&t.type==="web")||(afilt==="github"&&t.type==="github")||(afilt==="ext"&&(t.type==="ext"||t.type==="bot"));
+    const sq=srch.toLowerCase();
+    const mq=!sq||t.name.toLowerCase().includes(sq)||t.desc.toLowerCase().includes(sq)||t.cat.toLowerCase().includes(sq)||(t._addedBy||"").toLowerCase().includes(sq);
     return mc&&mf&&mq;
   });
-  // Stats
+
   document.getElementById("stats").innerHTML=
-    `<span class="stat"><span class="sdot" style="background:var(--cyan)"></span>Total <strong style="color:var(--cyan)">${tools.length}</strong> tools</span>`+
-    `<span class="stat"><span class="sdot" style="background:var(--g)"></span>New 2024 <strong style="color:var(--g)">${tools.filter(t=>t.isNew).length}</strong></span>`+
-    (custom.length?`<span class="stat"><span class="sdot" style="background:var(--yellow)"></span>My added <strong style="color:var(--yellow)">${custom.length}</strong></span>`:``) +
-    `<span class="stat"><span class="sdot" style="background:var(--pink)"></span>Showing <strong style="color:var(--pink)">${fil.length}</strong></span>`;
+    `<span class="stat"><span class="sdot" style="background:var(--cyan)"></span>Total <b style="color:var(--cyan)">${tools.length}</b></span>`+
+    `<span class="stat"><span class="sdot" style="background:var(--g)"></span>New 2024 <b style="color:var(--g)">${tools.filter(t=>t.isNew).length}</b></span>`+
+    (sharedTools.length?`<span class="stat"><span class="sdot" style="background:var(--teal)"></span>Team Added <b style="color:var(--teal)">${sharedTools.length}</b></span>`:"")+
+    `<span class="stat"><span class="sdot" style="background:var(--pink)"></span>Showing <b style="color:var(--pink)">${fil.length}</b></span>`;
+
   const grid=document.getElementById("grid");
-  const emp=document.getElementById("emp");
-  if(!fil.length){grid.innerHTML="";emp.style.display="block";document.getElementById("slbl").textContent="";return;}
-  emp.style.display="none";
-  const grp={};fil.forEach(t=>{if(!grp[t.cat])grp[t.cat]=[];grp[t.cat].push(t);});
+  if(!fil.length){grid.innerHTML="";document.getElementById("emp").style.display="block";document.getElementById("slbl").textContent="";return;}
+  document.getElementById("emp").style.display="none";
+
+  const grp={};fil.forEach(t=>{(grp[t.cat]=grp[t.cat]||[]).push(t);});
   const cats=acat==="ALL"?Object.keys(grp):[acat];
   document.getElementById("slbl").textContent=acat==="ALL"?`// all categories — ${fil.length} tools`:`// ${acat} — ${fil.length} tools`;
+
   grid.innerHTML=cats.map(cat=>{
     const items=grp[cat]||[];
     const cl=CAT_COL[cat]||"cg",lc=CC[cl]||"#00e676";
-    const hdr=acat==="ALL"?`<div class="chdr"><span class="clbl" style="background:${lc}18;color:${lc};border:1px solid ${lc}40">> ${cat.toUpperCase()}</span><div class="cline" style="background:${lc}25"></div><span class="ccnt">${items.length}</span></div>`:"";
-    return hdr+items.map(t=>cardH(t)).join("");
+    const hdr=acat==="ALL"?`<div class="cat-hdr"><span class="cat-lbl" style="background:${lc}15;color:${lc};border:1px solid ${lc}35">> ${cat.toUpperCase()}</span><div class="cat-line" style="background:${lc}25"></div><span class="cat-cnt">${items.length}</span></div>`:"";
+    return hdr+items.map(t=>cardHTML(t)).join("");
   }).join("");
 }
 
@@ -632,190 +607,170 @@ function buildTabs(){
   document.querySelectorAll(".tab").forEach(el=>el.addEventListener("click",()=>{acat=el.dataset.cat;buildTabs();render();}));
 }
 
-const FILTER_STYLES={all:"background:var(--g);color:#000;border-color:var(--g)",new:"background:var(--yellow);color:#000;border-color:var(--yellow)",github:"background:#1a2e1a;color:var(--g2);border-color:#2a4a2a",web:"background:var(--cyan);color:#000;border-color:var(--cyan)",ext:"background:var(--purple);color:#fff;border-color:var(--purple)",custom:"background:var(--teal);color:#000;border-color:var(--teal)"};
+const FC={all:"background:var(--g);color:#000",new:"background:var(--yellow);color:#000",github:"background:#0a1e0a;color:var(--g2);border-color:#1a3a1a",web:"background:var(--cyan);color:#000",ext:"background:var(--purple);color:#fff",shared:"background:var(--teal);color:#000"};
 function buildFilters(){
-  const hasC=custom.length>0;
-  const fs=[["all","All Types"],["new","New 2024"],["github","GitHub"],["web","Web Tools"],["ext","Ext & Bots"]];
-  if(hasC)fs.push(["custom","My Added ★"]);
-  document.getElementById("frow").innerHTML=fs.map(([v,l])=>`<button class="fb${afilt===v?" active":""}" data-v="${v}" style="${afilt===v?FILTER_STYLES[v]:""}">${l}</button>`).join("");
+  const hasS=sharedTools.length>0;
+  const fs=[["all","All"],["new","★ New 2024"],["github","🐙 GitHub"],["web","🌐 Web"],["ext","🧩 Ext/Bot"]];
+  if(hasS)fs.push(["shared","🌐 Team Added"]);
+  document.getElementById("frow").innerHTML=fs.map(([v,l])=>`<button class="fb${afilt===v?" active":""}" data-v="${v}" style="${afilt===v?FC[v]:""}">${l}</button>`).join("");
   document.querySelectorAll(".fb").forEach(b=>b.addEventListener("click",()=>{afilt=b.dataset.v;buildFilters();render();}));
 }
 
-document.getElementById("srch").addEventListener("input",e=>{q=e.target.value;render();});
+document.getElementById("srch").addEventListener("input",e=>{srch=e.target.value;render();});
 
-// ═══════════════════════════════════════════════════════
-// MODAL MULTI-STEP LOGIC
-// ═══════════════════════════════════════════════════════
+/* ═══════ MODAL LOGIC ═══════ */
 const ovl=document.getElementById("ovl");
-const openM=()=>{ovl.classList.remove("hidden");goToPage(1);document.getElementById("fn").focus();};
+const openM=()=>{ovl.classList.remove("hidden");goPage(1);document.getElementById("fn").focus();};
 const closeM=()=>{ovl.classList.add("hidden");resetForm();};
 document.getElementById("openModal").addEventListener("click",openM);
 document.getElementById("closeModal").addEventListener("click",closeM);
 document.getElementById("cancelBtn").addEventListener("click",closeM);
 ovl.addEventListener("click",e=>{if(e.target===ovl)closeM();});
-
-// Keyboard shortcut
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!ovl.classList.contains("hidden"))closeM();});
 
-function goToPage(n){
-  curPage=n;
-  ["page1","page2","page3","page4","pageSuccess"].forEach((id,i)=>{
-    document.getElementById(id).classList.toggle("show",i===n-1||(n===5&&id==="pageSuccess"));
+function goPage(n){
+  curPg=n;
+  ["pg1","pg2","pg3","pg4","pgS"].forEach((id,i)=>{
+    document.getElementById(id).classList.toggle("show",i+1===n||(n===5&&id==="pgS"));
   });
-  // Update step indicators
   for(let i=1;i<=4;i++){
-    const s=document.getElementById("step"+i);
-    if(!s)continue;
+    const s=document.getElementById("st"+i);
     s.classList.toggle("active",i===n);
-    s.classList.toggle("done",i<n);
+    s.classList.toggle("done",i<n&&n<=4);
   }
-  // Footer buttons
-  document.getElementById("prevBtn").style.display=n>1&&n<5?"flex":"none";
-  document.getElementById("nextBtn").style.display=n<4?"flex":"none";
-  document.getElementById("submitBtn").style.display=n===4?"flex":"none";
-  document.getElementById("cancelBtn").textContent=n===5?"CLOSE":"CANCEL";
-  // hide footer on success
-  document.getElementById("mftr").style.opacity=n===5?"0.5":"1";
+  document.getElementById("prevBtn").style.display=(n>1&&n<5)?"block":"none";
+  document.getElementById("nextBtn").style.display=(n<4)?"block":"none";
+  document.getElementById("submitBtn").style.display=(n===4)?"block":"none";
+  document.getElementById("cancelBtn").textContent=n===5?"✕ CLOSE":"CANCEL";
 }
 
-document.getElementById("nextBtn").addEventListener("click",()=>{
-  if(curPage===1&&!validatePage1())return;
-  if(curPage===2&&!validatePage2())return;
-  goToPage(curPage+1);
-  upPrev();
-});
-document.getElementById("prevBtn").addEventListener("click",()=>goToPage(curPage-1));
+document.getElementById("nextBtn").addEventListener("click",()=>{if(curPg===1&&!v1())return;if(curPg===2&&!v2())return;goPage(curPg+1);if(curPg===3)upPrev();});
+document.getElementById("prevBtn").addEventListener("click",()=>goPage(curPg-1));
 
-// TYPE SELECT
-document.querySelectorAll(".to").forEach(el=>{
-  el.addEventListener("click",()=>{
-    document.querySelectorAll(".to").forEach(x=>{x.className="to";});
-    const t=el.dataset.t;
-    const cls={github:"sg",web:"sc",ext:"se",bot:"sb"}[t]||"sg";
-    el.className="to "+cls;
-    selType=t;upPrev();
-  });
-});
+document.querySelectorAll(".to").forEach(el=>el.addEventListener("click",()=>{
+  document.querySelectorAll(".to").forEach(x=>x.className="to");
+  el.className="to "+({github:"sg",web:"sc",ext:"se",bot:"sb"}[el.dataset.t]||"sg");
+  selType=el.dataset.t; upPrev();
+}));
 
-// COLOR SELECT
-document.querySelectorAll(".co2").forEach(el=>{
-  el.addEventListener("click",()=>{
-    document.querySelectorAll(".co2").forEach(x=>x.classList.remove("sel"));
-    el.classList.add("sel");selCol=el.dataset.c;upPrev();
-  });
-});
+document.querySelectorAll(".co2").forEach(el=>el.addEventListener("click",()=>{
+  document.querySelectorAll(".co2").forEach(x=>x.classList.remove("sel"));
+  el.classList.add("sel"); selCol=el.dataset.c; upPrev();
+}));
 
-// CATEGORY SELECT
 document.getElementById("fc").addEventListener("change",e=>{
   document.getElementById("ccf").style.display=e.target.value==="__custom"?"block":"none";
-  upPrev();
 });
 
-// LIVE UPDATE
-["fn","fd","fy","fl"].forEach(id=>{
+["fn","fd","fy","fl","fby","fnotes"].forEach(id=>{
   const el=document.getElementById(id);
-  if(el)el.addEventListener("input",()=>{
-    if(id==="fd")document.getElementById("dc").textContent=document.getElementById("fd").value.length;
-    upPrev();
-  });
+  if(el)el.addEventListener("input",()=>{if(id==="fd")document.getElementById("dc").textContent=el.value.length;upPrev();});
 });
 
 function upPrev(){
   const nm=document.getElementById("fn").value||"Tool Name";
-  const dc2=document.getElementById("fd").value||"Description will appear here...";
+  const dc=document.getElementById("fd").value||"Description...";
   const yr=document.getElementById("fy").value||"2024";
   const tp=selType||"github";
   const cl=selCol||"cg";
   const nc=CC[cl]||"#00e676";
-  const notes=document.getElementById("fnotes")?document.getElementById("fnotes").value:"";
-  const lk=document.getElementById("fl")?document.getElementById("fl").value:"";
-  let catV=document.getElementById("fc").value||"—";
-  if(catV==="__custom"){catV=document.getElementById("fcc").value||"Custom";}
+  const by=(document.getElementById("fby")||{}).value||"team";
+  const nt=(document.getElementById("fnotes")||{}).value||"";
+  const lk=(document.getElementById("fl")||{}).value||"";
+  let cat=document.getElementById("fc").value||"—";
+  if(cat==="__custom")cat=(document.getElementById("fcc")||{}).value||"Custom";
 
   document.getElementById("pvn").textContent=nm;
   document.getElementById("pvn").style.color=nc;
-  document.getElementById("pvd").textContent=dc2;
-  document.getElementById("pvy").textContent="NEW "+yr;
+  document.getElementById("pvd").textContent=dc;
+  document.getElementById("pvy").textContent="★ "+yr;
   document.getElementById("pvc").className="card "+cl;
-  const notesEl=document.getElementById("pvnotes");
-  if(notesEl)notesEl.textContent=notes?"// "+notes:"";
+  document.getElementById("pvnotes").textContent=nt?"// "+nt:"";
   const pvt=document.getElementById("pvt");
-  pvt.className=`badge ${TYPE_BADGE[tp]||"bgit"}`;
-  pvt.textContent=`${TYPE_ICON[tp]||"🔧"} ${TYPE_LBL[tp]||tp}`;
-  const pvc=document.getElementById("pv-cat");if(pvc)pvc.textContent=catV;
-  const pvu=document.getElementById("pv-url");if(pvu)pvu.textContent=lk||"—";
+  pvt.className="badge "+(TBADGE[tp]||"bgit");
+  pvt.textContent=`${TICON[tp]||"🔧"} ${TLBL[tp]||tp}`;
+  const pc=document.getElementById("pv-cat");if(pc)pc.textContent=cat;
+  const pb=document.getElementById("pv-by");if(pb)pb.textContent=by||"anonymous";
+  const pu=document.getElementById("pv-url");if(pu)pu.textContent=lk||"—";
 }
 
-// VALIDATION
-function validatePage1(){
+function v1(){
   let ok=true;
   const nm=document.getElementById("fn").value.trim();
-  const dc2=document.getElementById("fd").value.trim();
+  const dc=document.getElementById("fd").value.trim();
   const cat=document.getElementById("fc").value;
-  document.getElementById("en").style.display=nm?"none":"block";if(!nm)ok=false;
-  document.getElementById("ed").style.display=dc2?"none":"block";if(!dc2)ok=false;
-  document.getElementById("ec").style.display=cat?"none":"block";if(!cat)ok=false;
+  etog("en",!nm);if(!nm)ok=false;
+  etog("ed",!dc);if(!dc)ok=false;
+  etog("ec",!cat);if(!cat)ok=false;
   return ok;
 }
-function validatePage2(){
+function v2(){
   let ok=true;
   const lk=document.getElementById("fl").value.trim();
   let lkOk=false;try{new URL(lk);lkOk=true;}catch(e){}
-  document.getElementById("el").style.display=(lk&&lkOk)?"none":"block";if(!lk||!lkOk)ok=false;
-  document.getElementById("et").style.display=selType?"none":"block";if(!selType)ok=false;
+  etog("el",!lk||!lkOk);if(!lk||!lkOk)ok=false;
+  etog("et",!selType);if(!selType)ok=false;
   return ok;
 }
+function etog(id,show){const e=document.getElementById(id);if(e)e.style.display=show?"block":"none";}
 
-// SUBMIT
-document.getElementById("submitBtn").addEventListener("click",()=>{
-  if(!validatePage1()||!validatePage2())return;
+document.getElementById("submitBtn").addEventListener("click",async()=>{
+  if(!v1()||!v2())return;
+  const btn=document.getElementById("submitBtn");
+  btn.textContent="SAVING..."; btn.disabled=true;
   let cat=document.getElementById("fc").value;
   if(cat==="__custom"){const cc=document.getElementById("fcc").value.trim();if(cc)cat=cc;}
   const yr=parseInt(document.getElementById("fy").value);
-  const notes=document.getElementById("fnotes").value.trim();
+  const by=document.getElementById("fby").value.trim();
+  const nt=document.getElementById("fnotes").value.trim();
   const tool={
     cat,
     name:document.getElementById("fn").value.trim(),
     desc:document.getElementById("fd").value.trim(),
     link:document.getElementById("fl").value.trim(),
-    type:selType,
-    year:yr,
-    isNew:yr>=2024,
-    col:selCol,
-    notes:notes||undefined,
-    _custom:true
+    type:selType,year:yr,isNew:yr>=2024,col:selCol,
+    notes:nt||undefined,
+    _shared:true,
+    _addedBy:by||"team",
+    _addedAt:new Date().toISOString()
   };
-  custom.push(tool);saveC();
-  // Show success
-  document.getElementById("success-name").textContent=`"${tool.name}" added to ${cat}`;
-  goToPage(5);
-  buildTabs();buildFilters();render();
-  // Toast
-  const t=document.getElementById("toast");
-  document.getElementById("tmsg").textContent=`"${tool.name}" added to arsenal!`;
-  t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"),3500);
-  setTimeout(()=>closeM(),2500);
+  sharedTools.push(tool);
+  const ok=await saveSharedTools();
+  btn.textContent="🌐 SHARE WITH TEAM"; btn.disabled=false;
+  if(ok){
+    document.getElementById("sname").textContent=`"${tool.name}" → ${cat}`;
+    goPage(5);
+    buildTabs(); buildFilters(); render();
+    showToast(`🌐 "${tool.name}" shared with all team members!`);
+    setTimeout(closeM,2800);
+  } else {
+    sharedTools.pop();
+    showToast("❌ Failed to save. Try again.");
+  }
 });
 
+function showToast(msg){
+  const t=document.getElementById("toast");
+  document.getElementById("tmsg").textContent=msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),3800);
+}
+
 function resetForm(){
-  ["fn","fd","fl","fcc","fnotes"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
-  document.getElementById("fc").value="";
-  document.getElementById("fy").value="2024";
+  ["fn","fd","fl","fcc","fnotes","fby"].forEach(id=>{const e=document.getElementById(id);if(e)e.value="";});
+  document.getElementById("fc").value=""; document.getElementById("fy").value="2024";
   document.getElementById("ccf").style.display="none";
-  document.querySelectorAll(".to").forEach(x=>x.className="to");selType="";
-  document.querySelectorAll(".co2").forEach(x=>x.classList.remove("sel"));
-  const dfc=document.querySelector(".co2[data-c='cg']");if(dfc)dfc.classList.add("sel");
-  selCol="cg";
-  ["en","ed","ec","el","et"].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display="none";});
   document.getElementById("dc").textContent="0";
+  document.querySelectorAll(".to").forEach(x=>x.className="to"); selType="";
+  document.querySelectorAll(".co2").forEach(x=>x.classList.remove("sel"));
+  const dg=document.querySelector(".co2[data-c='cg']");if(dg)dg.classList.add("sel"); selCol="cg";
+  ["en","ed","ec","el","et"].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display="none";});
   upPrev();
 }
 
-// ═══════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════
-buildTabs();buildFilters();render();
+/* ═══════ INIT ═══════ */
+loadSharedTools();
+startAutoRefresh();
 </script>
 </body>
 </html>
