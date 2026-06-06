@@ -1,61 +1,73 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TheCyberIndia — OSINT Arsenal</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#050805;--bg2:#080d08;--bg3:#0b130b;--card:#0e160e;--card2:#111911;--g:#00e676;--g2:#69f0ae;--cyan:#00e5ff;--pink:#f50057;--yellow:#ffd740;--purple:#d500f9;--orange:#ff6d00;--blue:#2979ff;--teal:#1de9b6;--red:#ff1744;--border:#152515;--border2:#1e3a1e;--text:#c8e6c9;--muted:#3d6b3d;--dim:#0a120a}
-body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);min-height:600px}
-::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:#1e3a1e;border-radius:3px}
+:root{
+  --bg:#050805;--bg2:#080d08;--bg3:#0b130b;--card:#0e160e;--card2:#111911;
+  --g:#00e676;--g2:#69f0ae;--cyan:#00e5ff;--pink:#f50057;--yellow:#ffd740;
+  --purple:#d500f9;--orange:#ff6d00;--blue:#2979ff;--teal:#1de9b6;--red:#ff1744;
+  --border:#152515;--border2:#1e3a1e;--text:#c8e6c9;--muted:#3d6b3d;--dim:#0a120a;
+}
+body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#1e3a1e;border-radius:4px}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,230,118,.01) 2px,rgba(0,230,118,.01) 4px);pointer-events:none;z-index:9998}
 
 /* TICKER */
-.ticker-wrap{background:#020402;border-bottom:1px solid #0f1f0f;padding:4px 0;overflow:hidden}
-.ticker{display:flex;white-space:nowrap;animation:tick 35s linear infinite}
-.ti{font-family:'Share Tech Mono',monospace;font-size:10px;padding:0 22px;color:var(--muted)}
+.ticker-wrap{background:#020402;border-bottom:1px solid #0a1a0a;padding:4px 0;overflow:hidden}
+.ticker-scroll{display:flex;white-space:nowrap;animation:tick 35s linear infinite}
+.ti{font-family:'Share Tech Mono',monospace;font-size:10px;padding:0 24px;color:var(--muted)}
 .ti b{color:var(--g)}
 @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* HEADER */
 .hdr{background:linear-gradient(180deg,#020502,var(--bg2));border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:400}
-.hdr-main{padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.hdr-main{padding:11px 15px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 
 /* LOGO */
-.logo-area{display:flex;align-items:center;gap:12px}
-.ring-wrap{position:relative;width:54px;height:54px;flex-shrink:0}
+.logo-area{display:flex;align-items:center;gap:13px}
+.ring-wrap{position:relative;width:56px;height:56px;flex-shrink:0}
 .r-outer{position:absolute;inset:0;animation:spinR 10s linear infinite}
 .r-inner{position:absolute;inset:7px;animation:spinL 5s linear infinite}
-.r-center{position:absolute;inset:13px;background:radial-gradient(circle,#0f280f,#050805);border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid #1e3a1e;box-shadow:inset 0 0 10px rgba(0,230,118,.1)}
-.r-icon{font-size:16px;animation:iconPulse 2.5s ease-in-out infinite}
+.r-center{position:absolute;inset:13px;background:radial-gradient(circle,#0f280f,#050805);border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid #1e3a1e;box-shadow:inset 0 0 12px rgba(0,230,118,.1)}
+.r-icon{font-size:17px;animation:iconP 2.5s ease-in-out infinite}
 @keyframes spinR{to{transform:rotate(360deg)}}
 @keyframes spinL{to{transform:rotate(-360deg)}}
-@keyframes iconPulse{0%,100%{filter:drop-shadow(0 0 2px #00e676)}50%{filter:drop-shadow(0 0 8px #00e5ff)}}
-.logo-info{}
-.logo-title{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,#00e676,#00e5ff,#1de9b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+@keyframes iconP{0%,100%{filter:drop-shadow(0 0 2px #00e676)}50%{filter:drop-shadow(0 0 8px #00e5ff)}}
+.logo-title{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,#00e676,#00e5ff,#1de9b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .logo-sub{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);margin-top:2px}
 .logo-pills{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}
-.pill{font-family:'Share Tech Mono',monospace;font-size:8px;padding:2px 6px;border-radius:8px;font-weight:700}
+.pill{font-family:'Share Tech Mono',monospace;font-size:8px;padding:2px 7px;border-radius:8px;font-weight:700}
 .pg{background:#071207;color:var(--g);border:1px solid #143014}
 .pc{background:#001018;color:var(--cyan);border:1px solid #002838}
+.py{background:#181000;color:var(--yellow);border:1px solid #302000}
 
-/* SYNC STATUS */
-.sync-status{display:flex;align-items:center;gap:6px;font-family:'Share Tech Mono',monospace;font-size:9px;background:var(--dim);border:1px solid var(--border2);border-radius:5px;padding:4px 8px;cursor:pointer;transition:all .15s}
-.sync-status:hover{border-color:var(--g)}
-.sync-dot{width:7px;height:7px;border-radius:50%;animation:syncPulse 1.5s ease-in-out infinite;flex-shrink:0}
-.sync-dot.ok{background:var(--g)}
-.sync-dot.loading{background:var(--yellow)}
-.sync-dot.err{background:var(--pink)}
-@keyframes syncPulse{0%,100%{opacity:1}50%{opacity:.3}}
-.sync-text{color:var(--muted)}
-
-/* ADD BTN */
-.add-btn{background:linear-gradient(135deg,var(--g),var(--cyan));color:#000;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;padding:10px 14px;border:none;border-radius:7px;cursor:pointer;letter-spacing:1px;display:flex;align-items:center;gap:6px;transition:all .15s;white-space:nowrap}
+/* HEADER BUTTONS */
+.hdr-right{display:flex;flex-direction:column;gap:5px;align-items:flex-end}
+.add-btn{background:linear-gradient(135deg,var(--g),var(--cyan));color:#000;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;padding:10px 15px;border:none;border-radius:7px;cursor:pointer;letter-spacing:1px;display:flex;align-items:center;gap:6px;transition:all .15s;white-space:nowrap}
 .add-btn:hover{transform:scale(1.04);box-shadow:0 0 18px rgba(0,229,118,.3)}
+.setup-btn{background:transparent;border:1px solid #2a4a00;color:var(--yellow);font-family:'Share Tech Mono',monospace;font-size:9px;padding:4px 10px;border-radius:5px;cursor:pointer;transition:all .12s;display:flex;align-items:center;gap:5px}
+.setup-btn:hover{background:#1a1400;border-color:var(--yellow)}
+
+/* SYNC BAR */
+.sync-bar{background:#001a0a;border-bottom:1px solid #0a3a1a;padding:5px 15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sync-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;transition:background .3s}
+.sync-dot.ok{background:var(--g);animation:sdP 2s ease-in-out infinite}
+.sync-dot.loading{background:var(--yellow);animation:sdP .5s ease-in-out infinite}
+.sync-dot.err{background:var(--pink)}
+@keyframes sdP{0%,100%{opacity:1}50%{opacity:.3}}
+.sync-msg{color:var(--muted);flex:1;font-family:'Share Tech Mono',monospace;font-size:9px}
+.sync-refresh{background:transparent;border:1px solid #1e3a1e;color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:9px;padding:2px 8px;border-radius:3px;cursor:pointer;margin-left:auto;transition:all .12s}
+.sync-refresh:hover{color:var(--g);border-color:var(--g)}
 
 /* SEARCH */
-.search-area{padding:8px 14px 9px}
+.search-area{padding:8px 15px 9px;background:var(--bg2)}
 .sw{position:relative}
-.si-svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.si{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted)}
 .search{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:8px 10px 8px 32px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;outline:none;transition:all .2s}
 .search:focus{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(0,229,255,.06)}
 .search::placeholder{color:#1a3a1a}
@@ -64,31 +76,31 @@ body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);mi
 .sdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 
 /* TABS */
-.tabs{display:flex;overflow-x:auto;background:var(--bg2);border-bottom:1px solid var(--border2);padding:0 12px;scrollbar-width:none}
+.tabs{display:flex;overflow-x:auto;background:var(--bg2);border-bottom:1px solid var(--border2);padding:0 13px;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tab{padding:8px 11px;font-size:10px;font-weight:700;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;font-family:'Share Tech Mono',monospace;transition:all .15s;letter-spacing:.4px}
 .tab.active{color:var(--cyan);border-bottom-color:var(--cyan)}
 .tab:hover:not(.active){color:var(--text)}
 .cbadge{background:var(--dim);border:1px solid var(--border);font-size:8px;padding:1px 4px;border-radius:6px;margin-left:2px}
 
-/* FILTERS */
-.content{padding:9px 12px}
-.frow{display:flex;gap:4px;margin-bottom:9px;flex-wrap:wrap;align-items:center}
-.frow-lbl{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);margin-right:2px}
+/* CONTENT */
+.content{padding:10px 13px}
+.frow-wrap{display:flex;align-items:center;gap:5px;margin-bottom:9px;flex-wrap:wrap}
+.frow-lbl{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted)}
 .fb{font-size:10px;padding:3px 9px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;font-family:'Share Tech Mono',monospace;transition:all .15s}
 .fb:hover{color:var(--text)}
 .fb.active{border-color:transparent}
 .slbl{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:#1a3a1a;padding:2px 0 7px}
 
 /* GRID */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(278px,1fr));gap:7px}
-.cat-hdr{grid-column:1/-1;display:flex;align-items:center;gap:7px;margin-top:10px;margin-bottom:2px}
-.cat-lbl{font-family:'Share Tech Mono',monospace;font-size:9px;font-weight:700;padding:2px 9px;border-radius:3px;letter-spacing:1px;white-space:nowrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:8px}
+.cat-hdr{grid-column:1/-1;display:flex;align-items:center;gap:8px;margin-top:11px;margin-bottom:2px}
+.cat-lbl{font-family:'Share Tech Mono',monospace;font-size:9px;font-weight:700;padding:2px 9px;border-radius:3px;letter-spacing:1px}
 .cat-line{flex:1;height:1px;opacity:.4}
 .cat-cnt{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted)}
 
 /* CARDS */
-.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 12px;transition:all .15s;position:relative;overflow:hidden}
+.card{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:11px 12px;transition:all .15s;position:relative;overflow:hidden}
 .card:hover{background:var(--card2);transform:translateY(-1px)}
 .card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:2px 0 0 2px}
 .cg::before{background:#00e676}.cc::before{background:#00e5ff}.cp::before{background:#d500f9}
@@ -96,8 +108,6 @@ body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);mi
 .cb2::before{background:#2979ff}.ct::before{background:#1de9b6}.crd::before{background:#ff1744}
 .cg:hover{box-shadow:0 3px 14px rgba(0,230,118,.09)}.cc:hover{box-shadow:0 3px 14px rgba(0,229,255,.09)}
 .cp:hover{box-shadow:0 3px 14px rgba(213,0,249,.09)}.cy:hover{box-shadow:0 3px 14px rgba(255,215,64,.09)}
-.cpk:hover{box-shadow:0 3px 14px rgba(245,0,87,.09)}.co:hover{box-shadow:0 3px 14px rgba(255,109,0,.09)}
-.cb2:hover{box-shadow:0 3px 14px rgba(41,121,255,.09)}.ct:hover{box-shadow:0 3px 14px rgba(29,233,182,.09)}
 .cname{font-size:13px;font-weight:700;letter-spacing:.3px}
 .cdesc{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.45;font-family:'Share Tech Mono',monospace}
 .cnotes{font-family:'Share Tech Mono',monospace;font-size:9px;color:#1e4a1e;margin-top:3px}
@@ -109,33 +119,33 @@ body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);mi
 .bweb{background:#001520;color:#00e5ff;border:1px solid #002840}
 .bext{background:#150023;color:#d580ff;border:1px solid #2e0050}
 .bbot{background:#170020;color:#f48fb1;border:1px solid #2e0040}
-.bshared{background:#001a2a;color:#00e5ff;border:1px solid #003850}
-.lbtn{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);text-decoration:none;padding:3px 7px;border:1px solid var(--border2);border-radius:4px;display:flex;align-items:center;gap:3px;transition:all .12s;flex-shrink:0}
+.bteam{background:#001818;color:#1de9b6;border:1px solid #003030}
+.lbtn{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);text-decoration:none;padding:3px 8px;border:1px solid var(--border2);border-radius:4px;display:flex;align-items:center;gap:3px;transition:all .12s;flex-shrink:0}
 .lbtn:hover{color:var(--cyan);border-color:var(--cyan)}
 .empty{text-align:center;padding:50px 20px;font-family:'Share Tech Mono',monospace;color:var(--muted);font-size:12px}
-.loading-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:12px}
-.loading-ring{width:40px;height:40px;border:2px solid #1e3a1e;border-top-color:var(--g);border-radius:50%;animation:spinR .8s linear infinite}
-.loading-text{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted)}
+.loading-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px;gap:12px}
+.loading-ring{width:38px;height:38px;border:2px solid #1e3a1e;border-top-color:var(--g);border-radius:50%;animation:spinR .8s linear infinite}
+.loading-txt{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted)}
 
-/* MODAL */
-.ovl{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:800;display:flex;align-items:center;justify-content:center;padding:10px;backdrop-filter:blur(5px)}
+/* OVERLAY */
+.ovl{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:800;display:flex;align-items:center;justify-content:center;padding:10px;backdrop-filter:blur(6px)}
 .ovl.hidden{display:none}
-.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:13px;width:100%;max-width:540px;max-height:94vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,229,118,.09)}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:13px;width:100%;max-width:560px;max-height:94vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,229,118,.08)}
 .mhdr{background:linear-gradient(135deg,#040c04,#060e10);border-bottom:1px solid var(--border2);padding:14px 17px;display:flex;align-items:center;gap:11px}
 .mhdr-ring{position:relative;width:40px;height:40px;flex-shrink:0}
 .mhdr-ring-svg{position:absolute;inset:0;animation:spinR 6s linear infinite}
-.mhdr-center{position:absolute;inset:8px;background:#030803;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px}
+.mhdr-center{position:absolute;inset:8px;background:#030803;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}
 .mhdr-info{flex:1}
-.mtitle{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;color:var(--g);letter-spacing:1px}
+.mtitle{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;letter-spacing:1px}
 .msub{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);margin-top:2px}
-.xbtn{background:transparent;border:1px solid var(--border);color:var(--muted);width:26px;height:26px;border-radius:5px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0}
+.xbtn{background:transparent;border:1px solid var(--border);color:var(--muted);width:27px;height:27px;border-radius:5px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0}
 .xbtn:hover{color:var(--pink);border-color:var(--pink)}
 .steps{display:flex;background:#030603;border-bottom:1px solid var(--border)}
-.step{flex:1;padding:8px 4px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:9px;color:#1a3a1a;border-bottom:2px solid transparent;transition:all .2s;letter-spacing:.3px;position:relative}
+.step{flex:1;padding:8px 4px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:9px;color:#1a3a1a;border-bottom:2px solid transparent;transition:all .2s;position:relative}
 .step.active{color:var(--cyan);border-bottom-color:var(--cyan)}
 .step.done{color:var(--g);border-bottom-color:var(--g)}
-.step.done::after{content:'✓';position:absolute;right:5px;top:50%;transform:translateY(-50%);font-size:10px}
-.mbody{padding:14px 16px;overflow-y:auto;flex:1}
+.step.done::after{content:'✓';position:absolute;right:5px;top:50%;transform:translateY(-50%)}
+.mbody{padding:15px 17px;overflow-y:auto;flex:1}
 .fpage{display:none;animation:fadeIn .2s ease}
 .fpage.show{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
@@ -144,7 +154,7 @@ body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);mi
 .fld{display:flex;flex-direction:column;gap:4px}
 .fld label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--muted)}
 .freq{color:var(--pink);font-style:normal}
-.fi{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:8px 10px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;outline:none;width:100%;transition:all .15s}
+.fi{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:9px 11px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;outline:none;width:100%;transition:all .15s}
 .fi:focus{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(0,229,255,.06)}
 .fi::placeholder{color:#1a3a1a}
 select.fi{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%233d6b3d'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;appearance:none}
@@ -154,15 +164,14 @@ textarea.fi{resize:vertical;min-height:68px}
 .dcnt{font-family:'Share Tech Mono',monospace;font-size:9px;color:#1a3a1a;text-align:right;margin-top:2px}
 .tgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
 .to{padding:9px 3px;border:1px solid var(--border2);border-radius:7px;text-align:center;cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);transition:all .15s;line-height:1.5;user-select:none}
+.to .ti{font-size:19px;display:block;margin-bottom:3px}
 .to:hover{color:var(--text);border-color:#2e5a2e}
-.to .ti{font-size:20px;display:block;margin-bottom:3px}
 .to.sg{background:#061a06;color:var(--g);border-color:var(--g)}.to.sc{background:#001020;color:var(--cyan);border-color:var(--cyan)}.to.se{background:#0e0020;color:#d580ff;border-color:#d580ff}.to.sb{background:#12001a;color:#f48fb1;border-color:#f48fb1}
 .sec-t{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:5px}
 .sec-t::after{content:'';flex:1;height:1px;background:var(--border)}
 .colgrid{display:grid;grid-template-columns:repeat(9,1fr);gap:4px}
 .co2{height:26px;border-radius:5px;border:2px solid transparent;cursor:pointer;transition:all .15s;position:relative}
-.co2:hover{transform:scale(1.08)}
-.co2.sel{border-color:#fff;transform:scale(1.14)}
+.co2:hover{transform:scale(1.08)}.co2.sel{border-color:#fff;transform:scale(1.14)}
 .co2.sel::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:rgba(0,0,0,.6)}
 .color-guide{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:7px}
 .cg-i{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted);display:flex;align-items:center;gap:4px}
@@ -177,38 +186,54 @@ textarea.fi{resize:vertical;min-height:68px}
 .success-title{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:var(--g);margin-top:10px;letter-spacing:1px}
 .success-sub{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--cyan);margin-top:5px}
 .success-note{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);margin-top:8px}
-.mftr{padding:11px 16px;border-top:1px solid var(--border);background:var(--dim);display:flex;gap:6px}
-.sbtn{flex:2;background:linear-gradient(135deg,var(--g),var(--cyan));color:#000;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;padding:10px;border:none;border-radius:6px;cursor:pointer;letter-spacing:1px;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .15s}
-.sbtn:hover{transform:scale(1.02);box-shadow:0 0 16px rgba(0,229,118,.25)}
-.nbtn{flex:2;background:linear-gradient(135deg,var(--cyan),var(--teal));color:#000;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;padding:10px;border:none;border-radius:6px;cursor:pointer;letter-spacing:1px;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .15s}
+.mftr{padding:11px 16px;border-top:1px solid var(--border);background:var(--dim);display:flex;gap:6px;flex-wrap:wrap}
+.sbtn{flex:2;min-width:120px;background:linear-gradient(135deg,var(--g),var(--cyan));color:#000;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;padding:10px;border:none;border-radius:6px;cursor:pointer;letter-spacing:1px;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .15s}
+.sbtn:hover{transform:scale(1.02)}.sbtn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.nbtn{flex:2;min-width:100px;background:linear-gradient(135deg,var(--cyan),var(--teal));color:#000;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:900;padding:10px;border:none;border-radius:6px;cursor:pointer;letter-spacing:1px;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .15s}
 .nbtn:hover{transform:scale(1.02)}
-.pbtn,.cbtn{flex:1;background:transparent;border:1px solid var(--border2);color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:10px;padding:10px 8px;border-radius:6px;cursor:pointer;transition:all .12s;text-align:center}
+.pbtn,.cbtn{flex:1;min-width:70px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:10px;padding:10px 8px;border-radius:6px;cursor:pointer;transition:all .12s;text-align:center}
 .pbtn:hover,.cbtn:hover{color:var(--text)}
 
-/* SHARED BANNER */
-.shared-banner{background:#001a0a;border:1px solid #0a3a1a;border-radius:7px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--g)}
-.shared-banner-icon{font-size:16px;flex-shrink:0}
+/* ─── SETUP MODAL SPECIFIC ─── */
+.setup-body{padding:16px 18px;overflow-y:auto;flex:1}
+.setup-step-box{background:var(--dim);border:1px solid var(--border2);border-radius:8px;padding:13px 15px;margin-bottom:12px}
+.setup-step-box.active-box{border-color:#1e4a1e;background:#001a00}
+.setup-step-title{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:.5px;margin-bottom:8px}
+.setup-step-title.g{color:var(--g)}.setup-step-title.y{color:var(--yellow)}.setup-step-title.c{color:var(--cyan)}
+.setup-line{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);line-height:2;display:flex;gap:8px;align-items:flex-start}
+.setup-num{color:var(--g);font-weight:700;flex-shrink:0;width:16px}
+.setup-line b{color:var(--text)}
+.setup-line a{color:var(--cyan)}
+.status-box{border-radius:7px;padding:10px 13px;font-family:'Share Tech Mono',monospace;font-size:10px;margin-top:10px;display:none;line-height:1.7}
+.status-box.ok{background:#001a00;border:1px solid #1e4a1e;color:var(--g)}
+.status-box.err{background:#100008;border:1px solid #3a0018;color:var(--pink)}
+.status-box.loading{background:#181000;border:1px solid #3a2a00;color:var(--yellow)}
+.big-btn{width:100%;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:900;padding:13px;border:none;border-radius:8px;cursor:pointer;letter-spacing:1px;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:10px}
+.big-btn.yellow-btn{background:linear-gradient(135deg,var(--yellow),var(--orange));color:#000}
+.big-btn.yellow-btn:hover{transform:scale(1.02);box-shadow:0 0 16px rgba(255,215,64,.3)}
+.big-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 
 /* TOAST */
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(70px);background:#060d06;border:1px solid var(--g);border-radius:9px;padding:9px 16px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--g);z-index:9999;transition:transform .4s cubic-bezier(.2,.8,.3,1.2);display:flex;align-items:center;gap:7px;box-shadow:0 0 24px rgba(0,229,118,.18);white-space:nowrap}
 .toast.show{transform:translateX(-50%) translateY(0)}
+.toast.err-toast{border-color:var(--pink);color:var(--pink)}
 
-.disc{text-align:center;padding:16px;border-top:1px solid var(--border);font-family:'Share Tech Mono',monospace;font-size:9px;color:#1a3a1a;line-height:1.8;margin-top:8px}
+.disc{text-align:center;padding:16px;border-top:1px solid var(--border);font-family:'Share Tech Mono',monospace;font-size:9px;color:#1a3a1a;line-height:1.9;margin-top:8px}
 </style>
 </head>
 <body>
 
 <!-- TICKER -->
 <div class="ticker-wrap">
-  <div class="ticker">
+  <div class="ticker-scroll">
     <span class="ti">⬤ <b>THECYBERINDIA</b> — SHARED OSINT ARSENAL</span>
-    <span class="ti">// TOOLS ADDED BY ANY TEAM MEMBER ARE <b>VISIBLE TO ALL</b></span>
-    <span class="ti">⬤ <b>REAL-TIME SHARED</b> DATABASE · TEAM COLLABORATION</span>
-    <span class="ti">// ETHICAL HACKING · FORENSICS · OPEN SOURCE INTEL</span>
+    <span class="ti">// KISI KA BHI TOOL — <b>SABKO DIKH TA HAI</b></span>
+    <span class="ti">⬤ JSONBIN POWERED · <b>REAL-TIME SYNC</b></span>
+    <span class="ti">// ETHICAL HACKING · FORENSICS · CYBER INTEL</span>
     <span class="ti">⬤ <b>THECYBERINDIA</b> — SHARED OSINT ARSENAL</span>
-    <span class="ti">// TOOLS ADDED BY ANY TEAM MEMBER ARE <b>VISIBLE TO ALL</b></span>
-    <span class="ti">⬤ <b>REAL-TIME SHARED</b> DATABASE · TEAM COLLABORATION</span>
-    <span class="ti">// ETHICAL HACKING · FORENSICS · OPEN SOURCE INTEL</span>
+    <span class="ti">// KISI KA BHI TOOL — <b>SABKO DIKH TA HAI</b></span>
+    <span class="ti">⬤ JSONBIN POWERED · <b>REAL-TIME SYNC</b></span>
+    <span class="ti">// ETHICAL HACKING · FORENSICS · CYBER INTEL</span>
   </div>
 </div>
 
@@ -217,34 +242,41 @@ textarea.fi{resize:vertical;min-height:68px}
   <div class="hdr-main">
     <div class="logo-area">
       <div class="ring-wrap">
-        <svg class="r-outer" viewBox="0 0 54 54" width="54" height="54" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="27" cy="27" r="25" fill="none" stroke="#0f2a0f" stroke-width="1"/>
-          <circle cx="27" cy="27" r="25" fill="none" stroke="#00e676" stroke-width="1.5" stroke-dasharray="5 4" opacity=".7"/>
-          <circle cx="27" cy="2" r="2.5" fill="#00e676"/><circle cx="52" cy="27" r="1.5" fill="#00e5ff"/><circle cx="27" cy="52" r="2" fill="#1de9b6"/><circle cx="2" cy="27" r="1.5" fill="#69f0ae"/>
+        <svg class="r-outer" viewBox="0 0 56 56" width="56" height="56" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="28" cy="28" r="26" fill="none" stroke="#0f2a0f" stroke-width="1"/>
+          <circle cx="28" cy="28" r="26" fill="none" stroke="#00e676" stroke-width="1.5" stroke-dasharray="5 4" opacity=".7"/>
+          <circle cx="28" cy="2" r="2.5" fill="#00e676"/><circle cx="54" cy="28" r="1.5" fill="#00e5ff"/>
+          <circle cx="28" cy="54" r="2" fill="#1de9b6"/><circle cx="2" cy="28" r="1.5" fill="#69f0ae"/>
         </svg>
-        <svg class="r-inner" viewBox="0 0 40 40" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="20" cy="20" r="17" fill="none" stroke="#001a00" stroke-width="1"/>
-          <circle cx="20" cy="20" r="17" fill="none" stroke="#00e5ff" stroke-width="1" stroke-dasharray="3 5" opacity=".4"/>
+        <svg class="r-inner" viewBox="0 0 42 42" width="42" height="42" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="21" cy="21" r="18" fill="none" stroke="#001a00" stroke-width="1"/>
+          <circle cx="21" cy="21" r="18" fill="none" stroke="#00e5ff" stroke-width="1" stroke-dasharray="3 5" opacity=".4"/>
         </svg>
         <div class="r-center"><span class="r-icon">🔍</span></div>
       </div>
-      <div class="logo-info">
+      <div>
         <div class="logo-title">THECYBERINDIA</div>
         <div class="logo-sub">⚡ SHARED OSINT &amp; FORENSICS ARSENAL</div>
-        <div class="logo-pills"><span class="pill pg">OSINT</span><span class="pill pc">TEAM SHARED</span></div>
+        <div class="logo-pills">
+          <span class="pill pg">OSINT</span>
+          <span class="pill pc">FORENSICS</span>
+          <span class="pill py">TEAM SHARED</span>
+        </div>
       </div>
     </div>
-    <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
-      <button class="add-btn" id="openModal">+ ADD TOOL</button>
-      <div class="sync-status" id="syncStatus" onclick="loadSharedTools()">
-        <div class="sync-dot loading" id="syncDot"></div>
-        <span class="sync-text" id="syncText">connecting...</span>
-      </div>
+    <div class="hdr-right">
+      <button class="add-btn" id="openAddModal">＋ ADD TOOL</button>
+      <button class="setup-btn" id="openSetupModal">⚙ DATABASE SETUP</button>
     </div>
+  </div>
+  <div class="sync-bar">
+    <div class="sync-dot loading" id="syncDot"></div>
+    <span class="sync-msg" id="syncMsg">connecting...</span>
+    <button class="sync-refresh" onclick="loadTools()">↻ REFRESH</button>
   </div>
   <div class="search-area">
     <div class="sw">
-      <svg class="si-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <svg class="si" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <input class="search" id="srch" type="text" placeholder="search tools, descriptions, categories..." autocomplete="off">
     </div>
     <div class="statsrow" id="stats"></div>
@@ -256,26 +288,98 @@ textarea.fi{resize:vertical;min-height:68px}
 
 <!-- CONTENT -->
 <div class="content">
-  <div class="shared-banner" id="sharedBanner" style="display:none">
-    <span class="shared-banner-icon">🌐</span>
-    <span>Shared tools visible to <b>all team members</b> — auto-refreshes every 30 seconds</span>
-  </div>
-  <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
-    <span class="frow-lbl" style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted)">FILTER:</span>
+  <div class="frow-wrap">
+    <span class="frow-lbl">FILTER:</span>
     <div id="frow" style="display:flex;gap:4px;flex-wrap:wrap"></div>
   </div>
   <div class="slbl" id="slbl"></div>
-  <div id="loadingScreen" class="loading-screen">
+  <div id="loadingWrap" class="loading-wrap">
     <div class="loading-ring"></div>
-    <div class="loading-text">loading shared arsenal...</div>
+    <div class="loading-txt" id="loadingTxt">loading arsenal...</div>
   </div>
   <div class="grid" id="grid" style="display:none"></div>
   <div class="empty" id="emp" style="display:none">🔍<br><br>No tools found.</div>
-  <div class="disc">⚠ All tools for educational purposes, ethical hacking & authorized cybercrime investigation only.<br>TheCyberIndia does not take responsibility for misuse.</div>
+  <div class="disc">⚠ All tools for educational purposes, ethical hacking &amp; authorized investigation only. TheCyberIndia is not responsible for misuse.</div>
 </div>
 
-<!-- ADD TOOL MODAL -->
-<div class="ovl hidden" id="ovl">
+
+<!-- ══════════════════════════════════════════
+  SETUP MODAL — ONE CLICK AUTOMATIC SETUP
+══════════════════════════════════════════ -->
+<div class="ovl" id="setupOvl">
+  <div class="modal" style="max-width:500px">
+    <div class="mhdr">
+      <div class="mhdr-ring">
+        <svg class="mhdr-ring-svg" viewBox="0 0 40 40" width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="18" fill="none" stroke="#3a2a00" stroke-width="1"/>
+          <circle cx="20" cy="20" r="18" fill="none" stroke="#ffd740" stroke-width="1.5" stroke-dasharray="5 3"/>
+          <circle cx="20" cy="2" r="2" fill="#ffd740"/>
+        </svg>
+        <div class="mhdr-center">⚙</div>
+      </div>
+      <div class="mhdr-info">
+        <div class="mtitle" style="color:var(--yellow)">ONE-CLICK SETUP</div>
+        <div class="msub">// sirf Master Key daalo — baaki sab automatic hoga</div>
+      </div>
+      <button class="xbtn" id="closeSetupModal">✕</button>
+    </div>
+    <div class="setup-body">
+
+      <!-- STEP 1 -->
+      <div class="setup-step-box">
+        <div class="setup-step-title g">STEP 1 — JSONBin Master Key Lo (FREE)</div>
+        <div class="setup-line"><span class="setup-num">①</span><div>Jaao: <a href="https://jsonbin.io" target="_blank">jsonbin.io</a> → <b>Sign Up FREE</b> (GitHub se bhi hota hai)</div></div>
+        <div class="setup-line"><span class="setup-num">②</span><div>Login ke baad: <b>API Keys</b> section → <b>Master Key copy karo</b></div></div>
+        <div class="setup-line"><span class="setup-num">③</span><div>Neeche paste karo — <b>Bin automatic ban jaayega!</b> 🎉</div></div>
+      </div>
+
+      <!-- INPUT -->
+      <div class="setup-step-box active-box">
+        <div class="setup-step-title c">MASTER KEY PASTE KARO</div>
+        <div class="fld">
+          <label>JSONBIN MASTER KEY <em class="freq">*</em></label>
+          <input class="fi" id="cfg-key" type="password" placeholder="$2a$10$xxxxxxxxxxxxxxxxxxxxxxxx..." autocomplete="off">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#1a3a1a;margin-top:3px">
+            jsonbin.io → API Keys → Master Key copy karo
+          </div>
+        </div>
+
+        <!-- STATUS BOX -->
+        <div class="status-box" id="setupStatus"></div>
+
+        <!-- CONNECT BUTTON -->
+        <button class="big-btn yellow-btn" id="connectBtn">
+          ⚡ CONNECT &amp; AUTO-SETUP
+        </button>
+      </div>
+
+      <!-- ALREADY CONFIGURED -->
+      <div class="setup-step-box" id="currentCfgBox" style="display:none">
+        <div class="setup-step-title g">✅ CURRENTLY CONNECTED</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);line-height:1.9">
+          <div>Bin ID: <span id="currentBinId" style="color:var(--cyan)">—</span></div>
+          <div>Status: <span style="color:var(--g)">Connected ✅</span></div>
+        </div>
+        <div style="margin-top:8px;font-family:'Share Tech Mono',monospace;font-size:9px;color:#1a3a1a">
+          Doston ko yeh Bin ID share karo taki woh bhi connect ho sakein
+        </div>
+      </div>
+
+      <!-- INFO -->
+      <div style="margin-top:10px;padding:10px 12px;background:#001a00;border:1px solid #0a3a1a;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:9px;color:#2a5a2a;line-height:1.9">
+        ✅ Free tier: 10,000 requests/month — team ke liye kaafi hai<br>
+        ✅ Koi bhi tool add kare — sabko real-time mein dikh ta hai<br>
+        ✅ Auto-refresh har 30 seconds — page reload nahi karna
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+  ADD TOOL MODAL
+══════════════════════════════════════════ -->
+<div class="ovl hidden" id="addOvl">
   <div class="modal">
     <div class="mhdr">
       <div class="mhdr-ring">
@@ -287,10 +391,10 @@ textarea.fi{resize:vertical;min-height:68px}
         <div class="mhdr-center">🛡️</div>
       </div>
       <div class="mhdr-info">
-        <div class="mtitle">ADD TOOL TO SHARED ARSENAL</div>
-        <div class="msub">// visible to all team members instantly · thecyberindia</div>
+        <div class="mtitle" style="color:var(--g)">TOOL ADD KARO — SABKO DIKHE</div>
+        <div class="msub">// shared database mein save hoga · thecyberindia team</div>
       </div>
-      <button class="xbtn" id="closeModal">✕</button>
+      <button class="xbtn" id="closeAddModal">✕</button>
     </div>
     <div class="steps">
       <div class="step active" id="st1">① INFO</div>
@@ -300,55 +404,55 @@ textarea.fi{resize:vertical;min-height:68px}
     </div>
     <div class="mbody">
 
-      <!-- PAGE 1 -->
+      <!-- P1 -->
       <div class="fpage show" id="pg1">
         <div class="fg">
           <div class="fld ff">
             <label>TOOL NAME <em class="freq">*</em></label>
-            <input class="fi" id="fn" type="text" placeholder="e.g. Maltego, Shodan..." maxlength="60">
+            <input class="fi" id="fn" type="text" placeholder="e.g. Maltego, Shodan, theHarvester..." maxlength="60">
             <div class="errm" id="en">⚠ Tool name required</div>
           </div>
           <div class="fld ff">
             <label>DESCRIPTION <em class="freq">*</em></label>
-            <textarea class="fi" id="fd" placeholder="What does this tool do? How is it useful for OSINT or forensics?" maxlength="200" rows="3"></textarea>
+            <textarea class="fi" id="fd" placeholder="Kya karta hai yeh tool? Kaise kaam aata hai?" maxlength="200" rows="3"></textarea>
             <div class="errm" id="ed">⚠ Description required</div>
             <div class="dcnt"><span id="dc">0</span>/200</div>
           </div>
           <div class="fld">
             <label>CATEGORY <em class="freq">*</em></label>
             <select class="fi" id="fc">
-              <option value="">-- select --</option>
+              <option value="">-- select category --</option>
               <option>OS Platforms</option><option>Domain &amp; Network</option><option>Person &amp; Social</option>
               <option>Email Intelligence</option><option>Mobile Forensics</option><option>Image &amp; Media</option>
               <option>Dark Web</option><option>Digital Forensics</option><option>OSINT Frameworks</option>
               <option>Telegram Intel</option><option>Search Engines</option><option>ProtonMail</option>
               <option>Cloud OSINT</option><option>Learning Resources</option>
-              <option value="__custom">+ New Category...</option>
+              <option value="__custom">+ Naya Category...</option>
             </select>
             <div class="errm" id="ec">⚠ Category required</div>
           </div>
           <div class="fld" id="ccf" style="display:none">
-            <label>CUSTOM CATEGORY <em class="freq">*</em></label>
+            <label>CUSTOM CATEGORY</label>
             <input class="fi" id="fcc" placeholder="e.g. Geo Intelligence..." maxlength="40">
           </div>
           <div class="fld">
-            <label>ADDED BY (Your Name)</label>
-            <input class="fi" id="fby" type="text" placeholder="e.g. Shahzad, TeamMember1..." maxlength="30">
+            <label>AAPKA NAAM (Added By)</label>
+            <input class="fi" id="fby" type="text" placeholder="e.g. Shahzad, TeamMember..." maxlength="30">
           </div>
           <div class="fld">
             <label>YEAR</label>
-            <select class="fi" id="fy"><option value="2025">2025</option><option value="2024" selected>2024</option><option value="2023">2023</option><option value="2022">2022</option><option value="2021">2021</option><option value="2020">2020</option></select>
+            <select class="fi" id="fy"><option value="2025">2025</option><option value="2024" selected>2024</option><option value="2023">2023</option><option value="2022">2022</option><option value="2021">2021</option></select>
           </div>
         </div>
       </div>
 
-      <!-- PAGE 2 -->
+      <!-- P2 -->
       <div class="fpage" id="pg2">
         <div class="fg">
           <div class="fld ff">
             <label>TOOL URL <em class="freq">*</em></label>
-            <input class="fi" id="fl" type="url" placeholder="https://github.com/...  OR  https://tool.io">
-            <div class="errm" id="el">⚠ Valid URL required (https://...)</div>
+            <input class="fi" id="fl" type="url" placeholder="https://github.com/...  ya  https://tool.io">
+            <div class="errm" id="el">⚠ Valid URL chahiye (https://...)</div>
           </div>
           <div class="fld ff">
             <label>TOOL TYPE <em class="freq">*</em></label>
@@ -358,16 +462,16 @@ textarea.fi{resize:vertical;min-height:68px}
               <div class="to" data-t="ext"><span class="ti">🧩</span>EXTENSION<br><span style="font-size:8px;color:#1a3a1a">browser</span></div>
               <div class="to" data-t="bot"><span class="ti">🤖</span>BOT/APP<br><span style="font-size:8px;color:#1a3a1a">telegram</span></div>
             </div>
-            <div class="errm" id="et">⚠ Select a tool type</div>
+            <div class="errm" id="et">⚠ Tool type select karo</div>
           </div>
           <div class="fld ff">
             <label>NOTES (optional)</label>
-            <input class="fi" id="fnotes" placeholder="e.g. requires Python 3.9+, needs API key..." maxlength="100">
+            <input class="fi" id="fnotes" placeholder="e.g. Python 3.9+ chahiye, API key lagega..." maxlength="100">
           </div>
         </div>
       </div>
 
-      <!-- PAGE 3 -->
+      <!-- P3 -->
       <div class="fpage" id="pg3">
         <div class="fg">
           <div class="fld ff">
@@ -397,15 +501,15 @@ textarea.fi{resize:vertical;min-height:68px}
         </div>
       </div>
 
-      <!-- PAGE 4 PREVIEW -->
+      <!-- P4 -->
       <div class="fpage" id="pg4">
         <div class="pv-t">LIVE PREVIEW</div>
         <div class="card cg" id="pvc">
           <div class="cname" id="pvn" style="color:#69f0ae">Tool Name</div>
-          <div class="cdesc" id="pvd">Description here...</div>
+          <div class="cdesc" id="pvd">Description...</div>
           <div class="cnotes" id="pvnotes"></div>
           <div class="cfooter">
-            <div class="badges"><span class="badge bnew" id="pvy">NEW 2024</span><span class="badge bgit" id="pvt">🐙 github</span><span class="badge bshared">🌐 shared</span></div>
+            <div class="badges"><span class="badge bnew" id="pvy">NEW 2024</span><span class="badge bgit" id="pvt">🐙 github</span><span class="badge bteam">🌐 shared</span></div>
             <div class="lbtn">🔗 open</div>
           </div>
         </div>
@@ -420,149 +524,171 @@ textarea.fi{resize:vertical;min-height:68px}
       <div class="fpage" id="pgS">
         <div class="success-page">
           <span class="success-icon">✅</span>
-          <div class="success-title">TOOL SHARED WITH TEAM!</div>
-          <div class="success-sub" id="sname">Tool added successfully</div>
-          <div class="success-note">// All team members can now see this tool<br>// Visible to everyone using this arsenal</div>
+          <div class="success-title">SABKO DIKH RAHA HAI!</div>
+          <div class="success-sub" id="sname">Tool saved to shared database</div>
+          <div class="success-note">// Sab team members ko ab yeh tool dikh raha hai<br>// Real-time sync — page refresh nahi karna</div>
         </div>
       </div>
 
     </div>
-    <div class="mftr" id="mftr">
-      <button class="cbtn" id="cancelBtn">CANCEL</button>
+    <div class="mftr">
+      <button class="cbtn" id="cancelAddBtn">CANCEL</button>
       <button class="pbtn" id="prevBtn" style="display:none">◀ BACK</button>
       <button class="nbtn" id="nextBtn">NEXT ▶</button>
-      <button class="sbtn" id="submitBtn" style="display:none">🌐 SHARE WITH TEAM</button>
+      <button class="sbtn" id="submitBtn" style="display:none">🌐 SABKO SHARE KARO</button>
     </div>
   </div>
 </div>
 
-<div class="toast" id="toast">✅ <span id="tmsg">Tool shared!</span></div>
+<div class="toast" id="toast">✅ <span id="tmsg">Done!</span></div>
 
 <script>
-/* ═══════════════════════════════════════════
-   BASE TOOLS (Built-in, always visible)
-═══════════════════════════════════════════ */
+/* ════════ BASE TOOLS ════════ */
 const BASE=[
   {cat:"OS Platforms",name:"OS-Surveillance",desc:"Ultimate streamlined OSINT research platform",link:"https://www.os-surveillance.io/",type:"web",year:2023,col:"cg"},
   {cat:"OS Platforms",name:"OSINTk.o",desc:"Customized Kali Linux ISO with pre-installed OSINT packages",link:"https://github.com/LinaYorda/OSINTko",type:"github",year:2022,col:"cg"},
+  {cat:"OS Platforms",name:"CyberPunkOS",desc:"VM with OSINT tools focused on dismantling Fake News",link:"https://github.com/cyberpunkOS/CyberPunkOS",type:"github",year:2022,col:"cg"},
   {cat:"OS Platforms",name:"Tlosint Live",desc:"Trace Labs OSINT Linux Distribution based on Kali",link:"https://github.com/tracelabs/tlosint-live",type:"github",year:2022,col:"cg"},
-  {cat:"OS Platforms",name:"OSINT JUMP",desc:"Offensive recon VM based on Kali NetInstall",link:"https://github.com/delikely/OSINT-JUMP",type:"github",year:2021,col:"cg"},
   {cat:"Domain & Network",name:"SpiderFoot",desc:"Automates OSINT for threat intelligence & attack surface mapping",link:"https://github.com/smicallef/spiderfoot",type:"github",year:2020,col:"cc"},
   {cat:"Domain & Network",name:"BBOT",desc:"OSINT automation for hackers — recursive recon engine",link:"https://github.com/blacklanternsecurity/bbot",type:"github",year:2023,col:"cc"},
-  {cat:"Domain & Network",name:"GooFuzz",desc:"OSINT fuzzing via Google Dorking — no traces on target server",link:"https://github.com/m3n0sd0n4ld/GooFuzz",type:"github",year:2022,col:"cc"},
-  {cat:"Domain & Network",name:"Netlas.io",desc:"Visualize relationships of investigation entry points like Maltego",link:"https://app.netlas.io/",type:"web",year:2023,col:"cc"},
-  {cat:"Domain & Network",name:"OpenSquat",desc:"Detection of phishing domains and typosquatting attacks",link:"https://github.com/atenreiro/opensquat",type:"github",year:2022,col:"cc"},
+  {cat:"Domain & Network",name:"GooFuzz",desc:"OSINT fuzzing via Google Dorking — no traces on target",link:"https://github.com/m3n0sd0n4ld/GooFuzz",type:"github",year:2022,col:"cc"},
+  {cat:"Domain & Network",name:"Netlas.io",desc:"Visualize relationships of investigation entry points",link:"https://app.netlas.io/",type:"web",year:2023,col:"cc"},
   {cat:"Domain & Network",name:"Chiasmodon",desc:"CLI OSINT toolkit for domain information gathering",link:"https://github.com/chiasmd0n/chiasmodon",type:"github",year:2023,col:"cc"},
   {cat:"Person & Social",name:"Social Analyzer",desc:"Find a person's profile across +1000 social media sites",link:"https://github.com/qeeqbox/social-analyzer",type:"github",year:2021,col:"cp"},
   {cat:"Person & Social",name:"Blackbird",desc:"Search for accounts by username across social networks",link:"https://github.com/p1ngul1n0/blackbird",type:"github",year:2023,col:"cp"},
+  {cat:"Person & Social",name:"Alfred",desc:"Find social media accounts based on username inputs",link:"https://github.com/Alfredredbird/alfred",type:"github",year:2023,col:"cp"},
   {cat:"Person & Social",name:"GHunt",desc:"Offensive Google framework for OSINT investigations",link:"https://github.com/mxrch/GHunt",type:"github",year:2022,col:"cp"},
-  {cat:"Person & Social",name:"CrossLinked",desc:"LinkedIn enumeration — extract valid employee names via scraping",link:"https://github.com/m8sec/CrossLinked",type:"github",year:2022,col:"cp"},
+  {cat:"Person & Social",name:"CrossLinked",desc:"LinkedIn enumeration — extract valid employee names",link:"https://github.com/m8sec/CrossLinked",type:"github",year:2022,col:"cp"},
+  {cat:"Person & Social",name:"Mr.Holmes",desc:"Complete OSINT tool for target investigation",link:"https://github.com/Lucksi/Mr.Holmes",type:"github",year:2023,col:"cp"},
   {cat:"Person & Social",name:"WhoCord",desc:"Discord OSINT — investigate users and servers",link:"https://github.com/Siv-nick/WhoCord",type:"github",year:2024,isNew:true,col:"cp"},
   {cat:"Person & Social",name:"IG Follower Export",desc:"Export Instagram followers list to CSV — Chrome extension",link:"https://chromewebstore.google.com/detail/ig-follower-export-tool-i/kicgclkbiilobmccmmidfghnijgfamdb",type:"ext",year:2024,isNew:true,col:"cp"},
-  {cat:"Email Intelligence",name:"Holehe",desc:"Check if email is used on Twitter, Instagram & 100+ sites",link:"https://github.com/megadose/holehe",type:"github",year:2021,col:"cy"},
-  {cat:"Email Intelligence",name:"iKy",desc:"Advance email investigations with visual intelligence graphs",link:"https://github.com/kennbroorg/iKy",type:"github",year:2022,col:"cy"},
+  {cat:"Email Intelligence",name:"Holehe",desc:"Check if email is used on Twitter Instagram & 100+ sites",link:"https://github.com/megadose/holehe",type:"github",year:2021,col:"cy"},
+  {cat:"Email Intelligence",name:"iKy",desc:"Advance email investigations with visual intelligence",link:"https://github.com/kennbroorg/iKy",type:"github",year:2022,col:"cy"},
   {cat:"Email Intelligence",name:"BehindTheEmail",desc:"Investigate who is behind an email address",link:"https://behindtheemail.com/",type:"web",year:2024,isNew:true,col:"cy"},
   {cat:"Email Intelligence",name:"MailAccess",desc:"Email OSINT — account access investigation tool",link:"https://github.com/KatrielMoses/MailAccess",type:"github",year:2024,isNew:true,col:"cy"},
   {cat:"Mobile Forensics",name:"MVT",desc:"Mobile Verification Toolkit — find signs of device compromise",link:"https://github.com/mvt-project/mvt",type:"github",year:2023,col:"co"},
   {cat:"Mobile Forensics",name:"Andriller",desc:"Forensic acquisition from Android devices — read-only",link:"https://github.com/den4uk/andriller",type:"github",year:2021,col:"co"},
-  {cat:"Mobile Forensics",name:"Whapa",desc:"Graphical forensic tools to analyze WhatsApp on Android & iOS",link:"https://github.com/B16f00t/whapa",type:"github",year:2022,col:"co"},
-  {cat:"Mobile Forensics",name:"Avilla Forensics",desc:"Police investigation forensics for WhatsApp, Signal & more",link:"https://github.com/AvillaDaniel/AvillaForensics",type:"github",year:2023,col:"co"},
-  {cat:"Image & Media",name:"ExifLooter",desc:"Find geolocation on all image URLs and directories (OpenStreetMap)",link:"https://github.com/aydinnyunus/exifLooter",type:"github",year:2022,col:"cpk"},
+  {cat:"Mobile Forensics",name:"Whapa",desc:"Graphical forensic tools to analyze WhatsApp on Android iOS",link:"https://github.com/B16f00t/whapa",type:"github",year:2022,col:"co"},
+  {cat:"Mobile Forensics",name:"Avilla Forensics",desc:"Police investigation forensics for WhatsApp Signal more",link:"https://github.com/AvillaDaniel/AvillaForensics",type:"github",year:2023,col:"co"},
+  {cat:"Image & Media",name:"ExifLooter",desc:"Find geolocation on all image URLs and directories",link:"https://github.com/aydinnyunus/exifLooter",type:"github",year:2022,col:"cpk"},
   {cat:"Image & Media",name:"Imago Forensics",desc:"Extract digital evidence from images recursively",link:"https://github.com/redaelli/imago-forensics",type:"github",year:2021,col:"cpk"},
   {cat:"Image & Media",name:"AutoExif",desc:"Easily remove or view sensitive EXIF data from photos",link:"https://github.com/SirCryptic/autoexif",type:"github",year:2023,col:"cpk"},
   {cat:"Dark Web",name:"Prying Deep",desc:"OSINT tool to collect intelligence on the dark web",link:"https://github.com/iudicium/pryingdeep",type:"github",year:2023,col:"cb2"},
   {cat:"Dark Web",name:"OnionSearch",desc:"Scrape URLs across different .onion search engines",link:"https://github.com/megadose/OnionSearch",type:"github",year:2022,col:"cb2"},
-  {cat:"Dark Web",name:"Ransomware Posts",desc:"Track ransomware groups' public posts and victim leaks",link:"https://github.com/privtools/ransomposts",type:"github",year:2023,col:"cb2"},
-  {cat:"Digital Forensics",name:"Hayabusa",desc:"Sigma-based threat hunting + Windows event log timeline generator",link:"https://github.com/Yamato-Security/hayabusa",type:"github",year:2023,col:"ct"},
-  {cat:"Digital Forensics",name:"Turbinia",desc:"Automation of digital forensic tools at scale — by Google",link:"https://github.com/google/turbinia",type:"github",year:2023,col:"ct"},
+  {cat:"Dark Web",name:"Ransomware Posts",desc:"Track ransomware groups public posts and victim leaks",link:"https://github.com/privtools/ransomposts",type:"github",year:2023,col:"cb2"},
+  {cat:"Digital Forensics",name:"Hayabusa",desc:"Sigma-based threat hunting and Windows event log timeline",link:"https://github.com/Yamato-Security/hayabusa",type:"github",year:2023,col:"ct"},
+  {cat:"Digital Forensics",name:"Turbinia",desc:"Automation of digital forensic tools at scale by Google",link:"https://github.com/google/turbinia",type:"github",year:2023,col:"ct"},
   {cat:"Digital Forensics",name:"IRIS Web",desc:"Collaborative Incident Response platform for DFIR teams",link:"https://github.com/dfir-iris/iris-web",type:"github",year:2023,col:"ct"},
-  {cat:"Digital Forensics",name:"Tracee",desc:"Runtime Security and Forensics using eBPF",link:"https://github.com/aquasecurity/tracee",type:"github",year:2023,col:"ct"},
-  {cat:"OSINT Frameworks",name:"GhostInt Tools",desc:"Comprehensive OSINT investigative toolkit — browser-based",link:"https://cyberz7.github.io/Ghostint-Tools/",type:"web",year:2024,isNew:true,col:"cg"},
-  {cat:"OSINT Frameworks",name:"D4rk Intel",desc:"Dark web & surface web OSINT investigation toolkit",link:"https://github.com/techenthusiast167/D4rk_Intel-OSINT-Investigative-Toolkit",type:"github",year:2024,isNew:true,col:"cg"},
+  {cat:"OSINT Frameworks",name:"GhostInt Tools",desc:"Comprehensive OSINT investigative toolkit browser-based",link:"https://cyberz7.github.io/Ghostint-Tools/",type:"web",year:2024,isNew:true,col:"cg"},
+  {cat:"OSINT Frameworks",name:"D4rk Intel",desc:"Dark web and surface web OSINT investigation toolkit",link:"https://github.com/techenthusiast167/D4rk_Intel-OSINT-Investigative-Toolkit",type:"github",year:2024,isNew:true,col:"cg"},
   {cat:"OSINT Frameworks",name:"OSINT Portal",desc:"Comprehensive web-based OSINT tools portal",link:"https://osint.juanmathewsrebellosantos.com/",type:"web",year:2024,isNew:true,col:"cg"},
-  {cat:"OSINT Frameworks",name:"rOSINT",desc:"Russian OSINT — tools for Russian-language investigations",link:"https://www.rosint.dev/",type:"web",year:2024,isNew:true,col:"cg"},
+  {cat:"OSINT Frameworks",name:"rOSINT",desc:"Russian OSINT tools for Russian-language investigations",link:"https://www.rosint.dev/",type:"web",year:2024,isNew:true,col:"cg"},
   {cat:"OSINT Frameworks",name:"OSINT CrackOverflow",desc:"Online OSINT tools collection and interactive framework",link:"https://osint.crackoverflow.com/",type:"web",year:2024,isNew:true,col:"cc"},
-  {cat:"Telegram Intel",name:"Telepathy",desc:"OSINT toolkit for investigating Telegram chats and channels",link:"https://github.com/jordanwildon/Telepathy",type:"github",year:2023,col:"cc"},
+  {cat:"Telegram Intel",name:"Telepathy",desc:"OSINT toolkit for investigating Telegram chats",link:"https://github.com/jordanwildon/Telepathy",type:"github",year:2023,col:"cc"},
   {cat:"Telegram Intel",name:"Telegram Nearby Map",desc:"Discover and map location of nearby Telegram users",link:"https://github.com/tejado/telegram-nearby-map",type:"github",year:2021,col:"cc"},
-  {cat:"Telegram Intel",name:"TrueCall Robot",desc:"Telegram bot for caller ID & phone number OSINT lookups",link:"https://t.me/TrueCall_Robot",type:"bot",year:2024,isNew:true,col:"cb2"},
+  {cat:"Telegram Intel",name:"TrueCall Robot",desc:"Telegram bot for caller ID and phone number OSINT",link:"https://t.me/TrueCall_Robot",type:"bot",year:2024,isNew:true,col:"cb2"},
   {cat:"Search Engines",name:"GoodOldSearch",desc:"Classic search results without modern algorithm manipulation",link:"https://goodoldsearch.com/",type:"web",year:2024,isNew:true,col:"cy"},
-  {cat:"Search Engines",name:"MetaOSINT",desc:"Identify OSINT tools and resources — 4000+ entries indexed",link:"https://metaosint.github.io/table/",type:"web",year:2023,col:"cy"},
+  {cat:"Search Engines",name:"MetaOSINT",desc:"Identify OSINT tools and resources 4000+ entries",link:"https://metaosint.github.io/table/",type:"web",year:2023,col:"cy"},
   {cat:"Learning Resources",name:"OSINT of Pakistan",desc:"Guide to OSINT tools and methods for Pakistan investigations",link:"https://unishka.substack.com/p/osint-of-pakistan",type:"web",year:2024,isNew:true,col:"cp"},
   {cat:"Learning Resources",name:"OSINTstitute",desc:"Learning hub for OSINT training and professional courses",link:"http://osintstitute.com/",type:"web",year:2024,isNew:true,col:"cp"},
-  {cat:"Learning Resources",name:"OhShINT",desc:"OSINT blog + huge collection of tools and resources",link:"https://github.com/OhShINT/ohshint.gitbook.io",type:"github",year:2022,col:"cp"},
-  {cat:"Learning Resources",name:"Linux for OSINT — 21 Day",desc:"Short Linux OSINT automation course — 21 day challenge",link:"https://github.com/cipher387/linux-for-OSINT-21-day",type:"github",year:2022,col:"cp"},
+  {cat:"Learning Resources",name:"OhShINT",desc:"OSINT blog and huge collection of tools and resources",link:"https://github.com/OhShINT/ohshint.gitbook.io",type:"github",year:2022,col:"cp"},
+  {cat:"Learning Resources",name:"Linux for OSINT 21 Day",desc:"Short Linux OSINT automation course 21 day challenge",link:"https://github.com/cipher387/linux-for-OSINT-21-day",type:"github",year:2022,col:"cp"},
+  {cat:"Learning Resources",name:"OSINT Stuff Tools",desc:"Collection of 500+ online OSINT tools",link:"https://github.com/cipher387/osint_stuff_tool_collection",type:"github",year:2023,col:"cp"},
 ];
 
-/* ═══════ CONFIG ═══════ */
+/* ════════ CONFIG ════════ */
 const CC={cg:"#00e676",cc:"#00e5ff",cp:"#d500f9",cy:"#ffd740",cpk:"#f50057",co:"#ff6d00",cb2:"#2979ff",ct:"#1de9b6",crd:"#ff1744"};
 const CAT_COL={"OS Platforms":"cg","Domain & Network":"cc","Person & Social":"cp","Email Intelligence":"cy","Mobile Forensics":"co","Image & Media":"cpk","Dark Web":"cb2","Digital Forensics":"ct","OSINT Frameworks":"cg","Telegram Intel":"cc","Search Engines":"cy","ProtonMail":"cpk","Cloud OSINT":"cb2","Learning Resources":"cp"};
-const TBADGE={github:"bgit",web:"bweb",ext:"bext",bot:"bbot"};
-const TICON={github:"🐙",web:"🌐",ext:"🧩",bot:"🤖"};
-const TLBL={github:"github",web:"website",ext:"extension",bot:"bot/app"};
-const STORAGE_KEY="tci_shared_tools_v1";
+const TB={github:"bgit",web:"bweb",ext:"bext",bot:"bbot"};
+const TI={github:"🐙",web:"🌐",ext:"🧩",bot:"🤖"};
+const TL={github:"github",web:"website",ext:"extension",bot:"bot/app"};
+const FCS={all:"background:var(--g);color:#000",new:"background:var(--yellow);color:#000",github:"background:#0a1e0a;color:var(--g2);border-color:#1a3a1a",web:"background:var(--cyan);color:#000",ext:"background:var(--purple);color:#fff",shared:"background:var(--teal);color:#000"};
+const JBIN="https://api.jsonbin.io/v3/b";
 
-/* ═══════ STATE ═══════ */
+/* ════════ STATE ════════ */
 let sharedTools=[];
 let acat="ALL",afilt="all",srch="",selType="",selCol="cg",curPg=1;
-let autoRefreshTimer=null;
 
-/* ═══════ SHARED STORAGE LOAD/SAVE ═══════ */
-async function loadSharedTools(){
-  setSyncStatus("loading","syncing...");
-  try{
-    const result=await window.storage.get(STORAGE_KEY,true);
-    if(result&&result.value){
-      sharedTools=JSON.parse(result.value);
-    } else {
-      sharedTools=[];
-    }
-    setSyncStatus("ok","synced · "+sharedTools.length+" shared");
-    document.getElementById("sharedBanner").style.display="flex";
-  } catch(e){
-    sharedTools=[];
-    setSyncStatus("ok","connected");
+/* ════════ CONFIG STORE ════════ */
+function getCfg(){try{return JSON.parse(localStorage.getItem("tci_cfg_v2")||"null");}catch(e){return null;}}
+function setCfg(o){localStorage.setItem("tci_cfg_v2",JSON.stringify(o));}
+
+/* ════════ JSONBIN API — AUTO CREATE BIN ════════ */
+async function autoSetup(key){
+  // Step 1: Create a new bin with [] automatically
+  const r=await fetch(JBIN,{
+    method:"POST",
+    headers:{"Content-Type":"application/json","X-Master-Key":key,"X-Bin-Name":"tci-arsenal","X-Bin-Private":"false"},
+    body:"[]"
+  });
+  if(!r.ok){
+    const err=await r.json().catch(()=>({}));
+    throw new Error(err.message||"HTTP "+r.status);
   }
-  document.getElementById("loadingScreen").style.display="none";
-  document.getElementById("grid").style.display="grid";
-  buildTabs(); buildFilters(); render();
+  const data=await r.json();
+  return data.metadata.id; // return bin ID
 }
 
-async function saveSharedTools(){
+async function loadTools(){
+  const cfg=getCfg();
+  setSyncStatus("loading","syncing...");
+  if(!cfg||!cfg.key||!cfg.bin){
+    setSyncStatus("err","⚙ Setup nahi hua — Database Setup button dabaao");
+    document.getElementById("loadingTxt").textContent="Pehle setup karo";
+    document.getElementById("loadingWrap").style.display="none";
+    document.getElementById("grid").style.display="grid";
+    sharedTools=[];buildTabs();buildFilters();render();return;
+  }
   try{
-    await window.storage.set(STORAGE_KEY,JSON.stringify(sharedTools),true);
-    setSyncStatus("ok","saved · "+sharedTools.length+" shared");
+    const r=await fetch(`${JBIN}/${cfg.bin}/latest`,{
+      headers:{"X-Master-Key":cfg.key,"X-Bin-Meta":"false"}
+    });
+    if(!r.ok)throw new Error("HTTP "+r.status);
+    const d=await r.json();
+    sharedTools=Array.isArray(d)?d:(d.record||[]);
+    const tc=sharedTools.filter(t=>t._shared).length;
+    setSyncStatus("ok",`✅ synced · ${tc} team tools · ${new Date().toLocaleTimeString()}`);
+  }catch(e){
+    sharedTools=[];
+    setSyncStatus("err","❌ Load failed: "+e.message+" — Setup check karo");
+  }
+  document.getElementById("loadingWrap").style.display="none";
+  document.getElementById("grid").style.display="grid";
+  buildTabs();buildFilters();render();
+}
+
+async function saveTools(){
+  const cfg=getCfg();
+  if(!cfg)return false;
+  try{
+    const r=await fetch(`${JBIN}/${cfg.bin}`,{
+      method:"PUT",
+      headers:{"Content-Type":"application/json","X-Master-Key":cfg.key},
+      body:JSON.stringify(sharedTools)
+    });
+    if(!r.ok)throw new Error("HTTP "+r.status);
     return true;
-  } catch(e){
-    setSyncStatus("err","save failed");
+  }catch(e){
+    setSyncStatus("err","❌ Save failed: "+e.message);
     return false;
   }
 }
 
-function setSyncStatus(state,text){
-  const dot=document.getElementById("syncDot");
-  const txt=document.getElementById("syncText");
-  dot.className="sync-dot "+state;
-  txt.textContent=text;
+function setSyncStatus(state,msg){
+  document.getElementById("syncDot").className="sync-dot "+state;
+  document.getElementById("syncMsg").textContent=msg;
 }
 
-/* AUTO REFRESH every 30s */
-function startAutoRefresh(){
-  if(autoRefreshTimer)clearInterval(autoRefreshTimer);
-  autoRefreshTimer=setInterval(async()=>{
-    await loadSharedTools();
-  },30000);
-}
-
-/* ═══════ RENDER ═══════ */
+/* ════════ RENDER ════════ */
 const allT=()=>[...BASE,...sharedTools];
 
 function cardHTML(t){
   const cl=t.col||CAT_COL[t.cat]||"cg",nc=CC[cl]||"#00e676";
   const yb=t.isNew?`<span class="badge bnew">★ ${t.year}</span>`:`<span class="badge bgit">${t.year}</span>`;
-  const shb=t._shared?`<span class="badge bshared">🌐 ${t._addedBy||"shared"}</span>`:"";
-  const tb=`<span class="badge ${TBADGE[t.type]||"bgit"}">${TICON[t.type]||"🔧"} ${TLBL[t.type]||t.type}</span>`;
+  const sb=t._shared?`<span class="badge bteam">🌐 ${t._addedBy||"team"}</span>`:"";
+  const tb2=`<span class="badge ${TB[t.type]||"bgit"}">${TI[t.type]||"🔧"} ${TL[t.type]||t.type}</span>`;
   const nt=t.notes?`<div class="cnotes">// ${t.notes}</div>`:"";
-  return`<div class="card ${cl}"><div class="cname" style="color:${nc}">${t.name}</div><div class="cdesc">${t.desc}</div>${nt}<div class="cfooter"><div class="badges">${yb}${shb}${tb}</div><a class="lbtn" href="${t.link}" target="_blank" rel="noopener">🔗 open</a></div></div>`;
+  return`<div class="card ${cl}"><div class="cname" style="color:${nc}">${t.name}</div><div class="cdesc">${t.desc}</div>${nt}<div class="cfooter"><div class="badges">${yb}${sb}${tb2}</div><a class="lbtn" href="${t.link}" target="_blank" rel="noopener">🔗 open</a></div></div>`;
 }
 
 function render(){
@@ -571,24 +697,21 @@ function render(){
     const mc=acat==="ALL"||t.cat===acat;
     const mf=afilt==="all"||(afilt==="new"&&t.isNew)||(afilt==="shared"&&t._shared)||(afilt==="web"&&t.type==="web")||(afilt==="github"&&t.type==="github")||(afilt==="ext"&&(t.type==="ext"||t.type==="bot"));
     const sq=srch.toLowerCase();
-    const mq=!sq||t.name.toLowerCase().includes(sq)||t.desc.toLowerCase().includes(sq)||t.cat.toLowerCase().includes(sq)||(t._addedBy||"").toLowerCase().includes(sq);
+    const mq=!sq||t.name.toLowerCase().includes(sq)||t.desc.toLowerCase().includes(sq)||t.cat.toLowerCase().includes(sq);
     return mc&&mf&&mq;
   });
-
+  const tc=sharedTools.filter(t=>t._shared).length;
   document.getElementById("stats").innerHTML=
     `<span class="stat"><span class="sdot" style="background:var(--cyan)"></span>Total <b style="color:var(--cyan)">${tools.length}</b></span>`+
     `<span class="stat"><span class="sdot" style="background:var(--g)"></span>New 2024 <b style="color:var(--g)">${tools.filter(t=>t.isNew).length}</b></span>`+
-    (sharedTools.length?`<span class="stat"><span class="sdot" style="background:var(--teal)"></span>Team Added <b style="color:var(--teal)">${sharedTools.length}</b></span>`:"")+
+    (tc?`<span class="stat"><span class="sdot" style="background:var(--teal)"></span>Team Added <b style="color:var(--teal)">${tc}</b></span>`:"")+
     `<span class="stat"><span class="sdot" style="background:var(--pink)"></span>Showing <b style="color:var(--pink)">${fil.length}</b></span>`;
-
   const grid=document.getElementById("grid");
   if(!fil.length){grid.innerHTML="";document.getElementById("emp").style.display="block";document.getElementById("slbl").textContent="";return;}
   document.getElementById("emp").style.display="none";
-
   const grp={};fil.forEach(t=>{(grp[t.cat]=grp[t.cat]||[]).push(t);});
   const cats=acat==="ALL"?Object.keys(grp):[acat];
   document.getElementById("slbl").textContent=acat==="ALL"?`// all categories — ${fil.length} tools`:`// ${acat} — ${fil.length} tools`;
-
   grid.innerHTML=cats.map(cat=>{
     const items=grp[cat]||[];
     const cl=CAT_COL[cat]||"cg",lc=CC[cl]||"#00e676";
@@ -607,26 +730,113 @@ function buildTabs(){
   document.querySelectorAll(".tab").forEach(el=>el.addEventListener("click",()=>{acat=el.dataset.cat;buildTabs();render();}));
 }
 
-const FC={all:"background:var(--g);color:#000",new:"background:var(--yellow);color:#000",github:"background:#0a1e0a;color:var(--g2);border-color:#1a3a1a",web:"background:var(--cyan);color:#000",ext:"background:var(--purple);color:#fff",shared:"background:var(--teal);color:#000"};
 function buildFilters(){
-  const hasS=sharedTools.length>0;
+  const hasS=sharedTools.filter(t=>t._shared).length>0;
   const fs=[["all","All"],["new","★ New 2024"],["github","🐙 GitHub"],["web","🌐 Web"],["ext","🧩 Ext/Bot"]];
   if(hasS)fs.push(["shared","🌐 Team Added"]);
-  document.getElementById("frow").innerHTML=fs.map(([v,l])=>`<button class="fb${afilt===v?" active":""}" data-v="${v}" style="${afilt===v?FC[v]:""}">${l}</button>`).join("");
+  document.getElementById("frow").innerHTML=fs.map(([v,l])=>`<button class="fb${afilt===v?" active":""}" data-v="${v}" style="${afilt===v?FCS[v]:""}">${l}</button>`).join("");
   document.querySelectorAll(".fb").forEach(b=>b.addEventListener("click",()=>{afilt=b.dataset.v;buildFilters();render();}));
 }
 
 document.getElementById("srch").addEventListener("input",e=>{srch=e.target.value;render();});
 
-/* ═══════ MODAL LOGIC ═══════ */
-const ovl=document.getElementById("ovl");
-const openM=()=>{ovl.classList.remove("hidden");goPage(1);document.getElementById("fn").focus();};
-const closeM=()=>{ovl.classList.add("hidden");resetForm();};
-document.getElementById("openModal").addEventListener("click",openM);
-document.getElementById("closeModal").addEventListener("click",closeM);
-document.getElementById("cancelBtn").addEventListener("click",closeM);
-ovl.addEventListener("click",e=>{if(e.target===ovl)closeM();});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!ovl.classList.contains("hidden"))closeM();});
+/* ════════ SETUP MODAL ════════ */
+const setupOvl=document.getElementById("setupOvl");
+
+function updateSetupCfgDisplay(){
+  const cfg=getCfg();
+  const box=document.getElementById("currentCfgBox");
+  if(cfg&&cfg.bin){
+    box.style.display="block";
+    document.getElementById("currentBinId").textContent=cfg.bin;
+  } else {
+    box.style.display="none";
+  }
+}
+
+document.getElementById("openSetupModal").addEventListener("click",()=>{
+  updateSetupCfgDisplay();
+  const cfg=getCfg();
+  if(cfg&&cfg.key)document.getElementById("cfg-key").value=cfg.key;
+  setupOvl.classList.remove("hidden");
+});
+document.getElementById("closeSetupModal").addEventListener("click",()=>setupOvl.classList.add("hidden"));
+setupOvl.addEventListener("click",e=>{if(e.target===setupOvl)setupOvl.classList.add("hidden");});
+
+document.getElementById("connectBtn").addEventListener("click",async()=>{
+  const key=document.getElementById("cfg-key").value.trim();
+  const sb=document.getElementById("setupStatus");
+  const btn=document.getElementById("connectBtn");
+
+  if(!key){
+    showStatus(sb,"err","⚠ Master Key daalna zaroori hai!");return;
+  }
+
+  btn.disabled=true;btn.textContent="⏳ Connecting...";
+  showStatus(sb,"loading","🔄 JSONBin se connect ho raha hai...");
+
+  try{
+    // Check if we already have a bin for this key
+    const existing=getCfg();
+    let binId;
+
+    if(existing&&existing.key===key&&existing.bin){
+      // Same key — verify existing bin still works
+      showStatus(sb,"loading","🔄 Existing bin verify kar raha hai...");
+      const r=await fetch(`${JBIN}/${existing.bin}/latest`,{
+        headers:{"X-Master-Key":key,"X-Bin-Meta":"false"}
+      });
+      if(r.ok){
+        binId=existing.bin;
+        showStatus(sb,"ok","✅ Already connected! Bin ID: "+binId);
+      } else {
+        // Bin not found — create new
+        showStatus(sb,"loading","🔄 Purana bin nahi mila, naya bana raha hai...");
+        binId=await autoSetup(key);
+        showStatus(sb,"ok","✅ Naya bin ban gaya! ID: "+binId);
+      }
+    } else {
+      // New key — create new bin
+      showStatus(sb,"loading","🔄 Naya shared bin automatically bana raha hai...");
+      binId=await autoSetup(key);
+      showStatus(sb,"ok","✅ Connected! Bin automatically ban gaya!\nBin ID: "+binId+"\n\nYeh ID apne doston ko bhejo!");
+    }
+
+    setCfg({key,bin:binId});
+    updateSetupCfgDisplay();
+    showToast("✅ Database connected! Sab ready hai.");
+    setTimeout(()=>{setupOvl.classList.add("hidden");loadTools();},2000);
+
+  }catch(e){
+    showStatus(sb,"err","❌ Error: "+e.message+"\n\nKya Master Key sahi hai? jsonbin.io → API Keys se copy karo");
+  }
+
+  btn.disabled=false;btn.innerHTML="⚡ CONNECT &amp; AUTO-SETUP";
+});
+
+function showStatus(el,type,msg){
+  el.style.display="block";
+  el.className="status-box "+type;
+  el.textContent=msg;
+}
+
+/* ════════ ADD TOOL MODAL ════════ */
+const addOvl=document.getElementById("addOvl");
+const openAddM=()=>{
+  if(!getCfg()){showToast("⚠ Pehle Database Setup karo!","err");document.getElementById("openSetupModal").click();return;}
+  addOvl.classList.remove("hidden");goPage(1);document.getElementById("fn").focus();
+};
+const closeAddM=()=>{addOvl.classList.add("hidden");resetForm();};
+document.getElementById("openAddModal").addEventListener("click",openAddM);
+document.getElementById("closeAddModal").addEventListener("click",closeAddM);
+document.getElementById("cancelAddBtn").addEventListener("click",closeAddM);
+addOvl.addEventListener("click",e=>{if(e.target===addOvl)closeAddM();});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){
+    if(!addOvl.classList.contains("hidden"))closeAddM();
+    else if(!setupOvl.classList.contains("hidden"))setupOvl.classList.add("hidden");
+  }
+});
 
 function goPage(n){
   curPg=n;
@@ -641,7 +851,7 @@ function goPage(n){
   document.getElementById("prevBtn").style.display=(n>1&&n<5)?"block":"none";
   document.getElementById("nextBtn").style.display=(n<4)?"block":"none";
   document.getElementById("submitBtn").style.display=(n===4)?"block":"none";
-  document.getElementById("cancelBtn").textContent=n===5?"✕ CLOSE":"CANCEL";
+  document.getElementById("cancelAddBtn").textContent=n===5?"✕ CLOSE":"CANCEL";
 }
 
 document.getElementById("nextBtn").addEventListener("click",()=>{if(curPg===1&&!v1())return;if(curPg===2&&!v2())return;goPage(curPg+1);if(curPg===3)upPrev();});
@@ -650,18 +860,15 @@ document.getElementById("prevBtn").addEventListener("click",()=>goPage(curPg-1))
 document.querySelectorAll(".to").forEach(el=>el.addEventListener("click",()=>{
   document.querySelectorAll(".to").forEach(x=>x.className="to");
   el.className="to "+({github:"sg",web:"sc",ext:"se",bot:"sb"}[el.dataset.t]||"sg");
-  selType=el.dataset.t; upPrev();
+  selType=el.dataset.t;upPrev();
 }));
-
 document.querySelectorAll(".co2").forEach(el=>el.addEventListener("click",()=>{
   document.querySelectorAll(".co2").forEach(x=>x.classList.remove("sel"));
-  el.classList.add("sel"); selCol=el.dataset.c; upPrev();
+  el.classList.add("sel");selCol=el.dataset.c;upPrev();
 }));
-
 document.getElementById("fc").addEventListener("change",e=>{
   document.getElementById("ccf").style.display=e.target.value==="__custom"?"block":"none";
 });
-
 ["fn","fd","fy","fl","fby","fnotes"].forEach(id=>{
   const el=document.getElementById(id);
   if(el)el.addEventListener("input",()=>{if(id==="fd")document.getElementById("dc").textContent=el.value.length;upPrev();});
@@ -669,38 +876,37 @@ document.getElementById("fc").addEventListener("change",e=>{
 
 function upPrev(){
   const nm=document.getElementById("fn").value||"Tool Name";
-  const dc=document.getElementById("fd").value||"Description...";
+  const dsc=document.getElementById("fd").value||"Description...";
   const yr=document.getElementById("fy").value||"2024";
   const tp=selType||"github";
   const cl=selCol||"cg";
   const nc=CC[cl]||"#00e676";
-  const by=(document.getElementById("fby")||{}).value||"team";
-  const nt=(document.getElementById("fnotes")||{}).value||"";
-  const lk=(document.getElementById("fl")||{}).value||"";
+  const by=document.getElementById("fby").value||"team";
+  const nt=document.getElementById("fnotes").value||"";
+  const lk=document.getElementById("fl").value||"";
   let cat=document.getElementById("fc").value||"—";
-  if(cat==="__custom")cat=(document.getElementById("fcc")||{}).value||"Custom";
-
+  if(cat==="__custom")cat=document.getElementById("fcc").value||"Custom";
   document.getElementById("pvn").textContent=nm;
   document.getElementById("pvn").style.color=nc;
-  document.getElementById("pvd").textContent=dc;
+  document.getElementById("pvd").textContent=dsc;
   document.getElementById("pvy").textContent="★ "+yr;
   document.getElementById("pvc").className="card "+cl;
   document.getElementById("pvnotes").textContent=nt?"// "+nt:"";
   const pvt=document.getElementById("pvt");
-  pvt.className="badge "+(TBADGE[tp]||"bgit");
-  pvt.textContent=`${TICON[tp]||"🔧"} ${TLBL[tp]||tp}`;
-  const pc=document.getElementById("pv-cat");if(pc)pc.textContent=cat;
-  const pb=document.getElementById("pv-by");if(pb)pb.textContent=by||"anonymous";
-  const pu=document.getElementById("pv-url");if(pu)pu.textContent=lk||"—";
+  pvt.className="badge "+(TB[tp]||"bgit");
+  pvt.textContent=`${TI[tp]||"🔧"} ${TL[tp]||tp}`;
+  document.getElementById("pv-cat").textContent=cat;
+  document.getElementById("pv-by").textContent=by||"anonymous";
+  document.getElementById("pv-url").textContent=lk||"—";
 }
 
 function v1(){
   let ok=true;
   const nm=document.getElementById("fn").value.trim();
-  const dc=document.getElementById("fd").value.trim();
+  const dsc=document.getElementById("fd").value.trim();
   const cat=document.getElementById("fc").value;
   etog("en",!nm);if(!nm)ok=false;
-  etog("ed",!dc);if(!dc)ok=false;
+  etog("ed",!dsc);if(!dsc)ok=false;
   etog("ec",!cat);if(!cat)ok=false;
   return ok;
 }
@@ -717,60 +923,67 @@ function etog(id,show){const e=document.getElementById(id);if(e)e.style.display=
 document.getElementById("submitBtn").addEventListener("click",async()=>{
   if(!v1()||!v2())return;
   const btn=document.getElementById("submitBtn");
-  btn.textContent="SAVING..."; btn.disabled=true;
+  btn.textContent="⏳ SAVING...";btn.disabled=true;
   let cat=document.getElementById("fc").value;
   if(cat==="__custom"){const cc=document.getElementById("fcc").value.trim();if(cc)cat=cc;}
   const yr=parseInt(document.getElementById("fy").value);
-  const by=document.getElementById("fby").value.trim();
-  const nt=document.getElementById("fnotes").value.trim();
   const tool={
-    cat,
-    name:document.getElementById("fn").value.trim(),
+    cat,name:document.getElementById("fn").value.trim(),
     desc:document.getElementById("fd").value.trim(),
     link:document.getElementById("fl").value.trim(),
     type:selType,year:yr,isNew:yr>=2024,col:selCol,
-    notes:nt||undefined,
+    notes:document.getElementById("fnotes").value.trim()||undefined,
     _shared:true,
-    _addedBy:by||"team",
+    _addedBy:document.getElementById("fby").value.trim()||"anonymous",
     _addedAt:new Date().toISOString()
   };
   sharedTools.push(tool);
-  const ok=await saveSharedTools();
-  btn.textContent="🌐 SHARE WITH TEAM"; btn.disabled=false;
+  const ok=await saveTools();
+  btn.textContent="🌐 SABKO SHARE KARO";btn.disabled=false;
   if(ok){
     document.getElementById("sname").textContent=`"${tool.name}" → ${cat}`;
-    goPage(5);
-    buildTabs(); buildFilters(); render();
-    showToast(`🌐 "${tool.name}" shared with all team members!`);
-    setTimeout(closeM,2800);
-  } else {
+    goPage(5);buildTabs();buildFilters();render();
+    const tc=sharedTools.filter(t=>t._shared).length;
+    setSyncStatus("ok",`✅ synced · ${tc} team tools`);
+    showToast(`🌐 "${tool.name}" — ab sabko dikh raha hai!`);
+    setTimeout(closeAddM,2800);
+  }else{
     sharedTools.pop();
-    showToast("❌ Failed to save. Try again.");
+    showToast("❌ Save failed — setup check karo","err");
   }
 });
 
-function showToast(msg){
+function showToast(msg,type="ok"){
   const t=document.getElementById("toast");
   document.getElementById("tmsg").textContent=msg;
+  t.className="toast"+(type==="err"?" err-toast":"");
   t.classList.add("show");
   setTimeout(()=>t.classList.remove("show"),3800);
 }
 
 function resetForm(){
   ["fn","fd","fl","fcc","fnotes","fby"].forEach(id=>{const e=document.getElementById(id);if(e)e.value="";});
-  document.getElementById("fc").value=""; document.getElementById("fy").value="2024";
-  document.getElementById("ccf").style.display="none";
-  document.getElementById("dc").textContent="0";
-  document.querySelectorAll(".to").forEach(x=>x.className="to"); selType="";
+  document.getElementById("fc").value="";document.getElementById("fy").value="2024";
+  document.getElementById("ccf").style.display="none";document.getElementById("dc").textContent="0";
+  document.querySelectorAll(".to").forEach(x=>x.className="to");selType="";
   document.querySelectorAll(".co2").forEach(x=>x.classList.remove("sel"));
-  const dg=document.querySelector(".co2[data-c='cg']");if(dg)dg.classList.add("sel"); selCol="cg";
+  const dg=document.querySelector(".co2[data-c='cg']");if(dg)dg.classList.add("sel");selCol="cg";
   ["en","ed","ec","el","et"].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display="none";});
   upPrev();
 }
 
-/* ═══════ INIT ═══════ */
-loadSharedTools();
-startAutoRefresh();
+/* ════════ INIT ════════ */
+const initCfg=getCfg();
+if(!initCfg){
+  // First time — auto open setup
+  setTimeout(()=>document.getElementById("openSetupModal").click(),600);
+  document.getElementById("loadingWrap").style.display="none";
+  document.getElementById("grid").style.display="grid";
+  buildTabs();buildFilters();render();
+} else {
+  loadTools();
+  setInterval(loadTools,30000);
+}
 </script>
 </body>
 </html>
