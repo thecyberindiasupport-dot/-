@@ -2720,3 +2720,136 @@ body {
     }
 }
 
+/* ============================================================ */
+/* INDIA BADGE & LOGO EMBLEM */
+/* ============================================================ */
+.india-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: linear-gradient(135deg, rgba(255, 153, 51, 0.12) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(19, 136, 8, 0.12) 100%);
+    border: 1px solid rgba(255, 153, 51, 0.35);
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    color: #fff;
+    box-shadow: 0 0 12px rgba(255, 153, 51, 0.15), 0 0 12px rgba(19, 136, 8, 0.15);
+    transition: var(--transition);
+}
+
+.india-badge:hover {
+    border-color: rgba(255, 153, 51, 0.7);
+    box-shadow: 0 0 18px rgba(255, 153, 51, 0.3), 0 0 18px rgba(19, 136, 8, 0.3);
+    transform: translateY(-1px);
+}
+
+.flag-in-svg {
+    display: inline-block;
+    border-radius: 3px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+.india-text-gradient {
+    background: linear-gradient(90deg, #FF9933 0%, #FFFFFF 50%, #138808 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+}
+
+/* ============================================================ */
+/* DIRECT QUICK ACTION COMMAND BUTTONS GRID (Section C) */
+/* ============================================================ */
+.quick-action-btns-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.btn-quick-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+}
+
+.btn-quick-action i {
+    font-size: 12px;
+    color: var(--primary);
+    transition: transform 0.2s ease;
+}
+
+.btn-quick-action:hover {
+    color: #fff;
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.45);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+    transform: translateY(-1px);
+}
+
+.btn-quick-action:hover i {
+    transform: scale(1.15);
+}
+
+.btn-quick-action:active {
+    transform: translateY(0);
+}
+
+/* Specific button accent highlights */
+.btn-quick-action.btn-accent-blue:hover {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.45);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.25);
+}
+.btn-quick-action.btn-accent-blue i { color: #3b82f6; }
+
+.btn-quick-action.btn-accent-purple:hover {
+    background: rgba(168, 85, 247, 0.15);
+    border-color: rgba(168, 85, 247, 0.45);
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.25);
+}
+.btn-quick-action.btn-accent-purple i { color: #a855f7; }
+
+.btn-quick-action.btn-accent-amber:hover {
+    background: rgba(245, 158, 11, 0.15);
+    border-color: rgba(245, 158, 11, 0.45);
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.25);
+}
+.btn-quick-action.btn-accent-amber i { color: #f59e0b; }
+
+/* ============================================================ */
+/* SPEC SECTION HEADERS */
+/* ============================================================ */
+.spec-section-header {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--primary-light);
+    text-transform: uppercase;
+    padding: 8px 12px;
+    background: rgba(16, 185, 129, 0.08);
+    border-left: 3px solid var(--primary);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    margin: 8px 0 4px 0;
+}
+
+
